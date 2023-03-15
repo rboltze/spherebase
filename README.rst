@@ -30,15 +30,16 @@ Features
 --------
 
 - Work in process
-- Provides a framework for creating customizable nodes, sockets and edges on the surface of a sphere
-- Full support for undo / redo and serialization into files
+- Provides a framework for creating customizable nodes, sockets and edges on the surface of a sphere.
+- Full support for undo / redo and serialization into files.
 - Hovering effects, dragging nodes, cutting edges.
-- Pyqt5 based example on how the sphere_base can be implemented
+- Pyqt5 based example on how the sphere_base can be implemented.
 
 Requirements
 ------------
 
 - Python 3.x
+- PyOpenGL
 - PyQt5 for the example
 
 Credits
