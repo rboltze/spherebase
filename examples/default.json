@@ -1,0 +1,529 @@
+{
+    "id": 257219536,
+    "type": "sphere_iot",
+    "view_width": 1714,
+    "view_height": 1018,
+    "spheres": [
+        {
+            "id": 480581616,
+            "type": "sphere_base",
+            "pos": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "orientation": [
+                0.0,
+                -0.555570233019602,
+                0.0,
+                0.8314696123025449
+            ],
+            "texture_id": 0,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [
+                {
+                    "id": 480667680,
+                    "node_type_name": "person_sphere_node",
+                    "texture_id": 12,
+                    "orientation_offset": [
+                        0.3633377317736461,
+                        0.6358430980176455,
+                        0.46084306742395825,
+                        0.5013111953469498
+                    ],
+                    "scene": null,
+                    "socket_id": 480667776,
+                    "socket": {
+                        "id": 480667776,
+                        "type": "socket",
+                        "scene": null
+                    },
+                    "op_code": 1
+                }
+            ],
+            "edges": []
+        },
+        {
+            "id": 480582000,
+            "type": "sphere_base",
+            "pos": [
+                11,
+                3,
+                5
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 3,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 480582384,
+            "type": "sphere_base",
+            "pos": [
+                9,
+                -23,
+                17
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 3,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 480582720,
+            "type": "sphere_base",
+            "pos": [
+                -6,
+                -22,
+                -6
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 2,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 480583056,
+            "type": "sphere_base",
+            "pos": [
+                5,
+                9,
+                8
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 1,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 480583392,
+            "type": "sphere_base",
+            "pos": [
+                -11,
+                -4,
+                -24
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 4,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 480632944,
+            "type": "sphere_base",
+            "pos": [
+                10,
+                20,
+                -21
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 4,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 480633280,
+            "type": "sphere_base",
+            "pos": [
+                8,
+                -5,
+                4
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 3,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 480633616,
+            "type": "sphere_base",
+            "pos": [
+                -10,
+                -25,
+                -16
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 3,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 480633952,
+            "type": "sphere_base",
+            "pos": [
+                0,
+                -9,
+                17
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 5,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 480634288,
+            "type": "sphere_base",
+            "pos": [
+                13,
+                20,
+                18
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 4,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 480634624,
+            "type": "sphere_base",
+            "pos": [
+                13,
+                16,
+                -15
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 2,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 480634960,
+            "type": "sphere_base",
+            "pos": [
+                21,
+                0,
+                -11
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 2,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 480581040,
+            "type": "sphere_base",
+            "pos": [
+                9,
+                -3,
+                -14
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 2,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 480580704,
+            "type": "sphere_base",
+            "pos": [
+                -9,
+                -5,
+                -20
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 4,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 480580368,
+            "type": "sphere_base",
+            "pos": [
+                -5,
+                3,
+                5
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 4,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 480580032,
+            "type": "sphere_base",
+            "pos": [
+                17,
+                9,
+                9
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 1,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 480579696,
+            "type": "sphere_base",
+            "pos": [
+                -16,
+                -8,
+                -8
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 5,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 475291360,
+            "type": "sphere_base",
+            "pos": [
+                16,
+                -22,
+                -25
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 1,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 475087296,
+            "type": "sphere_base",
+            "pos": [
+                -6,
+                -11,
+                17
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 1,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 480635344,
+            "type": "sphere_base",
+            "pos": [
+                -2,
+                -24,
+                -13
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 1,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 480635680,
+            "type": "sphere_base",
+            "pos": [
+                -1,
+                -11,
+                -11
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 3,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 480636016,
+            "type": "sphere_base",
+            "pos": [
+                5,
+                3,
+                -4
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 5,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 480636352,
+            "type": "sphere_base",
+            "pos": [
+                11,
+                18,
+                -12
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 2,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 480636688,
+            "type": "sphere_base",
+            "pos": [
+                20,
+                -24,
+                17
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 3,
+            "color_id": 0,
+            "color_id_per_lens": 12345,
+            "nodes": [],
+            "edges": []
+        }
+    ],
+    "target_sphere_id": 480581616
+}

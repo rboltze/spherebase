@@ -1,0 +1,3050 @@
+{
+    "id": 257219536,
+    "type": "sphere_iot",
+    "view_width": 1714,
+    "view_height": 1018,
+    "spheres": [
+        {
+            "id": 264350064,
+            "type": "sphere",
+            "pos": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "orientation": [
+                0.0,
+                0.09567202165105948,
+                0.0,
+                0.9954129114458966
+            ],
+            "texture_id": 0,
+            "color_id": 0,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [
+                {
+                    "id": 388072848,
+                    "node_type_name": "item_sphere_node",
+                    "texture_id": 26,
+                    "orientation_offset": [
+                        -0.12872417794237423,
+                        0.8170904860322242,
+                        0.5250351074854298,
+                        -0.20032812971835795
+                    ],
+                    "scene": {
+                        "id": 388073456,
+                        "scene_width": 64000,
+                        "scene_height": 64000,
+                        "zoom": 10,
+                        "center": [
+                            13.0,
+                            4.0
+                        ],
+                        "nodes": [
+                            {
+                                "id": 388073072,
+                                "title": "Item",
+                                "pos_x": -200.0,
+                                "pos_y": -300.0,
+                                "inputs": [],
+                                "outputs": [
+                                    {
+                                        "id": 381855472,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 381855504,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    },
+                                    {
+                                        "id": 381855536,
+                                        "index": 2,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 3
+                                    },
+                                    {
+                                        "id": 381855568,
+                                        "index": 3,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 4
+                                    }
+                                ],
+                                "content": {
+                                    "item_type": "wifi",
+                                    "name": "Name",
+                                    "version": "Version"
+                                },
+                                "op_code": 2
+                            }
+                        ],
+                        "edges": []
+                    },
+                    "socket_id": 388073008,
+                    "socket": {
+                        "id": 388073008,
+                        "type": "socket",
+                        "scene": null
+                    },
+                    "op_code": 2
+                },
+                {
+                    "id": 381954128,
+                    "node_type_name": "person_sphere_node",
+                    "texture_id": 13,
+                    "orientation_offset": [
+                        -0.09207971813266219,
+                        0.7747600234821587,
+                        0.6146520239153033,
+                        -0.1160651585075109
+                    ],
+                    "scene": {
+                        "id": 381954384,
+                        "scene_width": 64000,
+                        "scene_height": 64000,
+                        "zoom": 7,
+                        "center": [
+                            1083.9843749999998,
+                            64.45312499999999
+                        ],
+                        "nodes": [
+                            {
+                                "id": 381954320,
+                                "title": "Person",
+                                "pos_x": 459.90624999999983,
+                                "pos_y": -299.359375,
+                                "inputs": [],
+                                "outputs": [
+                                    {
+                                        "id": 381954512,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 381954544,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 2
+                                    },
+                                    {
+                                        "id": 381954576,
+                                        "index": 2,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    },
+                                    {
+                                        "id": 381954608,
+                                        "index": 3,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 4
+                                    }
+                                ],
+                                "content": {
+                                    "title": "Miss",
+                                    "name": "Janet",
+                                    "surname": "Doet",
+                                    "gender": "Female"
+                                },
+                                "op_code": 1
+                            },
+                            {
+                                "id": 319539728,
+                                "title": "Image",
+                                "pos_x": 951.7656249999998,
+                                "pos_y": 166.12500000000003,
+                                "inputs": [
+                                    {
+                                        "id": 319539824,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 6
+                                    }
+                                ],
+                                "outputs": [],
+                                "content": {
+                                    "file_name": "C:/Users/Kamila/PycharmProjects/Sphere/model/resources/images/jane_doe_1.jpg"
+                                },
+                                "op_code": 12
+                            },
+                            {
+                                "id": 271969840,
+                                "title": "Id",
+                                "pos_x": 793.3125,
+                                "pos_y": -373.0937499999999,
+                                "inputs": [
+                                    {
+                                        "id": 272026064,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 4
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": 272026128,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    }
+                                ],
+                                "content": {
+                                    "id_type": "Passport",
+                                    "id": "3452349i."
+                                },
+                                "op_code": 4
+                            },
+                            {
+                                "id": 271970128,
+                                "title": "Date",
+                                "pos_x": 1114.9062500000002,
+                                "pos_y": -380.9531249999999,
+                                "inputs": [
+                                    {
+                                        "id": 267042192,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 5
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": 267042224,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    }
+                                ],
+                                "content": {
+                                    "date_type": "Since",
+                                    "date_year": 2017,
+                                    "date_month": 3,
+                                    "date_day": 10
+                                },
+                                "op_code": 5
+                            },
+                            {
+                                "id": 271993552,
+                                "title": "Miscellaneous",
+                                "pos_x": 1428.6875000000002,
+                                "pos_y": -415.4531249999999,
+                                "inputs": [
+                                    {
+                                        "id": 267049296,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 6
+                                    }
+                                ],
+                                "outputs": [],
+                                "content": {
+                                    "description": "Old passport was stolen"
+                                },
+                                "op_code": 9
+                            },
+                            {
+                                "id": 267042352,
+                                "title": "Date",
+                                "pos_x": 1354.15625,
+                                "pos_y": -181.1406249999999,
+                                "inputs": [
+                                    {
+                                        "id": 266866224,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 5
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": 266865392,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    }
+                                ],
+                                "content": {
+                                    "date_type": "Birth",
+                                    "date_year": 1986,
+                                    "date_month": 9,
+                                    "date_day": 19
+                                },
+                                "op_code": 5
+                            },
+                            {
+                                "id": 272024080,
+                                "title": "Nationality",
+                                "pos_x": 962.0312500000002,
+                                "pos_y": -38.32812499999988,
+                                "inputs": [
+                                    {
+                                        "id": 266917392,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 2
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": 266916688,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 266916016,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    }
+                                ],
+                                "content": {
+                                    "nationality": "Spanish"
+                                },
+                                "op_code": 6
+                            },
+                            {
+                                "id": 271969872,
+                                "title": "Miscellaneous",
+                                "pos_x": 1327.3125,
+                                "pos_y": 152.59375000000009,
+                                "inputs": [
+                                    {
+                                        "id": 267011472,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 6
+                                    }
+                                ],
+                                "outputs": [],
+                                "content": {
+                                    "description": "Spanish since birth"
+                                },
+                                "op_code": 9
+                            }
+                        ],
+                        "edges": [
+                            {
+                                "id": 319540304,
+                                "edge_type": 2,
+                                "start": 381954512,
+                                "end": 319539824
+                            },
+                            {
+                                "id": 271818992,
+                                "edge_type": 2,
+                                "start": 381954608,
+                                "end": 272026064
+                            },
+                            {
+                                "id": 271862160,
+                                "edge_type": 2,
+                                "start": 272026128,
+                                "end": 267042192
+                            },
+                            {
+                                "id": 267050416,
+                                "edge_type": 2,
+                                "start": 267042224,
+                                "end": 267049296
+                            },
+                            {
+                                "id": 266916400,
+                                "edge_type": 2,
+                                "start": 381954576,
+                                "end": 266866224
+                            },
+                            {
+                                "id": 266917456,
+                                "edge_type": 2,
+                                "start": 381954544,
+                                "end": 266917392
+                            },
+                            {
+                                "id": 271859824,
+                                "edge_type": 2,
+                                "start": 266866224,
+                                "end": 266916016
+                            },
+                            {
+                                "id": 267012656,
+                                "edge_type": 2,
+                                "start": 266916688,
+                                "end": 267011472
+                            }
+                        ]
+                    },
+                    "socket_id": 381954096,
+                    "socket": {
+                        "id": 381954096,
+                        "type": "socket",
+                        "scene": null
+                    },
+                    "op_code": 1
+                },
+                {
+                    "id": 381955888,
+                    "node_type_name": "item_sphere_node",
+                    "texture_id": 22,
+                    "orientation_offset": [
+                        -0.02339274114464429,
+                        0.8367601158623599,
+                        0.5458933612024505,
+                        -0.03585702663138172
+                    ],
+                    "scene": {
+                        "id": 382063472,
+                        "scene_width": 64000,
+                        "scene_height": 64000,
+                        "zoom": 10,
+                        "center": [
+                            11.0,
+                            4.0
+                        ],
+                        "nodes": [
+                            {
+                                "id": 382063536,
+                                "title": "Item",
+                                "pos_x": -200.0,
+                                "pos_y": -300.0,
+                                "inputs": [],
+                                "outputs": [
+                                    {
+                                        "id": 382063696,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 382063728,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    },
+                                    {
+                                        "id": 382063760,
+                                        "index": 2,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 3
+                                    },
+                                    {
+                                        "id": 382063792,
+                                        "index": 3,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 4
+                                    }
+                                ],
+                                "content": {
+                                    "item_type": "smart phone",
+                                    "name": "Name",
+                                    "version": "Version"
+                                },
+                                "op_code": 2
+                            }
+                        ],
+                        "edges": []
+                    },
+                    "socket_id": 381955696,
+                    "socket": {
+                        "id": 381955696,
+                        "type": "socket",
+                        "scene": null
+                    },
+                    "op_code": 2
+                },
+                {
+                    "id": 382064720,
+                    "node_type_name": "item_sphere_node",
+                    "texture_id": 28,
+                    "orientation_offset": [
+                        0.013145311353107954,
+                        0.7734716330422484,
+                        0.6334913035506012,
+                        0.016049984241536003
+                    ],
+                    "scene": {
+                        "id": 382065872,
+                        "scene_width": 64000,
+                        "scene_height": 64000,
+                        "zoom": 10,
+                        "center": [
+                            16.0,
+                            5.0
+                        ],
+                        "nodes": [
+                            {
+                                "id": 382065968,
+                                "title": "Item",
+                                "pos_x": -200.0,
+                                "pos_y": -300.0,
+                                "inputs": [],
+                                "outputs": [
+                                    {
+                                        "id": 382066096,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 382066128,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    },
+                                    {
+                                        "id": 382066160,
+                                        "index": 2,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 3
+                                    },
+                                    {
+                                        "id": 382066192,
+                                        "index": 3,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 4
+                                    }
+                                ],
+                                "content": {
+                                    "item_type": "landline",
+                                    "name": "Name",
+                                    "version": "Version"
+                                },
+                                "op_code": 2
+                            }
+                        ],
+                        "edges": []
+                    },
+                    "socket_id": 382065264,
+                    "socket": {
+                        "id": 382065264,
+                        "type": "socket",
+                        "scene": null
+                    },
+                    "op_code": 2
+                },
+                {
+                    "id": 381955600,
+                    "node_type_name": "item_sphere_node",
+                    "texture_id": 15,
+                    "orientation_offset": [
+                        -0.01453255569007822,
+                        0.6994068509092827,
+                        0.7144343620853526,
+                        -0.014226875903887576
+                    ],
+                    "scene": {
+                        "id": 264966608,
+                        "scene_width": 64000,
+                        "scene_height": 64000,
+                        "zoom": 10,
+                        "center": [
+                            20.0,
+                            10.0
+                        ],
+                        "nodes": [
+                            {
+                                "id": 264967120,
+                                "title": "Item",
+                                "pos_x": -200.0,
+                                "pos_y": -300.0,
+                                "inputs": [],
+                                "outputs": [
+                                    {
+                                        "id": 264967280,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 264967312,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    },
+                                    {
+                                        "id": 264967344,
+                                        "index": 2,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 3
+                                    },
+                                    {
+                                        "id": 264967376,
+                                        "index": 3,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 4
+                                    }
+                                ],
+                                "content": {
+                                    "item_type": "laptop",
+                                    "name": "Name",
+                                    "version": "Version"
+                                },
+                                "op_code": 2
+                            },
+                            {
+                                "id": 388117776,
+                                "title": "Brand",
+                                "pos_x": 147.0,
+                                "pos_y": -221.0,
+                                "inputs": [
+                                    {
+                                        "id": 388117680,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 3
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": 388117840,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 388117648,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    }
+                                ],
+                                "content": {
+                                    "brand": "IBM"
+                                },
+                                "op_code": 7
+                            }
+                        ],
+                        "edges": [
+                            {
+                                "id": 346042512,
+                                "edge_type": 2,
+                                "start": 264967344,
+                                "end": 388117680
+                            }
+                        ]
+                    },
+                    "socket_id": 264966512,
+                    "socket": {
+                        "id": 264966512,
+                        "type": "socket",
+                        "scene": null
+                    },
+                    "op_code": 2
+                },
+                {
+                    "id": 265062256,
+                    "node_type_name": "item_sphere_node",
+                    "texture_id": 18,
+                    "orientation_offset": [
+                        -0.14132135022174644,
+                        0.7009666520747613,
+                        0.6838800009114472,
+                        -0.14485224542258487
+                    ],
+                    "scene": {
+                        "id": 382113008,
+                        "scene_width": 64000,
+                        "scene_height": 64000,
+                        "zoom": 10,
+                        "center": [
+                            57.0,
+                            6.0
+                        ],
+                        "nodes": [
+                            {
+                                "id": 382113072,
+                                "title": "Item",
+                                "pos_x": -247.0,
+                                "pos_y": -257.0,
+                                "inputs": [],
+                                "outputs": [
+                                    {
+                                        "id": 382114160,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 382114192,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    },
+                                    {
+                                        "id": 382114224,
+                                        "index": 2,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 3
+                                    },
+                                    {
+                                        "id": 382114256,
+                                        "index": 3,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 4
+                                    }
+                                ],
+                                "content": {
+                                    "item_type": "pc",
+                                    "name": "Home computer",
+                                    "version": "Windows 7"
+                                },
+                                "op_code": 2
+                            },
+                            {
+                                "id": 328060848,
+                                "title": "Brand",
+                                "pos_x": 22.0,
+                                "pos_y": -275.0,
+                                "inputs": [
+                                    {
+                                        "id": 328060880,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 3
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": 328060752,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 328060592,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    }
+                                ],
+                                "content": {
+                                    "brand": "HUAWEI"
+                                },
+                                "op_code": 7
+                            },
+                            {
+                                "id": 328057968,
+                                "title": "Date",
+                                "pos_x": 128.0,
+                                "pos_y": -118.0,
+                                "inputs": [
+                                    {
+                                        "id": 328039568,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 5
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": 328039440,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    }
+                                ],
+                                "content": {
+                                    "date_type": "Purchased",
+                                    "date_year": 2021,
+                                    "date_month": 3,
+                                    "date_day": 3
+                                },
+                                "op_code": 5
+                            }
+                        ],
+                        "edges": [
+                            {
+                                "id": 328150672,
+                                "edge_type": 2,
+                                "start": 382114224,
+                                "end": 328060880
+                            },
+                            {
+                                "id": 328150768,
+                                "edge_type": 2,
+                                "start": 382114192,
+                                "end": 328039568
+                            }
+                        ]
+                    },
+                    "socket_id": 265062224,
+                    "socket": {
+                        "id": 265062224,
+                        "type": "socket",
+                        "scene": null
+                    },
+                    "op_code": 2
+                },
+                {
+                    "id": 382216752,
+                    "node_type_name": "item_sphere_node",
+                    "texture_id": 19,
+                    "orientation_offset": [
+                        -0.23346049499377455,
+                        0.7445699551826341,
+                        0.5339888551096937,
+                        -0.3255267757577489
+                    ],
+                    "scene": {
+                        "id": 382217456,
+                        "scene_width": 64000,
+                        "scene_height": 64000,
+                        "zoom": 10,
+                        "center": [
+                            13.0,
+                            3.0
+                        ],
+                        "nodes": [
+                            {
+                                "id": 382217520,
+                                "title": "Item",
+                                "pos_x": -366.0,
+                                "pos_y": -247.0,
+                                "inputs": [],
+                                "outputs": [
+                                    {
+                                        "id": 382217680,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 382217712,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    },
+                                    {
+                                        "id": 382217744,
+                                        "index": 2,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 3
+                                    },
+                                    {
+                                        "id": 382217776,
+                                        "index": 3,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 4
+                                    }
+                                ],
+                                "content": {
+                                    "item_type": "rfid tag",
+                                    "name": "Name",
+                                    "version": "Version"
+                                },
+                                "op_code": 2
+                            },
+                            {
+                                "id": 388222704,
+                                "title": "Brand",
+                                "pos_x": 236.0,
+                                "pos_y": -231.0,
+                                "inputs": [
+                                    {
+                                        "id": 396912016,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 3
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": 397081776,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 282201936,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    }
+                                ],
+                                "content": {
+                                    "brand": "Brand"
+                                },
+                                "op_code": 7
+                            },
+                            {
+                                "id": 397079184,
+                                "title": "Date",
+                                "pos_x": 178.0,
+                                "pos_y": -83.0,
+                                "inputs": [
+                                    {
+                                        "id": 397079504,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 5
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": 397079536,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    }
+                                ],
+                                "content": {
+                                    "date_type": "Type",
+                                    "date_year": 2021,
+                                    "date_month": 3,
+                                    "date_day": 11
+                                },
+                                "op_code": 5
+                            },
+                            {
+                                "id": 387943952,
+                                "title": "Id",
+                                "pos_x": -130.0,
+                                "pos_y": -291.0,
+                                "inputs": [
+                                    {
+                                        "id": 387943440,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 4
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": 387942512,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    }
+                                ],
+                                "content": {
+                                    "id_type": "ID Type",
+                                    "id": "No."
+                                },
+                                "op_code": 4
+                            }
+                        ],
+                        "edges": [
+                            {
+                                "id": 293282256,
+                                "edge_type": 2,
+                                "start": 382217744,
+                                "end": 396912016
+                            },
+                            {
+                                "id": 346042448,
+                                "edge_type": 2,
+                                "start": 382217712,
+                                "end": 397079504
+                            },
+                            {
+                                "id": 396913328,
+                                "edge_type": 2,
+                                "start": 382217776,
+                                "end": 387943440
+                            }
+                        ]
+                    },
+                    "socket_id": 382216528,
+                    "socket": {
+                        "id": 382216528,
+                        "type": "socket",
+                        "scene": null
+                    },
+                    "op_code": 2
+                },
+                {
+                    "id": 382217840,
+                    "node_type_name": "item_sphere_node",
+                    "texture_id": 20,
+                    "orientation_offset": [
+                        -0.30078483558425423,
+                        0.569914054732998,
+                        0.727460274706281,
+                        -0.23564380243200733
+                    ],
+                    "scene": {
+                        "id": 382309776,
+                        "scene_width": 64000,
+                        "scene_height": 64000,
+                        "zoom": 10,
+                        "center": [
+                            6.0,
+                            3.0
+                        ],
+                        "nodes": [
+                            {
+                                "id": 382310096,
+                                "title": "Item",
+                                "pos_x": -200.0,
+                                "pos_y": -300.0,
+                                "inputs": [],
+                                "outputs": [
+                                    {
+                                        "id": 382310256,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 382310288,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    },
+                                    {
+                                        "id": 382310320,
+                                        "index": 2,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 3
+                                    },
+                                    {
+                                        "id": 382310352,
+                                        "index": 3,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 4
+                                    }
+                                ],
+                                "content": {
+                                    "item_type": "smart card",
+                                    "name": "Name",
+                                    "version": "Version"
+                                },
+                                "op_code": 2
+                            }
+                        ],
+                        "edges": []
+                    },
+                    "socket_id": 382309168,
+                    "socket": {
+                        "id": 382309168,
+                        "type": "socket",
+                        "scene": null
+                    },
+                    "op_code": 2
+                },
+                {
+                    "id": 382062896,
+                    "node_type_name": "item_sphere_node",
+                    "texture_id": 21,
+                    "orientation_offset": [
+                        -0.37345103102606875,
+                        0.5337387894529014,
+                        0.7038959436774996,
+                        -0.2831743853763643
+                    ],
+                    "scene": {
+                        "id": 382063472,
+                        "scene_width": 64000,
+                        "scene_height": 64000,
+                        "zoom": 10,
+                        "center": [
+                            5.0,
+                            2.0
+                        ],
+                        "nodes": [
+                            {
+                                "id": 382409872,
+                                "title": "Item",
+                                "pos_x": -200.0,
+                                "pos_y": -300.0,
+                                "inputs": [],
+                                "outputs": [
+                                    {
+                                        "id": 382409776,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 382409840,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    },
+                                    {
+                                        "id": 382409744,
+                                        "index": 2,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 3
+                                    },
+                                    {
+                                        "id": 382409808,
+                                        "index": 3,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 4
+                                    }
+                                ],
+                                "content": {
+                                    "item_type": "smart tv",
+                                    "name": "Name",
+                                    "version": "Version"
+                                },
+                                "op_code": 2
+                            }
+                        ],
+                        "edges": []
+                    },
+                    "socket_id": 382409488,
+                    "socket": {
+                        "id": 382409488,
+                        "type": "socket",
+                        "scene": null
+                    },
+                    "op_code": 2
+                },
+                {
+                    "id": 382062928,
+                    "node_type_name": "item_sphere_node",
+                    "texture_id": 23,
+                    "orientation_offset": [
+                        -0.3889143667193344,
+                        0.5671066442665589,
+                        0.6386469370955014,
+                        -0.3453487499999933
+                    ],
+                    "scene": {
+                        "id": 264966608,
+                        "scene_width": 64000,
+                        "scene_height": 64000,
+                        "zoom": 8,
+                        "center": [
+                            132.81249999999997,
+                            318.74999999999994
+                        ],
+                        "nodes": [
+                            {
+                                "id": 382065232,
+                                "title": "Item",
+                                "pos_x": 49.99999999999996,
+                                "pos_y": 226.56249999999994,
+                                "inputs": [],
+                                "outputs": [
+                                    {
+                                        "id": 382539728,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 382539760,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    },
+                                    {
+                                        "id": 382539792,
+                                        "index": 2,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 3
+                                    },
+                                    {
+                                        "id": 382539824,
+                                        "index": 3,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 4
+                                    }
+                                ],
+                                "content": {
+                                    "item_type": "smart watch",
+                                    "name": "Name",
+                                    "version": "Version"
+                                },
+                                "op_code": 2
+                            }
+                        ],
+                        "edges": []
+                    },
+                    "socket_id": 382538032,
+                    "socket": {
+                        "id": 382538032,
+                        "type": "socket",
+                        "scene": null
+                    },
+                    "op_code": 2
+                },
+                {
+                    "id": 265052016,
+                    "node_type_name": "item_sphere_node",
+                    "texture_id": 26,
+                    "orientation_offset": [
+                        -0.3270057477651137,
+                        0.661516239765967,
+                        0.5467345465098982,
+                        -0.3956574795288155
+                    ],
+                    "scene": {
+                        "id": 382217456,
+                        "scene_width": 64000,
+                        "scene_height": 64000,
+                        "zoom": 10,
+                        "center": [
+                            8.0,
+                            4.0
+                        ],
+                        "nodes": [
+                            {
+                                "id": 358326064,
+                                "title": "Item",
+                                "pos_x": -200.0,
+                                "pos_y": -300.0,
+                                "inputs": [],
+                                "outputs": [
+                                    {
+                                        "id": 358325904,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 358326096,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    },
+                                    {
+                                        "id": 358326128,
+                                        "index": 2,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 3
+                                    },
+                                    {
+                                        "id": 358326160,
+                                        "index": 3,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 4
+                                    }
+                                ],
+                                "content": {
+                                    "item_type": "wifi",
+                                    "name": "Name",
+                                    "version": "Version"
+                                },
+                                "op_code": 2
+                            }
+                        ],
+                        "edges": []
+                    },
+                    "socket_id": 358325264,
+                    "socket": {
+                        "id": 358325264,
+                        "type": "socket",
+                        "scene": null
+                    },
+                    "op_code": 2
+                },
+                {
+                    "id": 434070256,
+                    "node_type_name": "item_sphere_node",
+                    "texture_id": 26,
+                    "orientation_offset": [
+                        -0.07212552891762854,
+                        0.6289392151944342,
+                        0.7718675217014672,
+                        -0.05876989545167244
+                    ],
+                    "scene": {
+                        "id": 434071376,
+                        "scene_width": 64000,
+                        "scene_height": 64000,
+                        "zoom": 10,
+                        "center": [
+                            6.0,
+                            1.0
+                        ],
+                        "nodes": [
+                            {
+                                "id": 434071440,
+                                "title": "Item",
+                                "pos_x": -200.0,
+                                "pos_y": -300.0,
+                                "inputs": [],
+                                "outputs": [
+                                    {
+                                        "id": 434071600,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 434071632,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    },
+                                    {
+                                        "id": 434071664,
+                                        "index": 2,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 3
+                                    },
+                                    {
+                                        "id": 434071696,
+                                        "index": 3,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 4
+                                    }
+                                ],
+                                "content": {
+                                    "item_type": "wifi",
+                                    "name": "Name",
+                                    "version": "Version"
+                                },
+                                "op_code": 2
+                            }
+                        ],
+                        "edges": []
+                    },
+                    "socket_id": 434070352,
+                    "socket": {
+                        "id": 434070352,
+                        "type": "socket",
+                        "scene": null
+                    },
+                    "op_code": 2
+                },
+                {
+                    "id": 458945392,
+                    "node_type_name": "person_sphere_node",
+                    "texture_id": 12,
+                    "orientation_offset": [
+                        -0.23602536821233386,
+                        0.6980870963254231,
+                        0.6219133107927682,
+                        -0.26493445484299927
+                    ],
+                    "scene": {
+                        "id": 458946192,
+                        "scene_width": 64000,
+                        "scene_height": 64000,
+                        "zoom": 8,
+                        "center": [
+                            226.56249999999997,
+                            9.374999999999998
+                        ],
+                        "nodes": [
+                            {
+                                "id": 458946512,
+                                "title": "Person",
+                                "pos_x": -289.0,
+                                "pos_y": -216.0,
+                                "inputs": [],
+                                "outputs": [
+                                    {
+                                        "id": 458946672,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 458946704,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 2
+                                    },
+                                    {
+                                        "id": 458946736,
+                                        "index": 2,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    },
+                                    {
+                                        "id": 458946768,
+                                        "index": 3,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 4
+                                    }
+                                ],
+                                "content": {
+                                    "title": "Mr.",
+                                    "name": "Johnathan",
+                                    "surname": "Doet",
+                                    "gender": "Male"
+                                },
+                                "op_code": 1
+                            },
+                            {
+                                "id": 350882288,
+                                "title": "Image",
+                                "pos_x": -23.0,
+                                "pos_y": 40.0,
+                                "inputs": [
+                                    {
+                                        "id": 350890736,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 6
+                                    }
+                                ],
+                                "outputs": [],
+                                "content": {
+                                    "file_name": "C:/Users/Kamila/PycharmProjects/Sphere/model/resources/images/john_doe_1.jpg"
+                                },
+                                "op_code": 12
+                            },
+                            {
+                                "id": 389279184,
+                                "title": "Date",
+                                "pos_x": -33.0,
+                                "pos_y": -270.0,
+                                "inputs": [
+                                    {
+                                        "id": 279543600,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 5
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": 279543472,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    }
+                                ],
+                                "content": {
+                                    "date_type": "Type",
+                                    "date_year": 2021,
+                                    "date_month": 3,
+                                    "date_day": 11
+                                },
+                                "op_code": 5
+                            },
+                            {
+                                "id": 281344496,
+                                "title": "Nationality",
+                                "pos_x": 138.0,
+                                "pos_y": -95.0,
+                                "inputs": [
+                                    {
+                                        "id": 281344400,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 2
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": 281343760,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 281344304,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    }
+                                ],
+                                "content": {
+                                    "nationality": "Nationality"
+                                },
+                                "op_code": 6
+                            }
+                        ],
+                        "edges": [
+                            {
+                                "id": 350909648,
+                                "edge_type": 2,
+                                "start": 458946672,
+                                "end": 350890736
+                            },
+                            {
+                                "id": 350909616,
+                                "edge_type": 2,
+                                "start": 458946736,
+                                "end": 279543600
+                            },
+                            {
+                                "id": 281345040,
+                                "edge_type": 2,
+                                "start": 281344400,
+                                "end": 458946704
+                            }
+                        ]
+                    },
+                    "socket_id": 458945456,
+                    "socket": {
+                        "id": 458945456,
+                        "type": "socket",
+                        "scene": null
+                    },
+                    "op_code": 1
+                },
+                {
+                    "id": 536807568,
+                    "node_type_name": "item_sphere_node",
+                    "texture_id": 25,
+                    "orientation_offset": [
+                        -0.2246978547643316,
+                        0.6334953578238115,
+                        0.7129759608172757,
+                        -0.19964915471063654
+                    ],
+                    "scene": {
+                        "id": 536809424,
+                        "scene_width": 64000,
+                        "scene_height": 64000,
+                        "zoom": 10,
+                        "center": [
+                            58.0,
+                            -37.0
+                        ],
+                        "nodes": [
+                            {
+                                "id": 534962256,
+                                "title": "Item",
+                                "pos_x": -200.0,
+                                "pos_y": -300.0,
+                                "inputs": [],
+                                "outputs": [
+                                    {
+                                        "id": 534962416,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 534962448,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    },
+                                    {
+                                        "id": 534962480,
+                                        "index": 2,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 3
+                                    },
+                                    {
+                                        "id": 534962512,
+                                        "index": 3,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 4
+                                    }
+                                ],
+                                "content": {
+                                    "item_type": "webcam",
+                                    "name": "Name",
+                                    "version": "Version"
+                                },
+                                "op_code": 2
+                            },
+                            {
+                                "id": 350950032,
+                                "title": "Miscellaneous",
+                                "pos_x": 120.0,
+                                "pos_y": 71.0,
+                                "inputs": [
+                                    {
+                                        "id": 281396336,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 6
+                                    }
+                                ],
+                                "outputs": [],
+                                "content": {
+                                    "description": "Description"
+                                },
+                                "op_code": 9
+                            },
+                            {
+                                "id": 281371728,
+                                "title": "Brand",
+                                "pos_x": 120.0,
+                                "pos_y": -255.0,
+                                "inputs": [
+                                    {
+                                        "id": 281371600,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 3
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": 281371504,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 281371472,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    }
+                                ],
+                                "content": {
+                                    "brand": "Apple"
+                                },
+                                "op_code": 7
+                            },
+                            {
+                                "id": 281496304,
+                                "title": "Date",
+                                "pos_x": 144.0,
+                                "pos_y": -85.0,
+                                "inputs": [
+                                    {
+                                        "id": 281496368,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 5
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": 281494928,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    }
+                                ],
+                                "content": {
+                                    "date_type": "Type",
+                                    "date_year": 2021,
+                                    "date_month": 3,
+                                    "date_day": 11
+                                },
+                                "op_code": 5
+                            }
+                        ],
+                        "edges": [
+                            {
+                                "id": 281396368,
+                                "edge_type": 2,
+                                "start": 534962416,
+                                "end": 281396336
+                            },
+                            {
+                                "id": 281372016,
+                                "edge_type": 2,
+                                "start": 534962480,
+                                "end": 281371600
+                            },
+                            {
+                                "id": 281497168,
+                                "edge_type": 2,
+                                "start": 534962448,
+                                "end": 281496368
+                            }
+                        ]
+                    },
+                    "socket_id": 536808496,
+                    "socket": {
+                        "id": 536808496,
+                        "type": "socket",
+                        "scene": null
+                    },
+                    "op_code": 2
+                },
+                {
+                    "id": 287716912,
+                    "node_type_name": "person_sphere_node",
+                    "texture_id": 12,
+                    "orientation_offset": [
+                        -0.23968263622922625,
+                        0.4999371433066808,
+                        0.8192825002827001,
+                        -0.14625755147376676
+                    ],
+                    "scene": {
+                        "id": 382113008,
+                        "scene_width": 64000,
+                        "scene_height": 64000,
+                        "zoom": 10,
+                        "center": [
+                            6.0,
+                            1.0
+                        ],
+                        "nodes": [
+                            {
+                                "id": 415968336,
+                                "title": "Person",
+                                "pos_x": -200.0,
+                                "pos_y": -300.0,
+                                "inputs": [],
+                                "outputs": [
+                                    {
+                                        "id": 287718160,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 287717328,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 2
+                                    },
+                                    {
+                                        "id": 287719152,
+                                        "index": 2,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    },
+                                    {
+                                        "id": 287718576,
+                                        "index": 3,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 4
+                                    }
+                                ],
+                                "content": {
+                                    "title": "Mr.",
+                                    "name": "jimmy",
+                                    "surname": "Last name",
+                                    "gender": "Gender"
+                                },
+                                "op_code": 1
+                            },
+                            {
+                                "id": 415998608,
+                                "title": "Image",
+                                "pos_x": 282.0,
+                                "pos_y": 70.0,
+                                "inputs": [
+                                    {
+                                        "id": 416001360,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 6
+                                    }
+                                ],
+                                "outputs": [],
+                                "content": {
+                                    "file_name": "C:/Users/Kamila/PycharmProjects/Sphere/model/resources/images/john_doe_4.jpg"
+                                },
+                                "op_code": 12
+                            },
+                            {
+                                "id": 294164720,
+                                "title": "Marital status",
+                                "pos_x": 352.0,
+                                "pos_y": -181.0,
+                                "inputs": [
+                                    {
+                                        "id": 294164528,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 2
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": 294164624,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 294166096,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    }
+                                ],
+                                "content": {
+                                    "marital_status": "Single"
+                                },
+                                "op_code": 8
+                            },
+                            {
+                                "id": 416037584,
+                                "title": "Nationality",
+                                "pos_x": 392.0,
+                                "pos_y": -415.0,
+                                "inputs": [
+                                    {
+                                        "id": 416038192,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 2
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": 294166448,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 294166320,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    }
+                                ],
+                                "content": {
+                                    "nationality": "Spanish"
+                                },
+                                "op_code": 6
+                            }
+                        ],
+                        "edges": [
+                            {
+                                "id": 417716880,
+                                "edge_type": 3,
+                                "start": 287718160,
+                                "end": 416001360
+                            },
+                            {
+                                "id": 416264656,
+                                "edge_type": 3,
+                                "start": 294164528,
+                                "end": 287717328
+                            },
+                            {
+                                "id": 286367920,
+                                "edge_type": 3,
+                                "start": 416038192,
+                                "end": 287717328
+                            }
+                        ]
+                    },
+                    "socket_id": 400204624,
+                    "socket": {
+                        "id": 400204624,
+                        "type": "socket",
+                        "scene": null
+                    },
+                    "op_code": 1
+                },
+                {
+                    "id": 287715824,
+                    "node_type_name": "person_sphere_node",
+                    "texture_id": 13,
+                    "orientation_offset": [
+                        0.09628498002289,
+                        0.60941103992609,
+                        0.7834139950502965,
+                        0.07489926166208587
+                    ],
+                    "scene": {
+                        "id": 382113008,
+                        "scene_width": 64000,
+                        "scene_height": 64000,
+                        "zoom": 9,
+                        "center": [
+                            239.99999999999994,
+                            -198.74999999999997
+                        ],
+                        "nodes": [
+                            {
+                                "id": 293930064,
+                                "title": "Person",
+                                "pos_x": -200.0,
+                                "pos_y": -300.0,
+                                "inputs": [],
+                                "outputs": [
+                                    {
+                                        "id": 416035568,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 416038320,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 2
+                                    },
+                                    {
+                                        "id": 286483792,
+                                        "index": 2,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    },
+                                    {
+                                        "id": 286371728,
+                                        "index": 3,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 4
+                                    }
+                                ],
+                                "content": {
+                                    "title": "Ms.",
+                                    "name": "First name",
+                                    "surname": "Last name",
+                                    "gender": "Female"
+                                },
+                                "op_code": 1
+                            },
+                            {
+                                "id": 417484112,
+                                "title": "Date",
+                                "pos_x": 258.0,
+                                "pos_y": -521.0,
+                                "inputs": [
+                                    {
+                                        "id": 417481072,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 5
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": 417484368,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    }
+                                ],
+                                "content": {
+                                    "date_type": "Type",
+                                    "date_year": 2021,
+                                    "date_month": 7,
+                                    "date_day": 20
+                                },
+                                "op_code": 5
+                            },
+                            {
+                                "id": 415845392,
+                                "title": "Image",
+                                "pos_x": 306.0,
+                                "pos_y": 198.0,
+                                "inputs": [
+                                    {
+                                        "id": 329350864,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 6
+                                    }
+                                ],
+                                "outputs": [],
+                                "content": {
+                                    "file_name": "C:/Users/Kamila/PycharmProjects/Sphere/model/resources/images/jane_doe_3.jpg"
+                                },
+                                "op_code": 12
+                            },
+                            {
+                                "id": 416343952,
+                                "title": "Marital status",
+                                "pos_x": 228.0,
+                                "pos_y": -317.0,
+                                "inputs": [
+                                    {
+                                        "id": 417804592,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 2
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": 417808112,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 417804560,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    }
+                                ],
+                                "content": {
+                                    "marital_status": "Married"
+                                },
+                                "op_code": 8
+                            },
+                            {
+                                "id": 416264624,
+                                "title": "Date",
+                                "pos_x": 508.0,
+                                "pos_y": -313.0,
+                                "inputs": [
+                                    {
+                                        "id": 397771152,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 2,
+                                        "socket_type": 5
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": 397771056,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    }
+                                ],
+                                "content": {
+                                    "date_type": "Type",
+                                    "date_year": 2021,
+                                    "date_month": 7,
+                                    "date_day": 8
+                                },
+                                "op_code": 5
+                            }
+                        ],
+                        "edges": [
+                            {
+                                "id": 417484016,
+                                "edge_type": 3,
+                                "start": 286483792,
+                                "end": 417481072
+                            },
+                            {
+                                "id": 415998224,
+                                "edge_type": 3,
+                                "start": 416035568,
+                                "end": 329350864
+                            },
+                            {
+                                "id": 416344080,
+                                "edge_type": 3,
+                                "start": 417804592,
+                                "end": 416038320
+                            },
+                            {
+                                "id": 294164336,
+                                "edge_type": 3,
+                                "start": 417804560,
+                                "end": 397771152
+                            }
+                        ]
+                    },
+                    "socket_id": 415912432,
+                    "socket": {
+                        "id": 415912432,
+                        "type": "socket",
+                        "scene": null
+                    },
+                    "op_code": 1
+                }
+            ],
+            "edges": [
+                {
+                    "id": 381955440,
+                    "type": "edge",
+                    "edge_type": 0,
+                    "start_socket_id": 388073008,
+                    "end_socket_id": 381954096,
+                    "scene": null
+                },
+                {
+                    "id": 381953872,
+                    "type": "edge",
+                    "edge_type": 0,
+                    "start_socket_id": 381954096,
+                    "end_socket_id": 381955696,
+                    "scene": null
+                },
+                {
+                    "id": 264968112,
+                    "type": "edge",
+                    "edge_type": 0,
+                    "start_socket_id": 381954096,
+                    "end_socket_id": 382065264,
+                    "scene": {
+                        "id": 252559312,
+                        "scene_width": 64000,
+                        "scene_height": 64000,
+                        "zoom": 10,
+                        "center": [
+                            2.0,
+                            1.0
+                        ],
+                        "nodes": [
+                            {
+                                "id": 338121104,
+                                "title": "Edge relationship",
+                                "pos_x": -200.0,
+                                "pos_y": -300.0,
+                                "inputs": [],
+                                "outputs": [
+                                    {
+                                        "id": 301376112,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 301376208,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    }
+                                ],
+                                "content": {
+                                    "relationship": "Stolen"
+                                },
+                                "op_code": 3
+                            }
+                        ],
+                        "edges": []
+                    }
+                },
+                {
+                    "id": 264968208,
+                    "type": "edge",
+                    "edge_type": 0,
+                    "start_socket_id": 381954096,
+                    "end_socket_id": 264966512,
+                    "scene": {
+                        "id": 381954384,
+                        "scene_width": 64000,
+                        "scene_height": 64000,
+                        "zoom": 10,
+                        "center": [
+                            3.0,
+                            1.0
+                        ],
+                        "nodes": [
+                            {
+                                "id": 338121936,
+                                "title": "Edge relationship",
+                                "pos_x": -200.0,
+                                "pos_y": -300.0,
+                                "inputs": [],
+                                "outputs": [
+                                    {
+                                        "id": 338122768,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 338122448,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    }
+                                ],
+                                "content": {
+                                    "relationship": "Owner"
+                                },
+                                "op_code": 3
+                            }
+                        ],
+                        "edges": []
+                    }
+                },
+                {
+                    "id": 382115632,
+                    "type": "edge",
+                    "edge_type": 0,
+                    "start_socket_id": 265062224,
+                    "end_socket_id": 381954096,
+                    "scene": {
+                        "id": 252559312,
+                        "scene_width": 64000,
+                        "scene_height": 64000,
+                        "zoom": 10,
+                        "center": [
+                            3.0,
+                            1.0
+                        ],
+                        "nodes": [
+                            {
+                                "id": 338121936,
+                                "title": "Edge relationship",
+                                "pos_x": -200.0,
+                                "pos_y": -300.0,
+                                "inputs": [],
+                                "outputs": [
+                                    {
+                                        "id": 338122768,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 338122448,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    }
+                                ],
+                                "content": {
+                                    "relationship": "Owner"
+                                },
+                                "op_code": 3
+                            },
+                            {
+                                "id": 338123408,
+                                "title": "Edge relationship",
+                                "pos_x": -200.0,
+                                "pos_y": -300.0,
+                                "inputs": [],
+                                "outputs": [
+                                    {
+                                        "id": 338123472,
+                                        "index": 0,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 6
+                                    },
+                                    {
+                                        "id": 338123344,
+                                        "index": 1,
+                                        "multi_edges": true,
+                                        "position": 6,
+                                        "socket_type": 5
+                                    }
+                                ],
+                                "content": {
+                                    "relationship": "Usage"
+                                },
+                                "op_code": 3
+                            }
+                        ],
+                        "edges": []
+                    }
+                },
+                {
+                    "id": 263671760,
+                    "type": "edge",
+                    "edge_type": 0,
+                    "start_socket_id": 264966512,
+                    "end_socket_id": 434070352,
+                    "scene": null
+                },
+                {
+                    "id": 277606256,
+                    "type": "edge",
+                    "edge_type": 0,
+                    "start_socket_id": 265062224,
+                    "end_socket_id": 264966512,
+                    "scene": null
+                },
+                {
+                    "id": 391620880,
+                    "type": "edge",
+                    "edge_type": 0,
+                    "start_socket_id": 264966512,
+                    "end_socket_id": 264966512,
+                    "scene": null
+                },
+                {
+                    "id": 458948208,
+                    "type": "edge",
+                    "edge_type": 0,
+                    "start_socket_id": 382216528,
+                    "end_socket_id": 458945456,
+                    "scene": null
+                },
+                {
+                    "id": 458948272,
+                    "type": "edge",
+                    "edge_type": 0,
+                    "start_socket_id": 358325264,
+                    "end_socket_id": 458945456,
+                    "scene": null
+                },
+                {
+                    "id": 536696912,
+                    "type": "edge",
+                    "edge_type": 0,
+                    "start_socket_id": 382538032,
+                    "end_socket_id": 458945456,
+                    "scene": null
+                },
+                {
+                    "id": 536696880,
+                    "type": "edge",
+                    "edge_type": 0,
+                    "start_socket_id": 382409488,
+                    "end_socket_id": 458945456,
+                    "scene": null
+                },
+                {
+                    "id": 536698192,
+                    "type": "edge",
+                    "edge_type": 0,
+                    "start_socket_id": 382309168,
+                    "end_socket_id": 458945456,
+                    "scene": null
+                },
+                {
+                    "id": 536808816,
+                    "type": "edge",
+                    "edge_type": 0,
+                    "start_socket_id": 458945456,
+                    "end_socket_id": 536808496,
+                    "scene": null
+                },
+                {
+                    "id": 534965584,
+                    "type": "edge",
+                    "edge_type": 0,
+                    "start_socket_id": 458945456,
+                    "end_socket_id": 381954096,
+                    "scene": null
+                },
+                {
+                    "id": 281342352,
+                    "type": "edge",
+                    "edge_type": 0,
+                    "start_socket_id": 381954096,
+                    "end_socket_id": 381954096,
+                    "scene": null
+                },
+                {
+                    "id": 394636080,
+                    "type": "edge",
+                    "edge_type": 0,
+                    "start_socket_id": 382065264,
+                    "end_socket_id": 382065264,
+                    "scene": null
+                },
+                {
+                    "id": 394360720,
+                    "type": "edge",
+                    "edge_type": 0,
+                    "start_socket_id": 381955696,
+                    "end_socket_id": 381955696,
+                    "scene": null
+                },
+                {
+                    "id": 417716304,
+                    "type": "edge",
+                    "edge_type": 0,
+                    "start_socket_id": 400204624,
+                    "end_socket_id": 536808496,
+                    "scene": null
+                },
+                {
+                    "id": 417901584,
+                    "type": "edge",
+                    "edge_type": 0,
+                    "start_socket_id": 434070352,
+                    "end_socket_id": 400204624,
+                    "scene": null
+                },
+                {
+                    "id": 416265392,
+                    "type": "edge",
+                    "edge_type": 0,
+                    "start_socket_id": 434070352,
+                    "end_socket_id": 415912432,
+                    "scene": null
+                },
+                {
+                    "id": 286693584,
+                    "type": "edge",
+                    "edge_type": 0,
+                    "start_socket_id": 415912432,
+                    "end_socket_id": 415912432,
+                    "scene": null
+                }
+            ]
+        },
+        {
+            "id": 264350672,
+            "type": "sphere",
+            "pos": [
+                -15,
+                -15,
+                -2
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 2,
+            "color_id": 2,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 264350896,
+            "type": "sphere",
+            "pos": [
+                -17,
+                12,
+                21
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 5,
+            "color_id": 5,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 264351120,
+            "type": "sphere",
+            "pos": [
+                19,
+                9,
+                5
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 4,
+            "color_id": 4,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 264351344,
+            "type": "sphere",
+            "pos": [
+                11,
+                -15,
+                24
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 2,
+            "color_id": 2,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 264351600,
+            "type": "sphere",
+            "pos": [
+                14,
+                -20,
+                14
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 5,
+            "color_id": 5,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 264417392,
+            "type": "sphere",
+            "pos": [
+                -10,
+                23,
+                16
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 4,
+            "color_id": 4,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 264417616,
+            "type": "sphere",
+            "pos": [
+                -11,
+                13,
+                16
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 4,
+            "color_id": 4,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 264417840,
+            "type": "sphere",
+            "pos": [
+                -20,
+                -3,
+                -16
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 1,
+            "color_id": 1,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 264351568,
+            "type": "sphere",
+            "pos": [
+                3,
+                21,
+                -23
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 4,
+            "color_id": 4,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 264418256,
+            "type": "sphere",
+            "pos": [
+                13,
+                18,
+                5
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 5,
+            "color_id": 5,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 264418480,
+            "type": "sphere",
+            "pos": [
+                13,
+                -2,
+                0
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 2,
+            "color_id": 2,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 264418704,
+            "type": "sphere",
+            "pos": [
+                -6,
+                9,
+                23
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 1,
+            "color_id": 1,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 264418928,
+            "type": "sphere",
+            "pos": [
+                3,
+                -4,
+                -15
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 4,
+            "color_id": 4,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 264419152,
+            "type": "sphere",
+            "pos": [
+                13,
+                -2,
+                10
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 2,
+            "color_id": 2,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 264419376,
+            "type": "sphere",
+            "pos": [
+                9,
+                24,
+                21
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 1,
+            "color_id": 1,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 264419600,
+            "type": "sphere",
+            "pos": [
+                24,
+                -6,
+                -25
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 3,
+            "color_id": 3,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 264419824,
+            "type": "sphere",
+            "pos": [
+                10,
+                23,
+                8
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 3,
+            "color_id": 3,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 264420048,
+            "type": "sphere",
+            "pos": [
+                -15,
+                8,
+                -17
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 1,
+            "color_id": 1,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 264420272,
+            "type": "sphere",
+            "pos": [
+                -5,
+                -4,
+                11
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 3,
+            "color_id": 3,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 264420496,
+            "type": "sphere",
+            "pos": [
+                17,
+                8,
+                25
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 4,
+            "color_id": 4,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 264420720,
+            "type": "sphere",
+            "pos": [
+                5,
+                1,
+                -2
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 5,
+            "color_id": 5,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 264420944,
+            "type": "sphere",
+            "pos": [
+                24,
+                9,
+                15
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 2,
+            "color_id": 2,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 264421168,
+            "type": "sphere",
+            "pos": [
+                16,
+                -11,
+                -11
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 4,
+            "color_id": 4,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 387977264,
+            "type": "sphere",
+            "pos": [
+                5,
+                -5,
+                -3
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 3,
+            "color_id": 3,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 387977488,
+            "type": "sphere",
+            "pos": [
+                9,
+                -6,
+                1
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 1,
+            "color_id": 1,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 387977712,
+            "type": "sphere",
+            "pos": [
+                12,
+                -16,
+                -17
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 4,
+            "color_id": 4,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 387977936,
+            "type": "sphere",
+            "pos": [
+                15,
+                1,
+                0
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 2,
+            "color_id": 2,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 387978160,
+            "type": "sphere",
+            "pos": [
+                16,
+                -3,
+                -14
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 5,
+            "color_id": 5,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        },
+        {
+            "id": 387978384,
+            "type": "sphere",
+            "pos": [
+                4,
+                25,
+                0
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "texture_id": 3,
+            "color_id": 3,
+            "color_id_per_lens": 646555565652653163656,
+            "nodes": [],
+            "edges": []
+        }
+    ],
+    "target_sphere_id": 264350064
+}

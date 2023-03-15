@@ -1,0 +1,7 @@
+numpy==1.24.2
+Pillow==9.4
+pybullet==3.2.5
+pyrr==0.10.3
+pyperclip~=1.8.1
+setuptools~=67.6
+PyOpenGL==3.1.6
