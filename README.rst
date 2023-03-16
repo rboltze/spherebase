@@ -3,7 +3,6 @@ Sphere Base
 ============
 
 
-
 .. image:: https://img.shields.io/pypi/v/template.svg
         :target: https://pypi.python.org/pypi/template
 
