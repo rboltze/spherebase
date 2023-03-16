@@ -48,9 +48,10 @@ Installation
 
 ::
 
-The library is available from PyPI:
+The library is available from PyPI::
 
     $ pip install sphere-base==0.0.1
+
 
 ::
 
@@ -58,3 +59,6 @@ The library is available from PyPI:
 Or download the source code from github::
 
     git clone https://github.com/rboltze/sphere_base.git
+
+
+::
