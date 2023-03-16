@@ -6,14 +6,14 @@ A module containing the Configuration class.
 """
 
 from sphere_base.sphere_universe_base.suv_constants import *
+import os
 
-#
 class UvConfig:
     """
     The configuration class contains project wide variables which can be easily shared between modules and classes.
 
     """
-    def __init__(self, universe):
+    def __init__(self, universe, skybox_img_directory=""):
         """
         Constructor of the sphere_base class.
 
@@ -42,6 +42,26 @@ class UvConfig:
         self._textures = {}
         self._win_size_changed_listeners = []
         self._view_changed_listeners = []
+
+        self.skybox_sets = self.create_skybox_set(skybox_img_directory)
+
+    def create_skybox_set(self, skybox_dir=""):
+        # find all directories that hold skybox images and add them to a list
+        set0 = [None]
+        set2 = []
+
+        set1 = [SKYBOX_IMG_DIR + name for name in os.listdir(SKYBOX_IMG_DIR) if
+                os.path.isdir(os.path.join(SKYBOX_IMG_DIR, name))]
+        if skybox_dir:
+            set2 = [skybox_dir + name for name in os.listdir(skybox_dir) if
+                    os.path.isdir(os.path.join(skybox_dir, name))]
+
+        sets = set0 + set1 + set2
+        print(sets)
+
+        return sets
+
+
 
     def set_view_loc(self, view: 'matrix'):
         """

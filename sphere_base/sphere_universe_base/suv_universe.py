@@ -37,7 +37,7 @@ class Universe(Serializable):
     Clipboard_class = Clipboard
     Config_class = UvConfig
 
-    def __init__(self, parent, skybox_set_name=None, pybullet_key=None):
+    def __init__(self, parent, skybox_img_directory=None, pybullet_key=None):
         """
         Constructor of the ``Universe`` class
 
@@ -77,13 +77,12 @@ class Universe(Serializable):
         self._init_variables()
         self._init_listeners()
 
-        self.config = self.__class__.Config_class(self)
+        self.config = self.__class__.Config_class(self, skybox_img_directory)
         self.shader = self.__class__.Shader_class(self)
         self.cam = self.__class__.Camera_class(self)
         self.models = self.__class__.Models_class(self)
         self.Sphere = self.__class__.Sphere_class  # not instantiated here!
 
-        #self.mouse_ray = self.__class__.Ray_class(self, pybullet_key)
         self.mouse_ray = self.__class__.Ray_class(self, 1)
         self.skybox = self.__class__.Skybox_class(self)
         self.rubber_band_box = self.__class__.RubberBand_class(self)

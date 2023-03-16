@@ -40,7 +40,7 @@ Requirements
 
 - Python 3.x
 - PyOpenGL
-- PyQt5 for the example
+- PyQt5
 
 Credits
 -------

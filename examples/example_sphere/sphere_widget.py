@@ -29,7 +29,7 @@ class SphereWidget(QWidget):
 
         # delayed initialization waiting for OpenGL initialization
         self.uv_widget.add_to_delayed_init(self._delayed_init)
-        # self.split = self.UV
+
 
     def _delayed_init(self):
 
