@@ -8,6 +8,7 @@ A module containing the Configuration class.
 from sphere_base.sphere_universe_base.suv_constants import *
 import os
 
+
 class UvConfig:
     """
     The configuration class contains project wide variables which can be easily shared between modules and classes.
@@ -137,5 +138,3 @@ class UvConfig:
         mesh_id = self.mesh_id_counter
         self.mesh_id_counter += 1
         return mesh_id
-
-

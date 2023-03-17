@@ -24,7 +24,7 @@ This package was created to display a sphere within a window and can be used in 
 The library uses PyOpenGL and PyQT5
 
 * Free software: BSD license
-* Documentation: https://template.readthedocs.io.
+
 
 
 Features

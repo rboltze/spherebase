@@ -8,7 +8,7 @@ and resources data.
 
 """
 SPHERE_SMALL_RADIUS = 0.01
-SPHERE_RADIUS = 1
+SPHERE_RADIUS = 2
 COLLISION_NODE_DISC_RADIUS = 0.075
 COLLISION_SOCKET_RADIUS = 0.01
 HOVER_MIN_DISTANCE = 3
@@ -76,14 +76,7 @@ MODELS = {
 
 }
 
-
 SHADER_SWITCH = {"node": 0, "sphere_base": 1, "square1x1": 2, "rubber_band": 2, "sphere_small": 1, "socket": 2, "cube": 1}
-
-SKYBOX_SETS = ([None, "space1", "space2", "space3", "space4", "space5", "space6", "red1", "red2", "red3",
-                "blue1", "blue2"])
-
-SKYBOX_SET = "space2"
-SKYBOX_RANDOM_SET = True
 
 EDGE_TYPE_DIRECT = 1
 
