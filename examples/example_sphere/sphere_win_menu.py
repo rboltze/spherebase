@@ -5,7 +5,9 @@ A module containing the Main Window menu class
 """
 
 from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
 from sphere_base.sphere_universe_base.suv_utils import dump_exception
+from widget_settings import Settings
 
 
 class SphereMenu(QMenu):
@@ -30,6 +32,7 @@ class SphereMenu(QMenu):
         self._create_file_menu()
         self._create_edit_menu()
 
+
         # self.windowMenu = self.main_win.menuBar().addMenu("&Window")
         # self.update_window_menu()
         # self.windowMenu.aboutToShow.connect(self.update_window_menu)
@@ -38,6 +41,7 @@ class SphereMenu(QMenu):
 
         self.helpMenu = self.main_win.menuBar().addMenu("&Help")
         self.helpMenu.addAction(self.action_about)
+        self.helpMenu.addAction(self.action_settings)
 
         self.edit_menu.aboutToShow.connect(self._update_edit_menu)
 
@@ -68,7 +72,15 @@ class SphereMenu(QMenu):
         self.action_separator.setSeparator(True)
         self.action_about = QAction("&About", self, statusTip="Show the application's About box",
                                     triggered=self.main_win.on_about)
+        self.action_settings = QAction("&Settings", self, statusTip="Show the application's About box",
+                                    triggered=self.open_settings_window)
         self._update_edit_menu()
+
+    def open_settings_window(self):
+        self.w = Settings(self.main_win)
+        self.w.setGeometry(QRect(400, 400, 720, 360))
+        self.w.setWindowFlags(self.windowFlags() | Qt.Dialog)
+        self.w.show()
 
     def _create_file_menu(self):
         menu_bar = self.main_win.menuBar()
@@ -92,6 +104,10 @@ class SphereMenu(QMenu):
         self.edit_menu.addAction(self.action_paste)
         self.edit_menu.addSeparator()
         self.edit_menu.addAction(self.action_delete)
+
+    def _create_settings_menu(self):
+        menu_bar = self.main_win.menuBar()
+        self.file_menu = menu_bar.addMenu('&Settings')
 
     def _create_status_bar(self):
         """Create Status bar """

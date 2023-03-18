@@ -22,19 +22,24 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.filename = None
+        self._set_win_properties()
         self.sphere_widget = self.__class__.sphere_widget_class(self)
         self.setCentralWidget(self.sphere_widget.uv_widget)
-        self._set_win_properties()
         self.menu = self.__class__.Menu_class(self)
         self.setWindowTitle("Sphere")
 
         self.show()
 
     def _set_win_properties(self):
-        # set window properties
+        self.settings = QSettings(QSettings.IniFormat, QSettings.SystemScope, '__MyBiz', '__settings')
+        self.settings.setFallbacksEnabled(False)  # File only, not registry or or.
+
+        # setPath() to try to save to current working directory
+        self.settings.setPath(QSettings.IniFormat, QSettings.SystemScope, 'settings.ini')
+        # set default window properties
         self.setGeometry(200, 200, 800, 600)
-        # restore window size and position.
-        self.settings = QSettings(COMPANY, PRODUCT)
+
+        # try to restore window size and position from stored values from last time .
         if not self.settings.value("geometry") is None:
             self.restoreGeometry(self.settings.value("geometry"))
         if not self.settings.value("windowState") is None:
@@ -72,9 +77,9 @@ class MainWindow(QMainWindow):
         return name + ("*" if self.sphere_widget.has_been_modified() else "")
 
     def on_about(self):
-        QMessageBox.about(self, "About the Sphere Node Editor",
-                          "The <b>Sphere Node Editor</b> is a Python program to visualize and edit groups "
-                          "of related entities in a logical and attractive way. Written by: Richard Boltze, "
+        QMessageBox.about(self, "About  Sphere Base",
+                          "The <b>Sphere Baser</b> is a Python program to visualize a sphere and connected "
+                          "nodes on its surface. Written by: Richard Boltze, "
                           "email: rboltze@protonmail.com</a>")
 
     def closeEvent(self, event):
@@ -86,7 +91,6 @@ class MainWindow(QMainWindow):
             # Save the window size and position before exiting
             self.settings.setValue("geometry", self.saveGeometry())
             self.settings.setValue("windowState", self.saveState())
-            self.settings.setValue("split_geometry", self.sphere_widget.saveGeometry())
             QMainWindow.closeEvent(self, event)
         else:
             event.ignore()
