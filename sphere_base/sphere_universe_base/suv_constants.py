@@ -33,6 +33,7 @@ CAM_MOVEMENT_STEPS = 4
 
 MESH_DIR = "..//sphere_base/model/resources/meshes/"
 TEXTURE_DIR = "..//sphere_base/model/resources/"
+SPHERE_TEXTURE_DIR = "..//sphere_base/model/resources/sphere_textures/"
 SHADER_DIR = "..//sphere_base/model/resources/shaders/"
 SKYBOX_IMG_DIR = "..//sphere_base/model/resources/textures/skybox/"
 

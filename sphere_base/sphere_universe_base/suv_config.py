@@ -14,7 +14,7 @@ class UvConfig:
     The configuration class contains project wide variables which can be easily shared between modules and classes.
 
     """
-    def __init__(self, universe, skybox_img_directory=""):
+    def __init__(self, universe, skybox_img_dir="", sphere_texture_dir=""):
         """
         Constructor of the sphere_base class.
 
@@ -44,24 +44,31 @@ class UvConfig:
         self._win_size_changed_listeners = []
         self._view_changed_listeners = []
 
-        self.skybox_sets = self.create_skybox_set(skybox_img_directory)
+        self.skybox_sets = self.create_skybox_set(skybox_img_dir)
+        self.sphere_textures = self.create_texture_set(sphere_texture_dir)
 
-    @staticmethod
-    def create_skybox_set(skybox_dir=""):
-        # find all directories that hold skybox images and add them to a list
+    def create_skybox_set(self, skybox_dir=""):
+        return self.create_sets(SKYBOX_IMG_DIR, skybox_dir)
 
+    def create_texture_set(self, sphere_texture_dir=""):
         set0 = [None]
         set2 = []
+        set1 = [SPHERE_TEXTURE_DIR + file_name for file_name in os.listdir(SPHERE_TEXTURE_DIR)]
+        if sphere_texture_dir:
+            set2 = [SPHERE_TEXTURE_DIR + file_name for file_name in os.listdir(sphere_texture_dir)]
+        return set0 + set1 + set2
 
-        set1 = [SKYBOX_IMG_DIR + name for name in os.listdir(SKYBOX_IMG_DIR) if
-                os.path.isdir(os.path.join(SKYBOX_IMG_DIR, name))]
-        if skybox_dir:
-            set2 = [skybox_dir + name for name in os.listdir(skybox_dir) if
-                    os.path.isdir(os.path.join(skybox_dir, name))]
+    def create_sets(self, internal_dir, client_dir=""):
+        # combine directories and put all found directory names in a list
+        set0 = [None]
+        set2 = []
+        set1 = [internal_dir + name for name in os.listdir(internal_dir) if
+                os.path.isdir(os.path.join(internal_dir, name))]
+        if client_dir:
+            set2 = [client_dir + name for name in os.listdir(client_dir) if
+                    os.path.isdir(os.path.join(client_dir, name))]
 
-        sets = set0 + set1 + set2
-
-        return sets
+        return set0 + set1 + set2
 
     def set_view_loc(self, view: 'matrix'):
         """

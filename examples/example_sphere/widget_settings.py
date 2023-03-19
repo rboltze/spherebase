@@ -39,7 +39,7 @@ class Settings(QWidget):
 
         self.sphere_settings = WidgetSphereSettings()
         self.skybox_settings = WidgetSkyboxSettings(self.main_win)
-        self.textures_settings = WidgetTextureSettings()
+        self.textures_settings = WidgetTextureSettings(self.main_win)
         self.sphere_color_buttons = WidgetSphereColorButtonSettings()
         self.grid_layout.addWidget(self.skybox_settings, 1, 1, 1, 2)
         self.grid_layout.addWidget(self.textures_settings, 1, 3, 1, 5)

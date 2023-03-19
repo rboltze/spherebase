@@ -11,6 +11,7 @@ class WidgetSkyboxSettings(QWidget):
         super().__init__()
         self.main_win = main_win
         self.uv = main_win.sphere_widget.uv_widget.uv
+
         self._init_Values()
         self._setup_ui()
 
