@@ -171,7 +171,7 @@ class UV_Widget(QGLWidget):
 
             if self._clicked_on_item == self.uv.target_sphere.id:
 
-                # clicked on the target sphere_base (background). Release selection
+                # on_current_row_changed on the target sphere_base (background). Release selection
                 self.uv.target_sphere.selected_item = None
                 self.uv.target_sphere.select_item(None)
                 return

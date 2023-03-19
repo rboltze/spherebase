@@ -29,7 +29,7 @@ class Skybox(GraphicItem):
     
     """
 
-    def __init__(self, universe=None, skybox_set_name=None, skybox_img_directory=None):
+    def __init__(self, universe=None, skybox_set_name=None):
         """
         Constructor of the Skybox class.
 
@@ -69,8 +69,6 @@ class Skybox(GraphicItem):
         self.shader = self.model.shader
 
         self._init_variables()
-        self._init_skybox_image_set(skybox_set_name)
-        self.create_skybox_faces()
 
     def _init_variables(self):
         self.scale = None
@@ -79,12 +77,7 @@ class Skybox(GraphicItem):
         self.orientation = [0, 0, 0]
         self.paint_skybox = True
 
-    def get_skybox_set(self, skybox_name=None, skybox_id=None, random=False, ini=False):
-        if ini:
-            pass
-            # TODO:
-            # check the ini file if there are skybox settings and if there then use them
-            # if not - use random
+    def get_skybox_set(self, skybox_name=None, skybox_id=None, random=False):
 
         if skybox_id == 0:  # Do not use a skybox
             self.skb_id = skybox_id
@@ -97,40 +90,9 @@ class Skybox(GraphicItem):
             self.skb_id = skybox_id  # choose a skybox by its index
 
         if random:
-            self.skb_id = self._get_random_set()  # select a random skybox
+            self.skb_id = randint(1, len(self.cf.skybox_sets) - 1)  # select a random skybox
 
         self.create_skybox_faces()
-
-    def _init_skybox_image_set(self, skybox_set_name=None):
-        if skybox_set_name:
-            self.skb_id = self.get_skybox_id(skybox_set_name)
-        else:
-            self.skb_id = self._get_random_set()
-
-    def _get_random_set(self) -> int:
-        """
-        Returns the id of a random image set of all skybox sets stored. This happens at the beginning of the program.
-        If you want to allow the user to randomly jump to a new set during the program the new set should be
-        compared with the old set to avoid duplication.
-
-        """
-
-        return randint(1, len(self.cf.skybox_sets) - 1)
-
-
-    def get_skybox_id(self, skybox_name) -> int:
-        """
-        returns the id of a skybox based on its name.
-
-        :param skybox_name: Name of the ``Skybox`` set
-        :type skybox_name: ``string``
-        :returns: id of the skybox image set
-
-        """
-
-        for i, skybox in enumerate(self.cf.skybox_sets):
-            if skybox_name == skybox:
-                return i
 
     def get_next_set(self):
         """

@@ -8,10 +8,6 @@ from examples.example_sphere.sphere_win_menu import SphereMenu
 from examples.example_sphere.sphere_widget import SphereWidget
 from examples.example_sphere.sphere_uv_widget import UVWidget  # detail spheres
 
-COMPANY = "company"
-PRODUCT = "product"
-TAB_NAMES = {0: "Node editor", 1: "Description"}
-
 
 class MainWindow(QMainWindow):
     Menu_class = SphereMenu
@@ -21,29 +17,22 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
+        self.name_company = 'rboltze'
+        self.name_product = 'sphere_base'
+
         self.filename = None
         self._set_win_properties()
+        self._read_settings()
         self.sphere_widget = self.__class__.sphere_widget_class(self)
         self.setCentralWidget(self.sphere_widget.uv_widget)
         self.menu = self.__class__.Menu_class(self)
         self.setWindowTitle("Sphere")
-
         self.show()
+        self.sphere_widget.uv_widget.uv.skybox.get_skybox_set(skybox_id=self.skybox_id, random=self.random_skybox)
 
     def _set_win_properties(self):
-        self.settings = QSettings(QSettings.IniFormat, QSettings.SystemScope, '__MyBiz', '__settings')
-        self.settings.setFallbacksEnabled(False)  # File only, not registry or or.
-
-        # setPath() to try to save to current working directory
-        self.settings.setPath(QSettings.IniFormat, QSettings.SystemScope, 'settings.ini')
         # set default window properties
         self.setGeometry(200, 200, 800, 600)
-
-        # try to restore window size and position from stored values from last time .
-        if not self.settings.value("geometry") is None:
-            self.restoreGeometry(self.settings.value("geometry"))
-        if not self.settings.value("windowState") is None:
-            self.restoreState(self.settings.value("windowState"))
 
     def set_title(self, title=None):
         title = title if title else self.sphere_widget.title
@@ -88,9 +77,28 @@ class MainWindow(QMainWindow):
         """
         if self.may_be_saved():
             event.accept()
-            # Save the window size and position before exiting
-            self.settings.setValue("geometry", self.saveGeometry())
-            self.settings.setValue("windowState", self.saveState())
+            self.write_settings()
+            # # Save the window size and position before exiting
+            # self.settings.setValue("geometry", self.saveGeometry())
+            # self.settings.setValue("windowState", self.saveState())
             QMainWindow.closeEvent(self, event)
         else:
             event.ignore()
+
+    def _read_settings(self):
+        """Read the permanent profile settings for this app"""
+        settings = QSettings(self.name_company, self.name_product)
+        pos = settings.value('pos', QPoint(200, 200))
+        size = settings.value('size', QSize(400, 400))
+
+        self.move(pos)
+        self.resize(size)
+        self.skybox_id = settings.value('skybox_id', 0)
+        txt = settings.value('random_skybox', 'True')
+        self.random_skybox = True if txt == 'True' else False
+
+    def write_settings(self):
+        """Write the permanent profile settings for this app"""
+        settings = QSettings(self.name_company, self.name_product)
+        settings.setValue('pos', self.pos())
+        settings.setValue('size', self.size())

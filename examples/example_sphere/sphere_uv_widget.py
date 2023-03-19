@@ -10,7 +10,7 @@ from sphere_base.sphere_universe_base.suv_widget import UV_Widget
 from sphere_base.sphere_universe_base.suv_universe import Universe
 from sphere_base.sphere_overlay.sov_sphere import SplitSphere
 
-#PYBULLET_KEY_ID
+# PYBULLET_KEY_ID
 KEY = 2
 
 
@@ -20,7 +20,6 @@ class SphereUniverse(Universe):
     def __init__(self, parent, pybullet_key):
         skybox_img_dir = "..//examples/resources/textures/skybox/"
         super().__init__(parent, skybox_img_directory=skybox_img_dir, pybullet_key=pybullet_key)
-
 
     def draw(self):
         # In the detail sphere_base window only draw the selected sphere_base

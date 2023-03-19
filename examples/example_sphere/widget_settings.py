@@ -12,6 +12,7 @@ class Settings(QWidget):
         super().__init__()
         self.main_win = main_win
         self.setWindowTitle("Settings")
+        # TODO: settings windows does not stay on top
         self.setWindowFlags(self.windowFlags() | Qt.Dialog)
         self.uv = self.main_win.sphere_widget.uv_widget.uv
         self._init_Values()
@@ -37,7 +38,7 @@ class Settings(QWidget):
     def _setup_ui(self):
 
         self.sphere_settings = WidgetSphereSettings()
-        self.skybox_settings = WidgetSkyboxSettings(self.uv)
+        self.skybox_settings = WidgetSkyboxSettings(self.main_win)
         self.textures_settings = WidgetTextureSettings()
         self.sphere_color_buttons = WidgetSphereColorButtonSettings()
         self.grid_layout.addWidget(self.skybox_settings, 1, 1, 1, 2)

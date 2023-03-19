@@ -183,7 +183,7 @@ class Camera:
 
         """
 
-        # if a sphere_base has been clicked (_selected) then move the camera to the new sphere_base
+        # if a sphere_base has been on_current_row_changed (_selected) then move the camera to the new sphere_base
         if len(self.movement_stack) > 0:
             self.xyz = Vector3(self.movement_stack[0])
             self.target = Vector3(self.target_stack[0])
