@@ -46,10 +46,11 @@ class WidgetTextureSettings(QWidget):
 
 
     def on_current_row_changed(self, qmodelindex):
-        self.sphere.texture_id = self.texture_list_box.currentRow()
-        # self.uv.skybox.get_skybox_set(skybox_id=self.skybox_id)
-
-        self._write_settings()
+        if  self.sphere.texture_id != self.texture_list_box.currentRow():
+            self.sphere.texture_id = self.texture_list_box.currentRow()
+            print(self.texture_list_box.currentRow())
+            print(self.uv.config.sphere_textures[self.texture_list_box.currentRow()])
+            self._write_settings()
 
     def _read_settings(self):
         """Read the permanent profile settings for this app"""

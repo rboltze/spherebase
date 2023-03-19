@@ -44,7 +44,7 @@ class Mesh:
 
 
     def draw(self, shader: 'Shader', model_id: int, position: 'Vector3', orientation: 'Quaternion', scale: list = None,
-             texture_id: int = 0, color: list = None, switch: int = 0):
+             texture_id: int = 0, texture_file: str = "", color: list = None, switch: int = 0):
         """
         Sending the ``Mesh`` with all the parameters to the dedicated shader.
 
@@ -60,11 +60,14 @@ class Mesh:
         :type scale: ``Vector3`` scale of the Mesh
         :param texture_id: The ``id`` of the texture to put on the ``Mesh``.
         :type texture_id: ``int``
+        :param texture_file: The ``texture file`` to put on the ``Mesh``.
+        :type texture_file: ``str``
         :param color: ``rbg array``
         :type color: ``Array``
         :param switch: Switch used in the shader to switch from one behaviour to another.
         :type switch: ``int``
         """
+
         try:
             shader.draw(
                          object_index=model_id,
@@ -76,8 +79,9 @@ class Mesh:
                          orientation=orientation,
                          scale=scale,
                          texture_id=texture_id,
+                         texture_file=texture_file,
                          color=color,
-                         switch=switch,
+                         switch=switch
                          )
         except Exception as e:
             dump_exception(e)

@@ -55,9 +55,10 @@ class WidgetSkyboxSettings(QWidget):
         self.layout.addWidget(self.skybox_list_box)
 
     def on_current_row_changed(self, qmodelindex):
-        self.skybox_id = self.skybox_list_box.currentRow()
-        self.uv.skybox.get_skybox_set(skybox_id=self.skybox_id)
-        self._write_settings()
+        if self.skybox_id != self.skybox_list_box.currentRow():
+            self.skybox_id = self.skybox_list_box.currentRow()
+            self.uv.skybox.get_skybox_set(skybox_id=self.skybox_id)
+            self._write_settings()
 
     def on_click_box_skybox_startup(self, state):
         self.skybox_random_startup = True if state == 2 else False

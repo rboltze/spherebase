@@ -47,16 +47,16 @@ class UvConfig:
         self.skybox_sets = self.create_skybox_set(skybox_img_dir)
         self.sphere_textures = self.create_texture_set(sphere_texture_dir)
 
+
     def create_skybox_set(self, skybox_dir=""):
         return self.create_sets(SKYBOX_IMG_DIR, skybox_dir)
 
     def create_texture_set(self, sphere_texture_dir=""):
-        set0 = [None]
         set2 = []
         set1 = [SPHERE_TEXTURE_DIR + file_name for file_name in os.listdir(SPHERE_TEXTURE_DIR)]
         if sphere_texture_dir:
             set2 = [SPHERE_TEXTURE_DIR + file_name for file_name in os.listdir(sphere_texture_dir)]
-        return set0 + set1 + set2
+        return set1 + set2
 
     def create_sets(self, internal_dir, client_dir=""):
         # combine directories and put all found directory names in a list

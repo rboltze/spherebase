@@ -776,7 +776,7 @@ class Sphere(Serializable):
         Render the sphere_base and all the items on it.
         """
 
-        self.model.draw(self, self.texture_id, color=self.color)
+        self.model.draw(self, texture_id=self.texture_id, color=self.color)
         for item in self.items:
             if item.type == "node":
                 item.draw()

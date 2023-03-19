@@ -242,7 +242,7 @@ class SphereNode(Serializable):
         Renders all the icons and circles of the node_disc.
         """
         self.socket.draw()
-        self.node_disc.draw(self, self.texture_id, self.gr_node.main_image_color, switch=0)
+        self.node_disc.draw(self, texture_id=self.texture_id, color=self.gr_node.main_image_color, switch=0)
         self.node_disc.draw(self, color=self.gr_node.current_background_color, switch=2)
 
         self.circle.shader.line_width = self.gr_node.current_border_width
