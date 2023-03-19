@@ -18,6 +18,7 @@ from sphere_base.sphere_universe_base.suv_graphic_item import GraphicItem
 from collections import namedtuple
 from PIL import Image
 from random import randint
+import os
 
 
 class Skybox(GraphicItem):
@@ -78,11 +79,26 @@ class Skybox(GraphicItem):
         self.orientation = [0, 0, 0]
         self.paint_skybox = True
 
-    def get_random_skybox(self):
-        """
-        Change the skybox with a new random set of images
-        """
-        self._get_random_set()
+    def get_skybox_set(self, skybox_name=None, skybox_id=None, random=False, ini=False):
+        if ini:
+            pass
+            # TODO:
+            # check the ini file if there are skybox settings and if there then use them
+            # if not - use random
+
+        if skybox_id == 0:  # Do not use a skybox
+            self.skb_id = skybox_id
+        elif not skybox_name and not skybox_id and not random:
+            random = True  # select a random skybox
+        elif skybox_name:
+            lst = ['None' if not txt else os.path.basename(txt) for txt in self.uv.config.skybox_sets]
+            self.skb_id = lst.index(skybox_name)  # choose a skybox by its name
+        elif skybox_id:
+            self.skb_id = skybox_id  # choose a skybox by its index
+
+        if random:
+            self.skb_id = self._get_random_set()  # select a random skybox
+
         self.create_skybox_faces()
 
     def _init_skybox_image_set(self, skybox_set_name=None):

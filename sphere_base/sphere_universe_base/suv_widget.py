@@ -346,10 +346,7 @@ class UV_Widget(QGLWidget):
         elif event.key() == Qt.Key_Down:
             self.down = True
         elif event.key() == Qt.Key_P:
-            try:
-                self.uv.skybox.get_next_set()
-            except Exception as e:
-                dump_exception(e)
+            self.uv.skybox.get_next_set()
         elif event.key() == Qt.Key_O:
             self.uv.skybox.get_former_set()
         elif event.key() == Qt.Key_Delete:

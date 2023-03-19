@@ -1,6 +1,5 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import QRegExpValidator
+# -*- coding: utf-8 -*-
+
 from examples.example_sphere.widget_sphere_settings import *
 from examples.example_sphere.widget_skybox_settings import *
 from examples.example_sphere.widget_textures_settings import *

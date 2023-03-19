@@ -143,7 +143,7 @@ class Universe(Serializable):
         """
 
         self.clear()
-        self.skybox.get_random_skybox()
+        self.skybox.get_skybox_set(ini=True)
         self.create_test_spheres(TEST_SPHERE_NUMBER)
         self.cam.reset_to_default_view(self.target_sphere)
         self.on_selection_changed(None, None)
