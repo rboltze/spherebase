@@ -20,7 +20,9 @@ class SphereUniverse(Universe):
     def __init__(self, parent, pybullet_key):
         skybox_img_dir = "..//examples/resources/textures/skybox/"
         sphere_texture_dir = "..//examples/resources/sphere_textures/"
-        super().__init__(parent, skybox_img_dir=skybox_img_dir, sphere_texture_dir=sphere_texture_dir, pybullet_key=pybullet_key)
+
+        super().__init__(parent, skybox_img_dir=skybox_img_dir, sphere_texture_dir=sphere_texture_dir,
+                         pybullet_key=pybullet_key)
 
     def draw(self):
         # In the detail sphere_base window only draw the selected sphere_base

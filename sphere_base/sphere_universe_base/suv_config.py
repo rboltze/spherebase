@@ -7,6 +7,7 @@ A module containing the Configuration class.
 
 from sphere_base.sphere_universe_base.suv_constants import *
 import os
+import collections
 
 
 class UvConfig:
@@ -40,35 +41,50 @@ class UvConfig:
         self.mesh_id_counter = 0  # used in creating new indexes for meshes
 
         self.textures = []
-        self._textures = {}
+        self._textures = {}  # filled in models
         self._win_size_changed_listeners = []
         self._view_changed_listeners = []
 
         self.skybox_sets = self.create_skybox_set(skybox_img_dir)
-        self.sphere_textures = self.create_texture_set(sphere_texture_dir)
-
+        self.sphere_textures = self.create_texture_set(SPHERE_TEXTURE_DIR, sphere_texture_dir)
+        self.all_textures = self.create_texture_dict(SPHERE_TEXTURE_DIR, sphere_texture_dir, TEXTURES_DIR)
 
     def create_skybox_set(self, skybox_dir=""):
-        return self.create_sets(SKYBOX_IMG_DIR, skybox_dir)
-
-    def create_texture_set(self, sphere_texture_dir=""):
-        set2 = []
-        set1 = [SPHERE_TEXTURE_DIR + file_name for file_name in os.listdir(SPHERE_TEXTURE_DIR)]
-        if sphere_texture_dir:
-            set2 = [SPHERE_TEXTURE_DIR + file_name for file_name in os.listdir(sphere_texture_dir)]
-        return set1 + set2
-
-    def create_sets(self, internal_dir, client_dir=""):
-        # combine directories and put all found directory names in a list
         set0 = [None]
         set2 = []
-        set1 = [internal_dir + name for name in os.listdir(internal_dir) if
-                os.path.isdir(os.path.join(internal_dir, name))]
-        if client_dir:
-            set2 = [client_dir + name for name in os.listdir(client_dir) if
-                    os.path.isdir(os.path.join(client_dir, name))]
+        set1 = [SKYBOX_IMG_DIR + name for name in os.listdir(SKYBOX_IMG_DIR) if
+                os.path.isdir(os.path.join(SKYBOX_IMG_DIR, name))]
+        if skybox_dir:
+            set2 = [skybox_dir + name for name in os.listdir(skybox_dir) if
+                    os.path.isdir(os.path.join(skybox_dir, name))]
 
         return set0 + set1 + set2
+
+    def create_texture_dict(self, dir1, dir2, dir3):
+        # Get all textures from the 3 directories in a dictionary
+        textures = self.create_texture_set(dir1, dir2, dir3)
+        _dict = {}
+
+        for index, file_name in enumerate(textures):
+            key = os.path.basename(file_name)
+            type = os.path.split(os.path.dirname(file_name))[1]
+            if key in _dict:
+                continue
+            _dict[key] = {}
+            _dict[key]['file_name'] = key
+            _dict[key]['texture_id'] = index
+            _dict[key]['file_dir_name'] = file_name
+            _dict[key]['type'] = type[:-1]  # removing the 's'
+
+        return _dict
+
+    def create_texture_set(self, *args):
+        # puts all the files of all the directories in a list
+        _set = []
+        for directory in args:
+            s = [directory + file_name for file_name in os.listdir(directory)]
+            _set += s
+        return _set
 
     def set_view_loc(self, view: 'matrix'):
         """

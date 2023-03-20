@@ -44,7 +44,7 @@ class Mesh:
 
 
     def draw(self, shader: 'Shader', model_id: int, position: 'Vector3', orientation: 'Quaternion', scale: list = None,
-             texture_id: int = 0, texture_file: str = "", color: list = None, switch: int = 0):
+             texture_id: int = 0, color: list = None, switch: int = 0):
         """
         Sending the ``Mesh`` with all the parameters to the dedicated shader.
 
@@ -79,7 +79,6 @@ class Mesh:
                          orientation=orientation,
                          scale=scale,
                          texture_id=texture_id,
-                         texture_file=texture_file,
                          color=color,
                          switch=switch
                          )

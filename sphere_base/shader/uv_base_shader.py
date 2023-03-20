@@ -205,7 +205,7 @@ class BaseShader:
 
     def draw(self, object_index: int = 0, object_type: str = "", mesh_index: int = 0, indices: list = None,
              vertices: list = None, position: 'Vector3' = None, orientation: 'Quaternion' = None,
-             scale: 'Vector3' = None, texture_id: int = 0,  texture_file: str = "", color: 'Vector4' = None,
+             scale: 'Vector3' = None, texture_id: int = 0, color: 'Vector4' = None,
              switch: int = 0, ):
 
         """
@@ -246,11 +246,6 @@ class BaseShader:
         if texture_id > 0:
             glActiveTexture(GL_TEXTURE0)
             glBindTexture(GL_TEXTURE_2D, self.config.textures[texture_id])
-
-        if texture_file != "":
-            # glActiveTexture(GL_TEXTURE0)
-            # glBindTexture(GL_TEXTURE_2D, texture_file)
-            print(object_type, texture_file)
 
         obj_pos = matrix44.create_from_translation(Vector3(position))
         glUniformMatrix4fv(self.model_loc, 1, GL_FALSE, obj_pos)

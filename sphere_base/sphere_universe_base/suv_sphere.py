@@ -78,6 +78,7 @@ class Sphere(Serializable):
         super().__init__(sphere_type)
         self.uv = universe
         self.texture_id = texture_id
+        self.texture_file = self.uv.config.sphere_textures[self.texture_id]
         self.config = universe.config
 
         self._init_flags()
@@ -776,7 +777,7 @@ class Sphere(Serializable):
         Render the sphere_base and all the items on it.
         """
 
-        self.model.draw(self, texture_id=self.texture_id, color=self.color)
+        self.model.draw(self, texture_id=self.texture_id,  color=self.color)
         for item in self.items:
             if item.type == "node":
                 item.draw()

@@ -31,13 +31,12 @@ class SquareShader(BaseShader):
         super()._init_locations()
         self.scale_loc = glGetUniformLocation(self.shader_id, "scale")
 
-    def draw(self, object_index=0, object_type="", mesh_index=0, indices=None,
-             vertices=None, position=None, orientation=None, scale=None, texture_id=0, texture_file="",
-             color=None, switch=0):
+    def draw(self, object_index=0, object_type="", mesh_index=0, indices=None, vertices=None, position=None,
+             orientation=None, scale=None, texture_id=0, color=None, switch=0):
 
         super().draw(object_index=object_index, object_type=object_type, mesh_index=mesh_index, indices=indices,
                      vertices=vertices, position=position, orientation=orientation, scale=scale, texture_id=texture_id,
-                     texture_file=texture_file, color=color, switch=switch)
+                     color=color, switch=switch)
 
         glLineWidth(self.line_width)
         glUniform3f(self.scale_loc, *scale)  # sending the size of the box to the geometric shader

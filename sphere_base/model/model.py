@@ -84,7 +84,7 @@ class Model(GraphicItem):
         """
         return len(self.meshes)
 
-    def draw(self, parent, texture_id=0, texture_file="", color=None, switch=0, scale=None):
+    def draw(self, parent, texture_id=0, color=None, switch=0, scale=None):
         """
         Draw all ``Meshes`` for this ``Model``.
 
@@ -109,7 +109,6 @@ class Model(GraphicItem):
                       orientation=parent.orientation,
                       scale=scale if scale else parent.scale,
                       texture_id=texture_id,
-                      texture_file=texture_file,
                       color=color,
                       switch=switch
                       )

@@ -32,24 +32,21 @@ class WidgetTextureSettings(QWidget):
 
     def _setup_texture_list_box(self):
         # setting up the listbox for choosing sphere textures
-        for index, txt in enumerate(self.uv.config.sphere_textures):
-            if txt:
-                self.texture_list_box.insertItem(index, os.path.basename(txt))
-            else:
-                self.texture_list_box.insertItem(index, 'None')
+        for index, item in enumerate(self.uv.config.all_textures.values()):
+            if item['type'] == "sphere_texture":
+                self.texture_list_box.insertItem(index, os.path.basename(item['file_name']))
 
-        # self.texture_list_box.setCurrentRow(self.skybox_id)
-        self.texture_list_box.currentRowChanged.connect(self.on_current_row_changed)
-        self.texture_list_box.clicked.connect(self.on_current_row_changed)
-
+        self.texture_list_box.itemSelectionChanged.connect(self.on_current_row_changed)
         self.layout.addWidget(self.texture_list_box)
 
-
-    def on_current_row_changed(self, qmodelindex):
-        if  self.sphere.texture_id != self.texture_list_box.currentRow():
+    def on_current_row_changed(self, qmodelindex=None):
+        if self.sphere.texture_id != self.texture_list_box.currentRow():
             self.sphere.texture_id = self.texture_list_box.currentRow()
-            print(self.texture_list_box.currentRow())
-            print(self.uv.config.sphere_textures[self.texture_list_box.currentRow()])
+            for item in self.texture_list_box.selectedItems():
+                for index, _item in enumerate(self.uv.config.all_textures.values()):
+                    if _item['file_name'] == item.text():
+                        print(_item['texture_id'])
+                        self.uv.target_sphere.texture_id = _item['texture_id']
             self._write_settings()
 
     def _read_settings(self):

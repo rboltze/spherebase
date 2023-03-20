@@ -47,18 +47,18 @@ class SplitSphere(Sphere):
         self.history.store_history("node created", True)
         return node
 
-    def draw(self):
-        """
-        Render the sphere_base and all the items on it.
-        """
-        self.cube.draw(self, self.billboard_id, scale=[0.5, 0.5, 0.5])
-        self.model_h.draw(self, texture_id=1, color=self.color)
-
-        for item in self.items:
-            if item.type == "node":
-                item.draw()
-            elif item.type == "edge":
-                item.draw()
-
-        if self.edge_drag.dragging:
-            self.edge_drag.draw()
+    # def draw(self):
+    #     """
+    #     Render the sphere_base and all the items on it.
+    #     """
+    #     self.cube.draw(self, self.billboard_id, scale=[0.5, 0.5, 0.5])
+    #     self.model_h.draw(self, texture_id=1, color=self.color)
+    #
+    #     for item in self.items:
+    #         if item.type == "node":
+    #             item.draw()
+    #         elif item.type == "edge":
+    #             item.draw()
+    #
+    #     if self.edge_drag.dragging:
+    #         self.edge_drag.draw()

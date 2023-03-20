@@ -27,7 +27,7 @@ class NodeShader(BaseShader):
 
         super().draw(object_index=object_index, object_type=object_type, mesh_index=mesh_index, indices=indices,
                      vertices=vertices, position=position, orientation=orientation, scale=scale, texture_id=texture_id,
-                     texture_file=texture_file, color=color, switch=switch)
+                     color=color, switch=switch)
 
         glUniform1i(self.switcher_loc, switch)
         glDrawElements(GL_TRIANGLES, len(indices) * 3, GL_UNSIGNED_INT, ctypes.c_void_p(0))
