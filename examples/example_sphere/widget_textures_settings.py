@@ -15,13 +15,9 @@ class WidgetTextureSettings(QWidget):
         self._setup_ui()
 
     def _init_Values(self):
-        self._read_settings()
         self.texture_list_box = QListWidget()
-
         self.groupBox = QGroupBox("Sphere textures")
         self.layout = QGridLayout()
-
-        self.index = 0
 
     def _setup_ui(self):
         self._setup_texture_list_box()
@@ -48,24 +44,4 @@ class WidgetTextureSettings(QWidget):
             for item in self.texture_list_box.selectedItems():
                 for index, _item in enumerate(self.uv.config.all_textures.values()):
                     if _item['file_name'] == item.text():
-                        print(_item['texture_id'], _item['file_name'])
                         self.uv.target_sphere.texture_id = _item['texture_id']
-            self._write_settings()
-
-    def _read_settings(self):
-        """Read the permanent profile settings for this app"""
-        settings = QSettings(self.main_win.name_company, self.main_win.name_product)
-
-        # txt = settings.value('random_skybox', 'True')
-        # self.skybox_random_startup = True if txt == 'True' else False
-        # self.skybox_id = settings.value('skybox_id', 0)
-
-    def _write_settings(self):
-        """Write the settings"""
-        settings = QSettings(self.main_win.name_company, self.main_win.name_product)
-        # txt = 'True' if self.skybox_random_startup else 'False'
-        # settings.setValue('random_skybox', txt)
-        # settings.setValue('skybox_id', self.skybox_id)
-
-
-

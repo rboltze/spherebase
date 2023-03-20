@@ -107,19 +107,6 @@ class Models:
             if model.type and model.type == model_type:
                 return model
 
-    # def get_all_textures(self):
-    #     """
-    #     Returns a list with named tuples containing all textures
-    #
-    #     """
-    #
-    #     textures = []
-    #     for t in TEXTURES:
-    #         id, name, type, path = t[0], t[1], t[2], TEXTURE_DIR + t[3]
-    #         textures.append(self.Texture(id, name, type, path))
-    #
-    #     return textures
-
     def load_mesh_into_opengl(self, mesh_id=0, buffer=[], indices=[], shader=""):
         """
         Loads a single mesh into Opengl buffers
@@ -182,33 +169,10 @@ class Models:
         :type textures: list of ``named tuples``
 
         """
-        # print("len", len(textures))
-        # print("len", len(self.uv.config.all_textures))
+
         self.config.textures = glGenTextures(len(self.uv.config.all_textures))
-        # self.config.textures = glGenTextures(len(textures))
-
-        # self.load_texture_into_opengl('..//sphere_base/model/resources/sphere_textures/grid1.jpg', 0)
-
         for index, item in enumerate(self.uv.config.all_textures.values()):
-            # print(index, item['file_dir_name'], item['texture_id'])
             self.load_texture_into_opengl(item['file_dir_name'], item['texture_id'] + 1)
-
-            # # print("here")
-            # for i, texture in enumerate(textures):
-            #     if texture:
-            #         pass
-            #         # self.load_texture_into_opengl(texture.path, self.config.textures[i])
-            #         # print("here", texture.path, self.config.textures[i])
-
-            # self.config.create_texture_by_name_dictionary()
-
-        """
-                : note
-
-                A separate dictionary of textures is created in :class:`~sphere_iot.uv_config.UvConfig`.
-                This is used to find the id of a texture in OpenGl by its 'img_name'.
-
-        """
 
     @staticmethod
     def load_texture_into_opengl(texture_path, texture_id):

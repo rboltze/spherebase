@@ -112,38 +112,3 @@ RELEVANCE_TEXTURE = {1: 29, 2: 4, 3: 6, 4: 3}
 
 TRANSPARENCY_SMALL_SPHERES = 0.8
 TRANSPARENCY_DETAIL_SPHERE = 0.5
-
-TEXTURES = (
-    [0, "not_used", "texture_diffuseN", "textures/grid1.jpg"],
-    [1, "grid", "texture_diffuseN", "textures/grid1.jpg"],
-    [2, "color_grid", "texture_diffuseN", "textures/color_grid.png"],
-    [3, "red1", "texture_diffuseN", "textures/red1.jpg"],
-    [4, "green1", "texture_diffuseN", "textures/green1.jpg"],
-    [5, "blue1", "texture_diffuseN", "textures/blue1.jpg"],
-    [6, "yellow1", "texture_diffuseN", "textures/yellow1.jpg"],
-    [7, "white1", "texture_diffuseN", "textures/white1.jpg"],
-    [8, "circle_black", "texture_diffuseN", "textures/circle_black.jpg"],
-    [9, "circle_blue", "texture_diffuseN", "textures/circle_hover.jpg"],
-    [10, "circle_red", "texture_diffuseN", "textures/circle_selected.jpg"],
-    [11, "icon_question_mark_icon", "texture_diffuseN", "icons/icon_question_mark.png"],
-    [12, "icon_man", "texture_diffuseN", "icons/icon_man.png"],
-    [13, "woman_icon", "texture_diffuseN", "icons/icon_woman.png"],
-    [14, "lgbt_icon", "texture_diffuseN", "icons/icon_lgbt.png"],
-    [15, "laptop_icon", "texture_diffuseN", "icons/icon_laptop.png"],
-    [16, "mobile_icon", "texture_diffuseN", "icons/icon_mobile.png"],
-    [17, "passport_icon", "texture_diffuseN", "icons/icon_passport.png"],
-    [18, "pc_icon", "texture_diffuseN", "icons/icon_pc.png"],
-    [19, "rfid_tag_icon", "texture_diffuseN", "icons/icon_rfid.png"],
-    [20, "smart_card_icon", "texture_diffuseN", "icons/icon_smart_card.png"],
-    [21, "smart_tv_icon", "texture_diffuseN", "icons/icon_smart_tv.png"],
-    [22, "smart_phone_icon", "texture_diffuseN", "icons/icon_smart_phone.png"],
-    [23, "smart_watch_icon", "texture_diffuseN", "icons/icon_smart_watch.png"],
-    [24, "tablet_icon", "texture_diffuseN", "icons/icon_tablet.png"],
-    [25, "webcam_icon", "texture_diffuseN", "icons/icon_webcam.png"],
-    [26, "wifi_icon", "texture_diffuseN", "icons/icon_wifi.png"],
-    [27, "item_icon", "texture_diffuseN", "icons/icon_item.png"],
-    [28, "landline_icon", "texture_diffuseN", "icons/icon_landline.png"],
-    [29, "light_grey", "texture_diffuseN", "textures/light_grey.jpg"],
-    [30, "man_billboard", "texture_diffuseN", "textures/man.jpg"],
-    [31, "woman_billboard", "texture_diffuseN", "textures/woman.jpg"],
-)

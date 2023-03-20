@@ -50,9 +50,6 @@ class WidgetSkyboxSettings(QWidget):
 
         self.skybox_list_box.setCurrentRow(self.skybox_id)
         self.skybox_list_box.itemSelectionChanged.connect(self.on_current_row_changed)
-        # self.skybox_list_box.currentRowChanged.connect(self.on_current_row_changed)
-        self.skybox_list_box.clicked.connect(self.on_current_row_changed)
-
         self.layout.addWidget(self.skybox_list_box)
 
     def on_current_row_changed(self, qmodelindex=None):

@@ -7,7 +7,6 @@ A module containing the Configuration class.
 
 from sphere_base.sphere_universe_base.suv_constants import *
 import os
-import collections
 
 
 class UvConfig:
@@ -40,8 +39,6 @@ class UvConfig:
 
         self.mesh_id_counter = 0  # used in creating new indexes for meshes
 
-        # self.textures = []
-        # self._textures = {}  # filled in models
         self._win_size_changed_listeners = []
         self._view_changed_listeners = []
 
@@ -49,8 +46,8 @@ class UvConfig:
         self.sphere_textures = self.create_texture_set(SPHERE_TEXTURE_DIR, sphere_texture_dir)
         self.all_textures = self.create_texture_dict(SPHERE_TEXTURE_DIR, sphere_texture_dir, TEXTURES_DIR, ICONS_DIR)
 
-
-    def create_skybox_set(self, skybox_dir=""):
+    @staticmethod
+    def create_skybox_set(skybox_dir=""):
         set0 = [None]
         set2 = []
         set1 = [SKYBOX_IMG_DIR + name for name in os.listdir(SKYBOX_IMG_DIR) if
@@ -80,7 +77,8 @@ class UvConfig:
                     _dict[key]['type'] = _type[:-1]  # removing the 's'
         return _dict
 
-    def create_texture_set(self, *args):
+    @staticmethod
+    def create_texture_set(*args):
         # puts all the files of all the directories in a list
         _set = []
         for directory in args:
@@ -133,15 +131,6 @@ class UvConfig:
         for callback in self._view_changed_listeners:
             callback()
 
-    # def create_texture_by_name_dictionary(self):
-    #     """
-    #     Creating a texture dictionary indexed by name
-    #
-    #     """
-    #     for texture in TEXTURES:
-    #         texture_id, texture_name = texture[0], texture[1]
-    #         self._textures[texture_name] = texture_id
-
     def get_img_id(self, img_name) -> int:
         """
         Returns texture id of the texture name received.
@@ -150,26 +139,13 @@ class UvConfig:
         :type img_name: str
 
         """
-        #
-        _id = None
 
+        image_id = None
         for index, _item in enumerate(self.uv.config.all_textures.values()):
             if _item['file_name'] == img_name or _item['file_name'][:-4] == img_name:
-                _id = _item['texture_id']
+                image_id = _item['texture_id']
                 continue
-
-        return _id
-
-
-        # if img_name in self._textures:
-        #     return self._textures[img_name]
-        # return None
-
-
-
-        # if img_name in self._textures:
-        #     return self._textures[img_name]
-        # return None
+        return image_id
 
     def get_mesh_id(self) -> int:
         """
