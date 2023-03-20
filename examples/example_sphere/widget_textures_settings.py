@@ -21,6 +21,8 @@ class WidgetTextureSettings(QWidget):
         self.groupBox = QGroupBox("Sphere textures")
         self.layout = QGridLayout()
 
+        self.index = 0
+
     def _setup_ui(self):
         self._setup_texture_list_box()
 
@@ -36,6 +38,7 @@ class WidgetTextureSettings(QWidget):
             if item['type'] == "sphere_texture":
                 self.texture_list_box.insertItem(index, os.path.basename(item['file_name']))
 
+        self.texture_list_box.setCurrentRow(self.uv.target_sphere.texture_id)
         self.texture_list_box.itemSelectionChanged.connect(self.on_current_row_changed)
         self.layout.addWidget(self.texture_list_box)
 
@@ -45,7 +48,7 @@ class WidgetTextureSettings(QWidget):
             for item in self.texture_list_box.selectedItems():
                 for index, _item in enumerate(self.uv.config.all_textures.values()):
                     if _item['file_name'] == item.text():
-                        print(_item['texture_id'])
+                        print(_item['texture_id'], _item['file_name'])
                         self.uv.target_sphere.texture_id = _item['texture_id']
             self._write_settings()
 

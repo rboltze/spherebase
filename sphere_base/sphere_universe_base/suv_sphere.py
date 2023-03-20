@@ -78,7 +78,7 @@ class Sphere(Serializable):
         super().__init__(sphere_type)
         self.uv = universe
         self.texture_id = texture_id
-        self.texture_file = self.uv.config.sphere_textures[self.texture_id]
+        # self.texture_file = self.uv.config.sphere_textures[self.texture_id]
         self.config = universe.config
 
         self._init_flags()

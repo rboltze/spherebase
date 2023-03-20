@@ -12,7 +12,7 @@ class PersonGraphicNode(GraphicNode):
 
     def init_assets(self):
         super().init_assets()
-        self.set_icon_by_name("man_icon")
+        self.set_icon_by_name("icon_man")
         self.set_background_color([0.07, 0.0, 0.4, 0.1])
 
 @register_node(OP_SPHERE_NODE_PERSON, SPHERE_NODE_EDITOR)

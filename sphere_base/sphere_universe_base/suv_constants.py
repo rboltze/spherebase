@@ -34,6 +34,7 @@ CAM_MOVEMENT_STEPS = 4
 MESH_DIR = "..//sphere_base/model/resources/meshes/"
 TEXTURE_DIR = "..//sphere_base/model/resources/"
 TEXTURES_DIR = "..//sphere_base/model/resources/textures/"
+ICONS_DIR = "..//sphere_base/model/resources/icons/"
 SPHERE_TEXTURE_DIR = "..//sphere_base/model/resources/sphere_textures/"
 SHADER_DIR = "..//sphere_base/model/resources/shaders/"
 SKYBOX_IMG_DIR = "..//sphere_base/model/resources/textures/skybox/"
@@ -124,8 +125,8 @@ TEXTURES = (
     [8, "circle_black", "texture_diffuseN", "textures/circle_black.jpg"],
     [9, "circle_blue", "texture_diffuseN", "textures/circle_hover.jpg"],
     [10, "circle_red", "texture_diffuseN", "textures/circle_selected.jpg"],
-    [11, "question_mark_icon", "texture_diffuseN", "icons/icon_question_mark.png"],
-    [12, "man_icon", "texture_diffuseN", "icons/icon_man.png"],
+    [11, "icon_question_mark_icon", "texture_diffuseN", "icons/icon_question_mark.png"],
+    [12, "icon_man", "texture_diffuseN", "icons/icon_man.png"],
     [13, "woman_icon", "texture_diffuseN", "icons/icon_woman.png"],
     [14, "lgbt_icon", "texture_diffuseN", "icons/icon_lgbt.png"],
     [15, "laptop_icon", "texture_diffuseN", "icons/icon_laptop.png"],

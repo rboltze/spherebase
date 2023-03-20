@@ -243,9 +243,9 @@ class BaseShader:
         glUseProgram(self.shader_id)
         glBindVertexArray(self.config.VAO[mesh_index])
 
-        if texture_id > 0:
-            glActiveTexture(GL_TEXTURE0)
-            glBindTexture(GL_TEXTURE_2D, self.config.textures[texture_id])
+        # if texture_id > 0:
+        glActiveTexture(GL_TEXTURE0)
+        glBindTexture(GL_TEXTURE_2D, self.config.textures[texture_id])
 
         obj_pos = matrix44.create_from_translation(Vector3(position))
         glUniformMatrix4fv(self.model_loc, 1, GL_FALSE, obj_pos)

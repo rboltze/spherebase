@@ -40,7 +40,7 @@ class Models:
 
         self._models = []
 
-        self.load_textures_into_opengl(self.get_all_textures())
+        self.load_textures_into_opengl()
         self.Model = self.__class__.Model_class
         self.setup_models()
         self.create_all_meshes()
@@ -51,7 +51,7 @@ class Models:
         """
         no_of_meshes = 0
 
-        # itterate through all models from the Model dictionary
+        # iterate through all models from the Model dictionary
         for _name in MODELS.keys():
             model_name = _name
             model_id = MODELS[_name]["model_id"]
@@ -107,18 +107,18 @@ class Models:
             if model.type and model.type == model_type:
                 return model
 
-    def get_all_textures(self):
-        """
-        Returns a list with named tuples containing all textures
-
-        """
-
-        textures = []
-        for t in TEXTURES:
-            id, name, type, path = t[0], t[1], t[2], TEXTURE_DIR + t[3]
-            textures.append(self.Texture(id, name, type, path))
-
-        return textures
+    # def get_all_textures(self):
+    #     """
+    #     Returns a list with named tuples containing all textures
+    #
+    #     """
+    #
+    #     textures = []
+    #     for t in TEXTURES:
+    #         id, name, type, path = t[0], t[1], t[2], TEXTURE_DIR + t[3]
+    #         textures.append(self.Texture(id, name, type, path))
+    #
+    #     return textures
 
     def load_mesh_into_opengl(self, mesh_id=0, buffer=[], indices=[], shader=""):
         """
@@ -173,7 +173,7 @@ class Models:
 
         shader.set_environment()
 
-    def load_textures_into_opengl(self, textures):
+    def load_textures_into_opengl(self):
         """
         Receives a list of ``named tuples`` representing all textures used in this implementation
         and loads them into OpenGl
@@ -182,14 +182,25 @@ class Models:
         :type textures: list of ``named tuples``
 
         """
+        # print("len", len(textures))
+        # print("len", len(self.uv.config.all_textures))
+        self.config.textures = glGenTextures(len(self.uv.config.all_textures))
+        # self.config.textures = glGenTextures(len(textures))
 
-        if len(self.config.textures) == 0:
-            self.config.textures = glGenTextures(len(textures))
-            for i, texture in enumerate(textures):
-                if texture:
-                    self.load_texture_into_opengl(texture.path, self.config.textures[i])
+        # self.load_texture_into_opengl('..//sphere_base/model/resources/sphere_textures/grid1.jpg', 0)
 
-            self.config.create_texture_by_name_dictionary()
+        for index, item in enumerate(self.uv.config.all_textures.values()):
+            # print(index, item['file_dir_name'], item['texture_id'])
+            self.load_texture_into_opengl(item['file_dir_name'], item['texture_id'] + 1)
+
+            # # print("here")
+            # for i, texture in enumerate(textures):
+            #     if texture:
+            #         pass
+            #         # self.load_texture_into_opengl(texture.path, self.config.textures[i])
+            #         # print("here", texture.path, self.config.textures[i])
+
+            # self.config.create_texture_by_name_dictionary()
 
         """
                 : note

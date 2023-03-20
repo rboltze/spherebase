@@ -40,14 +40,15 @@ class UvConfig:
 
         self.mesh_id_counter = 0  # used in creating new indexes for meshes
 
-        self.textures = []
-        self._textures = {}  # filled in models
+        # self.textures = []
+        # self._textures = {}  # filled in models
         self._win_size_changed_listeners = []
         self._view_changed_listeners = []
 
         self.skybox_sets = self.create_skybox_set(skybox_img_dir)
         self.sphere_textures = self.create_texture_set(SPHERE_TEXTURE_DIR, sphere_texture_dir)
-        self.all_textures = self.create_texture_dict(SPHERE_TEXTURE_DIR, sphere_texture_dir, TEXTURES_DIR)
+        self.all_textures = self.create_texture_dict(SPHERE_TEXTURE_DIR, sphere_texture_dir, TEXTURES_DIR, ICONS_DIR)
+
 
     def create_skybox_set(self, skybox_dir=""):
         set0 = [None]
@@ -60,22 +61,23 @@ class UvConfig:
 
         return set0 + set1 + set2
 
-    def create_texture_dict(self, dir1, dir2, dir3):
+    def create_texture_dict(self, dir1, dir2, dir3, dir4):
         # Get all textures from the 3 directories in a dictionary
-        textures = self.create_texture_set(dir1, dir2, dir3)
+        textures = self.create_texture_set(dir1, dir2, dir3, dir4)
         _dict = {}
 
         for index, file_name in enumerate(textures):
             key = os.path.basename(file_name)
-            type = os.path.split(os.path.dirname(file_name))[1]
+            _type = os.path.split(os.path.dirname(file_name))[1]
             if key in _dict:
                 continue
-            _dict[key] = {}
-            _dict[key]['file_name'] = key
-            _dict[key]['texture_id'] = index
-            _dict[key]['file_dir_name'] = file_name
-            _dict[key]['type'] = type[:-1]  # removing the 's'
-
+            if os.path.isfile(file_name):
+                if file_name.endswith('.jpg') or file_name.endswith('.png'):
+                    _dict[key] = {}
+                    _dict[key]['file_name'] = key
+                    _dict[key]['texture_id'] = index
+                    _dict[key]['file_dir_name'] = file_name
+                    _dict[key]['type'] = _type[:-1]  # removing the 's'
         return _dict
 
     def create_texture_set(self, *args):
@@ -131,14 +133,14 @@ class UvConfig:
         for callback in self._view_changed_listeners:
             callback()
 
-    def create_texture_by_name_dictionary(self):
-        """
-        Creating a texture dictionary indexed by name
-
-        """
-        for texture in TEXTURES:
-            texture_id, texture_name = texture[0], texture[1]
-            self._textures[texture_name] = texture_id
+    # def create_texture_by_name_dictionary(self):
+    #     """
+    #     Creating a texture dictionary indexed by name
+    #
+    #     """
+    #     for texture in TEXTURES:
+    #         texture_id, texture_name = texture[0], texture[1]
+    #         self._textures[texture_name] = texture_id
 
     def get_img_id(self, img_name) -> int:
         """
@@ -148,9 +150,26 @@ class UvConfig:
         :type img_name: str
 
         """
-        if img_name in self._textures:
-            return self._textures[img_name]
-        return None
+        #
+        _id = None
+
+        for index, _item in enumerate(self.uv.config.all_textures.values()):
+            if _item['file_name'] == img_name or _item['file_name'][:-4] == img_name:
+                _id = _item['texture_id']
+                continue
+
+        return _id
+
+
+        # if img_name in self._textures:
+        #     return self._textures[img_name]
+        # return None
+
+
+
+        # if img_name in self._textures:
+        #     return self._textures[img_name]
+        # return None
 
     def get_mesh_id(self) -> int:
         """
