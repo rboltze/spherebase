@@ -1,24 +1,24 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from os import path
 
 
 class WidgetSphereColorButtonSettings(QWidget):
     color_changed = pyqtSignal()
 
-    def __init__(self):
+    def __init__(self, main_win):
         super().__init__()
+        self.uv = main_win.sphere_widget.uv_widget.uv
+        self.sphere = self.uv.target_sphere
         self._init_Values()
         self._setup_ui()
 
     def _init_Values(self):
+        self.color = []
         self.groupBox = QGroupBox("Default sphere colors")
         self.layout = QGridLayout()
 
     def _setup_ui(self):
         self._setup_buttons()
-
         self.groupBox.setLayout(self.layout)
 
         v_box = QVBoxLayout()
@@ -53,11 +53,17 @@ class WidgetSphereColorButtonSettings(QWidget):
         self.layout.addWidget(btn_blue, 4, 1)
         self.layout.addWidget(btn_yellow, 5, 1)
 
-        # self.groupBox.setLayout(self.layout)
-        # v_box = QVBoxLayout()
-        # v_box.addWidget(self.groupBox)
-        # self.setLayout(v_box)
-
     def on_click_change(self, color=None):
+        if color == 'white':
+            self.color = [1, 1, 1, 0.8]
+        elif color == 'red':
+            self.color = [0.8, 0.08, 0.08, 0.7]
+        elif color == 'green':
+            self.color = [0.37, 0.56, 0.32, 0.6]
+        elif color == 'blue':
+            self.color = [0.30, 0.65, 1.00, 0.6]
+        elif color == 'yellow':
+            self.color = [0.88, 0.7, 0.32, 0.8]
+        self.uv.target_sphere.color = self.color
         self.color_changed.emit()
 

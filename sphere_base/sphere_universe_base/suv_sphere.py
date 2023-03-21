@@ -78,7 +78,6 @@ class Sphere(Serializable):
         super().__init__(sphere_type)
         self.uv = universe
         self.texture_id = texture_id
-        # self.texture_file = self.uv.config.sphere_textures[self.texture_id]
         self.config = universe.config
 
         self._init_flags()
@@ -106,15 +105,17 @@ class Sphere(Serializable):
         self.uv.add_sphere(self)
         self.history.store_initial_history_stamp()
 
+
     def _init_variables(self):
         self.scale = None
         self.index = 0
         self.radius = 1.0
-        self.color = None
+        self.color = [1, 1, 1, 1]
         self.orientation = quaternion.create_from_eulers([0.0, 0.0, 0.0])
         self._hovered_item = None
         self.color_id = 0  # color id translates to a relevance color. Higher numbers are closer to red
         self.color_id_per_lens = 12345  # Each digit represents a color to be selected by a lens
+        self.animation = 0  # rotation speed
 
         self.selected_item = None
         self.items = []
@@ -777,6 +778,9 @@ class Sphere(Serializable):
         Render the sphere_base and all the items on it.
         """
 
+        if self.animation != 0:
+            self.rotate_sphere(self.animation)
+
         self.model.draw(self, texture_id=self.texture_id,  color=self.color)
         for item in self.items:
             if item.type == "node":
@@ -831,6 +835,7 @@ class Sphere(Serializable):
             ('pos', self.xyz),
             ('orientation', self.orientation.tolist()),
             ('texture_id', self.texture_id),
+            ('color', self.color),
             ('color_id', self.color_id),
             ('color_id_per_lens', self.get_color_id_per_lens()),
             ('nodes', nodes),
@@ -845,6 +850,8 @@ class Sphere(Serializable):
         self.xyz = data['pos']
         self.orientation = np.array(data['orientation'])
         self.texture_id = data['texture_id']
+        if 'color' in data:
+            self.color = data['color']
         self.color_id = data['color_id']
         self.color_id_per_lens = data['color_id_per_lens']
 
@@ -852,7 +859,7 @@ class Sphere(Serializable):
         color_id = int(str(self.color_id_per_lens)[0])
         c = RELEVANCE_COLORS[color_id]
         # Create the color with the relevant transparency for the sphere_base
-        self.color = [c[0], c[1], c[2], TRANSPARENCY_DETAIL_SPHERE]
+        # self.color = [c[0], c[1], c[2], TRANSPARENCY_DETAIL_SPHERE]
 
         self.uv.mouse_ray.reset_position_collision_object(self)
 

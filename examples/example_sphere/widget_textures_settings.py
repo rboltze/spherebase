@@ -44,4 +44,4 @@ class WidgetTextureSettings(QWidget):
             for item in self.texture_list_box.selectedItems():
                 for index, _item in enumerate(self.uv.config.all_textures.values()):
                     if _item['file_name'] == item.text():
-                        self.uv.target_sphere.texture_id = _item['texture_id']
+                        self.uv.target_sphere.texture_id = _item['img_id']

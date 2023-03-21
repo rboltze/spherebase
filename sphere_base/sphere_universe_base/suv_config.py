@@ -72,7 +72,7 @@ class UvConfig:
                 if file_name.endswith('.jpg') or file_name.endswith('.png'):
                     _dict[key] = {}
                     _dict[key]['file_name'] = key
-                    _dict[key]['texture_id'] = index
+                    _dict[key]['img_id'] = index
                     _dict[key]['file_dir_name'] = file_name
                     _dict[key]['type'] = _type[:-1]  # removing the 's'
         return _dict
@@ -143,7 +143,7 @@ class UvConfig:
         image_id = None
         for index, _item in enumerate(self.uv.config.all_textures.values()):
             if _item['file_name'] == img_name or _item['file_name'][:-4] == img_name:
-                image_id = _item['texture_id']
+                image_id = _item['img_id']
                 continue
         return image_id
 

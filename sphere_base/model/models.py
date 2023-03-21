@@ -107,6 +107,20 @@ class Models:
             if model.type and model.type == model_type:
                 return model
 
+    def load_textures_into_opengl(self):
+        """
+        Gets all the images and textures in the config dictionary. Retrieves image file location and
+        loads them into OpenGl
+
+        :param textures: list of textures
+        :type textures: list of ``named tuples``
+
+        """
+
+        self.config.textures = glGenTextures(len(self.uv.config.all_textures))
+        for index, item in enumerate(self.uv.config.all_textures.values()):
+            self.load_texture_into_opengl(item['file_dir_name'], item['img_id'] + 1)
+
     def load_mesh_into_opengl(self, mesh_id=0, buffer=[], indices=[], shader=""):
         """
         Loads a single mesh into Opengl buffers
@@ -159,20 +173,6 @@ class Models:
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0)
 
         shader.set_environment()
-
-    def load_textures_into_opengl(self):
-        """
-        Receives a list of ``named tuples`` representing all textures used in this implementation
-        and loads them into OpenGl
-
-        :param textures: list of textures
-        :type textures: list of ``named tuples``
-
-        """
-
-        self.config.textures = glGenTextures(len(self.uv.config.all_textures))
-        for index, item in enumerate(self.uv.config.all_textures.values()):
-            self.load_texture_into_opengl(item['file_dir_name'], item['texture_id'] + 1)
 
     @staticmethod
     def load_texture_into_opengl(texture_path, texture_id):

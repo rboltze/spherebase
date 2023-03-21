@@ -21,7 +21,7 @@ class SplitSphere(Sphere):
         self.billboard_id = random.randint(30, 31)
 
     def get_model(self):
-        self.cube = self.uv.models.get_model('cube') #model in the middle of the globe
+        # self.cube = self.uv.models.get_model('cube') #model in the middle of the globe
         self.model_h = self.uv.models.get_model('holo_sphere')
         self.model = self.uv.models.get_model('sphere_base')
         self.shader = self.model.shader
@@ -47,18 +47,22 @@ class SplitSphere(Sphere):
         self.history.store_history("node created", True)
         return node
 
-    # def draw(self):
-    #     """
-    #     Render the sphere_base and all the items on it.
-    #     """
-    #     self.cube.draw(self, self.billboard_id, scale=[0.5, 0.5, 0.5])
-    #     self.model_h.draw(self, texture_id=1, color=self.color)
-    #
-    #     for item in self.items:
-    #         if item.type == "node":
-    #             item.draw()
-    #         elif item.type == "edge":
-    #             item.draw()
-    #
-    #     if self.edge_drag.dragging:
-    #         self.edge_drag.draw()
+    def draw(self):
+        """
+        Render the sphere_base and all the items on it.
+        """
+
+        if self.animation != 0:
+            self.rotate_sphere(self.animation)
+
+        # self.cube.draw(self, self.billboard_id, scale=[0.5, 0.5, 0.5])
+        self.model_h.draw(self, texture_id=self.texture_id, color=self.color)
+
+        for item in self.items:
+            if item.type == "node":
+                item.draw()
+            elif item.type == "edge":
+                item.draw()
+
+        if self.edge_drag.dragging:
+            self.edge_drag.draw()
