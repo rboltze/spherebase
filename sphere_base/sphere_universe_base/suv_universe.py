@@ -7,7 +7,7 @@ Module universe. The universe contains all the spheres.
 
 from collections import OrderedDict
 from sphere_base.sphere_universe_base.suv_serializable import Serializable
-from sphere_base.sphere_universe_base.suv_sphere import Sphere
+from sphere_base.sphere.sphere import Sphere
 from sphere_base.model.models import Models
 from sphere_base.sphere_universe_base.suv_mouse_ray import MouseRay
 from sphere_base.sphere_universe_base.suv_cam import Camera

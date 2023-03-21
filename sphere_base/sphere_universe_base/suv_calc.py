@@ -143,3 +143,59 @@ class UvCalc:
         # return the distance on the great circle
         return 2 * phi * radius
 
+    @staticmethod
+    def get_position_modifier(ratio: float, mod_x=True) -> int:
+        """
+
+        This is a modifier based on the distance between the mouse pointer and the center of the screen.
+        ratio is between 0 and 1. There are some differences between horizontal, vertical, positive and negative.
+
+        :param ratio: ratio modifier between -1.0 and 1.0
+        :type ratio: ``float``
+        :param mod_x: ``True`` if the modifier is meant for the x-axis
+        :type mod_x: ``bool``
+        :return: position modifier ``int``
+        """
+        position_modifier_x = {0: 9, 1: 8, 2: 7, 3: 7, 4: 7, 5: 7, 6: 7, 7: 7, 8: 7, 9: 7,
+                               -1: 7, -2: 6, -3: 6, -4: 6, -5: 6, -6: 6, -7: 6, -8: 6, -9: 7}
+        position_modifier_y = {0: 9, 1: 8, 2: 7, 3: 7, 4: 8, 5: 8, 6: 8, 7: 9, 8: 9, 9: 9,
+                               -1: 7, -2: 6, -3: 7, -4: 8, -5: 8, -6: 8, -7: 9, -8: 9, -9: 9}
+
+        position_modifier = position_modifier_x if mod_x else position_modifier_y
+
+        d = int(ratio * 10)
+        if d in position_modifier:
+            return position_modifier[d]
+        elif d > 10:
+            return position_modifier[10]
+        else:
+            return 9
+
+    @staticmethod
+    def get_distance_modifier(distance: float) -> int:
+        """
+
+        This function returns a modifier based on the distance between the camera and the target sphere_base center.
+        It is used while dragging object and creating new objects. The modifier is larger when the distance is larger.
+
+        :param distance: Distance between camera position and the center of the target sphere_base
+        :type distance: ``float``
+        :return: distance modifier ``int``
+
+        .. note::
+
+           All spheres in the basic implementation use a radius of 1. The minimum workable distance after extensive
+           testing is 1.5. Getting closer to the sphere_base causes sometimes the camera to jump inside the sphere_base.
+           When keeping a minimum distance of 2 this does not happen.
+
+        """
+
+        distance_modifier = {2: 3, 3: 6, 4: 9, 5: 12, 6: 15, 7: 18, 8: 21, 9: 24, 10: 27}
+        d = int(distance)
+        if d in distance_modifier:
+            return distance_modifier[int(distance)]
+        elif d > 10:
+            return distance_modifier[10]
+        else:
+            return pow(distance, 2)
+

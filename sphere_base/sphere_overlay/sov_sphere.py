@@ -4,7 +4,7 @@
 This is the implementation for the detail sphere_base
 """
 
-from sphere_base.sphere_universe_base.suv_sphere import Sphere
+from sphere_base.sphere.sphere import Sphere
 from sphere_base.sphere_overlay.sov_conf import *
 from sphere_base.sphere_overlay.sphere_nodes.edge_sphere_item import SphereEdge
 import random

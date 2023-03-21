@@ -105,7 +105,6 @@ class Sphere(Serializable):
         self.uv.add_sphere(self)
         self.history.store_initial_history_stamp()
 
-
     def _init_variables(self):
         self.scale = None
         self.index = 0
@@ -113,8 +112,8 @@ class Sphere(Serializable):
         self.color = [1, 1, 1, 1]
         self.orientation = quaternion.create_from_eulers([0.0, 0.0, 0.0])
         self._hovered_item = None
-        self.color_id = 0  # color id translates to a relevance color. Higher numbers are closer to red
-        self.color_id_per_lens = 12345  # Each digit represents a color to be selected by a lens
+        # self.color_id = 0  # color id translates to a relevance color. Higher numbers are closer to red
+        # self.color_id_per_lens = 12345  # Each digit represents a color to be selected by a lens
         self.animation = 0  # rotation speed
 
         self.selected_item = None
@@ -472,9 +471,9 @@ class Sphere(Serializable):
         y_offset = 1.0 - (2.0 * mouse_y) / self.uv.view.view_height
 
         # camera to center of target sphere_base modifier
-        m = self.get_distance_modifier(self.uv.cam.distance_to_target)
-        p_x = self.get_position_modifier(x_offset, True)
-        p_y = self.get_position_modifier(y_offset, False)
+        m = self.calc.get_distance_modifier(self.uv.cam.distance_to_target)
+        p_x = self.calc.get_position_modifier(x_offset, True)
+        p_y = self.calc.get_position_modifier(y_offset, False)
 
         # mouse pointer offset in radians
         mouse_pitch = -(pi / 180 * (x_offset * p_x * m))
@@ -529,7 +528,7 @@ class Sphere(Serializable):
         """
 
         # distance modifier
-        m = self.get_distance_modifier(self.uv.cam.distance_to_target)
+        m = self.calc.get_distance_modifier(self.uv.cam.distance_to_target)
 
         x_offset *= .02 * m
         y_offset *= .02 * m
@@ -556,68 +555,12 @@ class Sphere(Serializable):
         :type dragging: ``bool``
         """
         self.start_socket = start_socket
-        m = self.get_distance_modifier(self.uv.cam.distance_to_target) * .02
+        m = self.calc.get_distance_modifier(self.uv.cam.distance_to_target) * .02
 
         x_offset *= m
         y_offset *= m
 
         self.edge_drag.drag(start_socket, x_offset, y_offset, dragging)
-
-    @staticmethod
-    def get_distance_modifier(distance: float) -> int:
-        """
-
-        This function returns a modifier based on the distance between the camera and the target sphere_base center.
-        It is used while dragging object and creating new objects. The modifier is larger when the distance is larger.
-
-        :param distance: Distance between camera position and the center of the target sphere_base
-        :type distance: ``float``
-        :return: distance modifier ``int``
-
-        .. note::
-
-           All spheres in the basic implementation use a radius of 1. The minimum workable distance after extensive
-           testing is 1.5. Getting closer to the sphere_base causes sometimes the camera to jump inside the sphere_base.
-           When keeping a minimum distance of 2 this does not happen.
-
-        """
-
-        distance_modifier = {2: 3, 3: 6, 4: 9, 5: 12, 6: 15, 7: 18, 8: 21, 9: 24, 10: 27}
-        d = int(distance)
-        if d in distance_modifier:
-            return distance_modifier[int(distance)]
-        elif d > 10:
-            return distance_modifier[10]
-        else:
-            return pow(distance, 2)
-
-    @staticmethod
-    def get_position_modifier(ratio: float, mod_x=True) -> int:
-        """
-
-        This is a modifier based on the distance between the mouse pointer and the center of the screen.
-        ratio is between 0 and 1. There are some differences between horizontal, vertical, positive and negative.
-
-        :param ratio: ratio modifier between -1.0 and 1.0
-        :type ratio: ``float``
-        :param mod_x: ``True`` if the modifier is meant for the x-axis
-        :type mod_x: ``bool``
-        :return: position modifier ``int``
-        """
-        position_modifier_x = {0: 9, 1: 8, 2: 7, 3: 7, 4: 7, 5: 7, 6: 7, 7: 7, 8: 7, 9: 7,
-                               -1: 7, -2: 6, -3: 6, -4: 6, -5: 6, -6: 6, -7: 6, -8: 6, -9: 7}
-        position_modifier_y = {0: 9, 1: 8, 2: 7, 3: 7, 4: 8, 5: 8, 6: 8, 7: 9, 8: 9, 9: 9,
-                               -1: 7, -2: 6, -3: 7, -4: 8, -5: 8, -6: 8, -7: 9, -8: 9, -9: 9}
-
-        position_modifier = position_modifier_x if mod_x else position_modifier_y
-
-        d = int(ratio * 10)
-        if d in position_modifier:
-            return position_modifier[d]
-        elif d > 10:
-            return position_modifier[10]
-        else:
-            return 9
 
     def select_item(self, item: 'node or edge', shift: bool = False):
         """
@@ -767,29 +710,7 @@ class Sphere(Serializable):
         self.uv.remove_sphere(self)
 
     def on_lens_index_changed(self):
-        # if the lens changes than the relevance colors change as well
-        # Each digit in the 'color_id_per_lens' represents a color_id
-        if self.color_id_per_lens > 0:
-            color_id = int(str(self.color_id_per_lens)[self.uv.lens_index])
-            self.color = RELEVANCE_COLORS[color_id]
-
-    def draw(self):
-        """
-        Render the sphere_base and all the items on it.
-        """
-
-        if self.animation != 0:
-            self.rotate_sphere(self.animation)
-
-        self.model.draw(self, texture_id=self.texture_id,  color=self.color)
-        for item in self.items:
-            if item.type == "node":
-                item.draw()
-            elif item.type == "edge":
-                item.draw()
-
-        if self.edge_drag.dragging:
-            self.edge_drag.draw()
+        return NotImplemented
 
     def set_node_class_selector(self, class_selecting_function: 'function'):
         """
@@ -809,17 +730,25 @@ class Sphere(Serializable):
         return SphereNode if self.node_class_selector is None else self.node_class_selector(data)
 
     def get_color_id_per_lens(self):
-        # returns a number with many digits, each digit represents a texture. Selecting a lens determines
-        # which digit to use
-        number = ""
-        if self.color_id_per_lens > 0:
-            number = self.color_id_per_lens
-        else:
-            for i in range(0, 21):
-                x = randint(1, 5)
-                number = int(str(number) + str(x))
+        return NotImplemented
 
-        return number
+    def draw(self):
+        """
+        Render the sphere_base and all the items on it.
+        """
+
+        if self.animation != 0:
+            self.rotate_sphere(self.animation)
+
+        self.model.draw(self, texture_id=self.texture_id,  color=self.color)
+        for item in self.items:
+            if item.type == "node":
+                item.draw()
+            elif item.type == "edge":
+                item.draw()
+
+        if self.edge_drag.dragging:
+            self.edge_drag.draw()
 
     def serialize(self):
         nodes, edges = [], []
@@ -836,8 +765,8 @@ class Sphere(Serializable):
             ('orientation', self.orientation.tolist()),
             ('texture_id', self.texture_id),
             ('color', self.color),
-            ('color_id', self.color_id),
-            ('color_id_per_lens', self.get_color_id_per_lens()),
+            # ('color_id', self.color_id),
+            # ('color_id_per_lens', self.get_color_id_per_lens()),
             ('nodes', nodes),
             ('edges', edges),
         ])
@@ -852,14 +781,6 @@ class Sphere(Serializable):
         self.texture_id = data['texture_id']
         if 'color' in data:
             self.color = data['color']
-        self.color_id = data['color_id']
-        self.color_id_per_lens = data['color_id_per_lens']
-
-        # Take the first color_id digit in the number
-        color_id = int(str(self.color_id_per_lens)[0])
-        c = RELEVANCE_COLORS[color_id]
-        # Create the color with the relevant transparency for the sphere_base
-        # self.color = [c[0], c[1], c[2], TRANSPARENCY_DETAIL_SPHERE]
 
         self.uv.mouse_ray.reset_position_collision_object(self)
 
