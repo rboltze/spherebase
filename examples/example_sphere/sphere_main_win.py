@@ -14,6 +14,7 @@ class MainWindow(QMainWindow):
     sphere_widget_class = SphereWidget
     Uv_Widget_class = UVWidget
 
+
     def __init__(self):
         super().__init__()
 
