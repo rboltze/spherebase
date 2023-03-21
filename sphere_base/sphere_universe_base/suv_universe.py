@@ -118,7 +118,8 @@ class Universe(Serializable):
 
         # Change the relevance colors of all spheres
         for sphere in self._spheres:
-            sphere.on_lens_index_changed()
+            pass
+            # sphere.on_lens_index_changed()
 
     def clear(self):
         """

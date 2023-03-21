@@ -14,7 +14,7 @@ class ItemGraphicNode(GraphicNode):
 
     def init_assets(self):
         super().init_assets()
-        self.set_icon_by_name("item_icon")
+        self.set_icon_by_name("icon_item")
         self.set_background_color([0.17, 0.07, 0.4, 0.05])
         self.scale = [2.0, 2.0, 2.0]
         self.circle_scale = [0.27, 0.30, 0.27]

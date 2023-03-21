@@ -13,8 +13,6 @@ from collections import OrderedDict
 from sphere_base.sphere_universe_base.suv_node import SphereNode
 from sphere_base.sphere_universe_base.suv_edge_drag import EdgeDrag
 from sphere_base.sphere_universe_base.suv_surface_edge import SphereSurfaceEdge
-from sphere_base.sphere_universe_base.suv_constants import *
-
 from sphere_base.sphere_universe_base.suv_history import History
 from pyrr import quaternion, Vector3
 from math import pi
@@ -96,10 +94,11 @@ class Sphere(Serializable):
         self.xyz = position if position else ([randint(-25, 25), randint(-25, 25), randint(-25, 25)])
         self.texture_id = texture_id if texture_id or texture_id == 0 else randint(1, 5)
 
-        self.collision_object_id = self.create_collision_object(self)
+        # self.collision_object_id = self.create_collision_object(self)
+        self.collision_object_id = self.uv.mouse_ray.create_collision_object(self)
 
         # for testing purposes a number of random nodes can be created
-        self.create_test_node(NUMBER_OF_TEST_NODES)
+        # self.create_test_node(NUMBER_OF_TEST_NODES)
 
         # add the sphere_base to the universe
         self.uv.add_sphere(self)
@@ -112,15 +111,12 @@ class Sphere(Serializable):
         self.color = [1, 1, 1, 1]
         self.orientation = quaternion.create_from_eulers([0.0, 0.0, 0.0])
         self._hovered_item = None
-        # self.color_id = 0  # color id translates to a relevance color. Higher numbers are closer to red
-        # self.color_id_per_lens = 12345  # Each digit represents a color to be selected by a lens
         self.animation = 0  # rotation speed
 
         self.selected_item = None
         self.items = []
         self.items_selected = []
         self.items_deselected = []
-
 
     def _init_listeners(self):
         self._selection_changed_listeners = []
@@ -130,30 +126,11 @@ class Sphere(Serializable):
     def _init_flags(self):
         self._has_been_modified = False
         self._dragging = False
-        self._selected = False
+        self.selected = False
 
     def get_model(self):
         # likely to be overridden
         self.model = self.uv.models.get_model('sphere_base')
-        self.shader = self.model.shader
-
-    def create_collision_object(self, sphere):
-        return self.uv.mouse_ray.create_collision_object(sphere)
-
-    @property
-    def selected(self) -> bool:
-        """
-        Sets 'selected' value .
-
-        :getter: Returns current state
-        :setter: Sets _dragging value
-        :type: ``bool``
-        """
-        return self._selected
-
-    @selected.setter
-    def selected(self, value: bool):
-        self._selected = value
 
     @property
     def dragging(self) -> bool:
@@ -191,13 +168,12 @@ class Sphere(Serializable):
             # call all registered listeners
             for callback in self._has_been_modified_listeners:
                 callback()
-
-        self._has_been_modified = value
+        else:
+            self._has_been_modified = value
 
     def add_has_been_modified_listener(self, callback: 'function'):
         """
         Register callback for 'has been modified' event.
-
         :param callback: callback function
         """
         self._has_been_modified_listeners.append(callback)
@@ -205,7 +181,6 @@ class Sphere(Serializable):
     def add_selection_changed_listener(self, callback: 'function'):
         """
         Register callback for 'selection changed' event.
-
         :param callback: callback function
         """
         self._selection_changed_listeners.append(callback)
@@ -213,29 +188,9 @@ class Sphere(Serializable):
     def add_item_deselected_listener(self, callback: 'function'):
         """
         Register callback for `deselected item` event.
-
         :param callback: callback function
         """
         self._items_deselected_listeners.append(callback)
-
-    def create_test_node(self, number_of_nodes: int = 0):
-        """
-        Creates a number_of_nodes at random positions on the target node.
-
-        :param number_of_nodes: number of tests nodes to create
-        :type number_of_nodes: ``int``
-        """
-
-        for i in range(number_of_nodes):
-            x = randint(-30, 30)  # 30º above and below the equator
-            roll = (pi / 180 * (90 + x))
-            y = randint(160, 200)
-            pitch = (pi / 180 * y)
-            yaw = 0.0  # no yaw
-
-            orientation_offset = quaternion.create_from_eulers([roll, pitch, yaw])
-            self.Node(self, orientation_offset)
-            self.history.store_history("node created", True)
 
     def create_new_node(self, node_type: str = "person", mouse_x: int = 0, mouse_y: int = 0) -> 'node':
         """
@@ -255,7 +210,6 @@ class Sphere(Serializable):
 
         # create new node at the cumulative angle
         node = self.Node(self, orientation)
-
         self.history.store_history("node created", True)
         return node
 
@@ -264,12 +218,9 @@ class Sphere(Serializable):
         Handles item selection and triggers event `Item _selected`.
         """
         if items_selected:
-
             for callback in self._selection_changed_listeners:
-
                 callback(self, items_selected)
                 self.history.store_history("Selection Changed")
-
 
     def on_item_deselected(self, item: 'Node or Edge'):
         """
@@ -380,7 +331,6 @@ class Sphere(Serializable):
             self.history.store_history("edge created", True)
             return edge
 
-        # print("edge already exist, not created")
         return None
 
     def get_edges(self, start_socket=None, end_socket=None):
@@ -458,6 +408,9 @@ class Sphere(Serializable):
         """
         Calculates the angle of the mouse pointer with the center of the target sphere_base. It takes into account the
         distance of the camera with the target sphere_base and the distance of the mouse from the center of the screen.
+
+        Todo: this is not a correct calculation and needs to be revised. The new calculation needs to find the point
+              where the mouse_ray hits the sphere. And this pint needs to be calculated in angles.
 
         :param mouse_x: x-position of the mouse pointer
         :type mouse_x: ``float``
@@ -709,9 +662,6 @@ class Sphere(Serializable):
         self.uv.mouse_ray.delete_collision_object(self)
         self.uv.remove_sphere(self)
 
-    def on_lens_index_changed(self):
-        return NotImplemented
-
     def set_node_class_selector(self, class_selecting_function: 'function'):
         """
         Helper method that sets the function which decides what `Node` class to instantiate when deserializing
@@ -728,9 +678,6 @@ class Sphere(Serializable):
         in the serialized Node.
         """
         return SphereNode if self.node_class_selector is None else self.node_class_selector(data)
-
-    def get_color_id_per_lens(self):
-        return NotImplemented
 
     def draw(self):
         """

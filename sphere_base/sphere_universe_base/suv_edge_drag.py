@@ -8,10 +8,15 @@ Edge_drag module. contains the EdgeDraw class which is responsible for drawing a
 from pyrr import quaternion
 from sphere_base.sphere_universe_base.suv_socket import *
 from sphere_base.sphere_universe_base.suv_graphic_edge import GraphicEdge
+from sphere_base.shader.uv_sphere_shader import SphereShader
 
 
 class EdgeDrag:
+
     GraphicsEdge_class = GraphicEdge
+    Shader_class = SphereShader
+
+
     """
     This class takes care of dragging a new edge. SLERP-ing Quaternions to determine the angle 
     with the center of the sphere_base.
@@ -53,6 +58,7 @@ class EdgeDrag:
     def _init_variables(self):
         self.uv = self.sphere.uv
         self.shader = self.sphere.shader
+        # self.shader = self.__class__.Shader_class(self)
 
         self.radius = self.sphere.radius
         self.start_socket = None
