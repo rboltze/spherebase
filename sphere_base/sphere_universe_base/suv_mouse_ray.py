@@ -13,8 +13,8 @@ This module also creates all collision objects in the ``PyBullet`` simulation wo
 
 import pybullet as p
 from pyrr import Vector3, Vector4, vector, matrix44
-from sphere_base.sphere_universe_base.suv_constants import *
-from sphere_base.sphere_universe_base.suv_utils import dump_exception
+from sphere_base.constants import *
+from sphere_base.utils import dump_exception
 from pybullet_utils import bullet_client as bc
 
 DEBUG = False

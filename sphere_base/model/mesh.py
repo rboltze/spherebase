@@ -5,7 +5,7 @@
 """
 
 import numpy as np
-from sphere_base.sphere_universe_base.suv_utils import dump_exception
+from sphere_base.utils import dump_exception
 
 
 class Mesh:

@@ -4,7 +4,7 @@
 A module containing all code for working with history on a single sphere_base (Undo/Redo)
 """
 
-from sphere_base.sphere_universe_base.suv_utils import dump_exception
+from sphere_base.utils import dump_exception
 
 DEBUG = False
 DEBUG_SELECTION = False

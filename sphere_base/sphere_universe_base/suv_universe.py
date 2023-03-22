@@ -6,15 +6,15 @@ Module universe. The universe contains all the spheres.
 """
 
 from collections import OrderedDict
-from sphere_base.sphere_universe_base.suv_serializable import Serializable
+from sphere_base.serializable import Serializable
 from sphere_base.sphere.sphere import Sphere
 from sphere_base.model.models import Models
 from sphere_base.sphere_universe_base.suv_mouse_ray import MouseRay
 from sphere_base.sphere_universe_base.suv_cam import Camera
 from sphere_base.sphere_universe_base.suv_skybox import Skybox
 from sphere_base.sphere_universe_base.suv_rubber_band import RubberBand
-from sphere_base.sphere_universe_base.suv_clipboard import Clipboard
-from sphere_base.sphere_universe_base.suv_config import UvConfig
+from sphere_base.clipboard import Clipboard
+from sphere_base.config import UvConfig
 from sphere_base.shader.uv_default_shader import DefaultShader
 import os.path
 

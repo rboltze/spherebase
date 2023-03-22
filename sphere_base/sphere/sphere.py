@@ -7,14 +7,14 @@ One sphere_base at the time can become the 'target sphere_base'.
 """
 
 from random import *
-from sphere_base.sphere_universe_base.suv_serializable import Serializable
-from sphere_base.sphere_universe_base.suv_utils import dump_exception
+from sphere_base.serializable import Serializable
+from sphere_base.utils import dump_exception
 from collections import OrderedDict
 from sphere_base.sphere_universe_base.suv_node import SphereNode
 from sphere_base.sphere_universe_base.suv_edge_drag import EdgeDrag
 from sphere_base.sphere_universe_base.suv_surface_edge import SphereSurfaceEdge
-from sphere_base.sphere_universe_base.suv_history import History
-from pyrr import quaternion, Vector3
+from sphere_base.history import History
+from pyrr import quaternion
 from math import pi
 from sphere_base.sphere_universe_base.suv_calc import UvCalc
 import numpy as np

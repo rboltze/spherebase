@@ -1,5 +1,5 @@
 from sphere_base.model.mesh import Mesh
-from sphere_base.sphere_universe_base.suv_utils import dump_exception
+from sphere_base.utils import dump_exception
 
 DEBUG = False
 

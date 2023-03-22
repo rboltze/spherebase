@@ -8,7 +8,7 @@ This class contains the class that colors the small overview spheres. It inherit
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from sphere_base.shader.uv_base_shader import BaseShader
-from sphere_base.sphere_universe_base.suv_constants import *
+from sphere_base.constants import *
 
 
 class SphereSmallShader(BaseShader):

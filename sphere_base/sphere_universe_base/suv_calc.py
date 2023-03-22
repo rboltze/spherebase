@@ -11,7 +11,7 @@ import math
 
 class UvCalc:
     """
-    contains calculation to put items on a sphere_base. These calculations are used
+    contains calculation for putting items on a sphere_base. These calculations are used
     by nodes, sockets and edges.
 
     """

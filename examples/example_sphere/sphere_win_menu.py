@@ -6,7 +6,7 @@ A module containing the Main Window menu class
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from sphere_base.sphere_universe_base.suv_utils import dump_exception
+from sphere_base.utils import dump_exception
 from widget_settings import Settings
 
 

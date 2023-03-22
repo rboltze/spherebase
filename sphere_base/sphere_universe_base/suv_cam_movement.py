@@ -7,7 +7,7 @@ camera movement module. Contains the camera movement class. It has the calculati
 
 from math import sin, cos, radians
 from pyrr import Vector3, Vector4, matrix44
-from sphere_base.sphere_universe_base.suv_constants import *
+from sphere_base.constants import *
 
 
 class CameraMovement:

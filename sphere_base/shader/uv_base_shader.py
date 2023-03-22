@@ -10,7 +10,7 @@ from pyrr import Vector3, matrix44
 import pyrr
 from OpenGL.GL.shaders import compileProgram, compileShader
 
-from sphere_base.sphere_universe_base.suv_constants import *
+from sphere_base.constants import *
 
 
 class BaseShader:

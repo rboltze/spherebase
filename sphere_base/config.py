@@ -5,7 +5,7 @@ A module containing the Configuration class.
 
 """
 
-from sphere_base.sphere_universe_base.suv_constants import *
+from sphere_base.constants import *
 import os
 
 

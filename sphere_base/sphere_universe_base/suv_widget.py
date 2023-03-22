@@ -13,8 +13,7 @@ import json
 
 from OpenGL.GL import *
 from sphere_base.sphere_universe_base.suv_universe import Universe
-from sphere_base.sphere_universe_base.suv_constants import *
-from sphere_base.sphere_universe_base.suv_utils import dump_exception
+from sphere_base.constants import *
 
 
 class UV_Widget(QGLWidget):

@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import *
 
 from examples.example_sphere.sphere_uv_widget import UVWidget  # detail spheres
 import os.path
-from sphere_base.sphere_universe_base.suv_utils import dump_exception
+from sphere_base.utils import dump_exception
 
 TAB_NAMES = {0: "Node editor", 1: "Description"}
 

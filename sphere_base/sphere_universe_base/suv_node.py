@@ -5,11 +5,11 @@ Module Node. A node is the basis for all nodes. Further nodes are derived from S
 """
 
 from pyrr import quaternion
-from sphere_base.sphere_universe_base.suv_serializable import Serializable
+from sphere_base.serializable import Serializable
 from collections import OrderedDict
 from sphere_base.sphere_universe_base.suv_graphic_node import GraphicNode
 from sphere_base.sphere_universe_base.suv_socket import Socket
-from sphere_base.sphere_universe_base.suv_constants import *
+from sphere_base.constants import *
 # from sphere_iot.uv_calc import UvCalc
 import numpy as np
 

@@ -5,7 +5,7 @@ The ``Models`` class holds all textures and all models used in this implementati
 """
 
 from collections import namedtuple
-from sphere_base.sphere_universe_base.suv_constants import *
+from sphere_base.constants import *
 from PIL import Image
 from OpenGL.GL import *
 from sphere_base.model.model import Model

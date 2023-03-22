@@ -6,10 +6,10 @@ The position of the socket is always is always in the center of the node disc it
 """
 
 
-from sphere_base.sphere_universe_base.suv_serializable import Serializable
+from sphere_base.serializable import Serializable
 from sphere_base.sphere_universe_base.suv_graphic_socket import GraphicSocket
 from sphere_base.sphere_universe_base.suv_calc import UvCalc
-from sphere_base.sphere_universe_base.suv_constants import *
+from sphere_base.constants import *
 from collections import OrderedDict
 
 DEBUG = False
