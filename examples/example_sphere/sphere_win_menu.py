@@ -78,7 +78,7 @@ class SphereMenu(QMenu):
 
     def open_settings_window(self):
         self.w = Settings(self.main_win)
-        self.w.setGeometry(QRect(400, 400, 720, 575))
+        self.w.setGeometry(QRect(400, 400, 500, 575))
         self.w.setWindowFlags(self.windowFlags() | Qt.Dialog)
         self.w.show()
 

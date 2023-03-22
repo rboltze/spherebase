@@ -42,7 +42,8 @@ class Camera:
 
         - **target** - ``Vector`` xyz position of the target sphere_base.
         - **distance_to_target** - distance between camera and center of the target sphere_base. (``Vector3``).
-        - **camera_direction** - normalized ``vector3`` pointing away from the center of the target sphere_base through the center of the camera.
+        - **camera_direction** - normalized ``vector3`` pointing away from the center of the target sphere_base
+          through the center of the camera.
         - **camera_up** - ``Vector3`` with the ``up`` position of the camera.
         - **xyz** - position of the camera (``Vector3``).
         - **mouse_sensitivity** - ``float`` modifier to adjust the sensitivity of the mouse when moving the camera.
@@ -93,10 +94,10 @@ class Camera:
     def set_movement_values(self, min_radius=MIN_RADIUS, cam_movement_steps=CAM_MOVEMENT_STEPS):
         self.cm.set_minimum_values(min_radius, cam_movement_steps)
 
-    def reset_to_default_view(self, target_sphere, default_pos= DEFAULT_POS):
+    def reset_to_default_view(self, target_sphere, default_pos=DEFAULT_POS):
         """
         Resetting the camera view to the default view on the sphere_base, without any rotation.
-
+        :param default_pos: Defult position
         :param target_sphere: The target :class:`~sphere_iot.uv_sphere.Sphere` the camera is looking at
         :type target_sphere:  :class:`~sphere_iot.uv_sphere.Sphere`
 
@@ -136,7 +137,8 @@ class Camera:
 
         self.process_movement(target_sphere, rotation=x_offset, angle_up=y_offset)
 
-    def process_movement(self, target_sphere: 'sphere_base' = None, rotation: int = 0, angle_up: int = 0, radius: int = 0):
+    def process_movement(self, target_sphere: 'sphere_base' = None, rotation: int = 0, angle_up: int = 0,
+                         radius: int = 0):
         """
         Moves the camera around the target sphere_base based on received angles.
 
@@ -193,11 +195,3 @@ class Camera:
         # The view needs to be updated before drawing. This is because OpenGL is a state machine that listens to
         # changes program wide spanning instances!
         self.get_view_matrix()
-
-
-
-
-
-
-
-

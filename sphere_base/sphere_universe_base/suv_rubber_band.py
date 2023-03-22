@@ -6,7 +6,6 @@ for drawing a square selection box. Selecting all the items within the box.
 """
 
 from sphere_base.sphere_universe_base.suv_graphic_item import GraphicItem
-from pyrr import Vector4
 
 RAY_SEED = 20  # 10 creates 10 x 10 = 100 rays, x creates x**2 rays
 
@@ -91,8 +90,8 @@ class RubberBand(GraphicItem):
 
     def drag(self, start: bool, mouse_x: float, mouse_y: float):
         """
-        Size dragging the rubber band box. Start equals ``True`` when starting a new ``rubber band box`` and the starting
-        edge position is the current mouse position (mouse_x, mouse_y).
+        Size dragging the rubber band box. Start equals ``True`` when starting a new ``rubber band box``
+        and the starting edge position is the current mouse position (mouse_x, mouse_y).
 
         ``Start`` is ``False`` means we are already dragging a ``rubber band box`` and we just keep dragging the
         mouse position indicates the position of the opposite corner of the box.

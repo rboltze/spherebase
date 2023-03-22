@@ -31,6 +31,3 @@ class NodeShader(BaseShader):
 
         glUniform1i(self.switcher_loc, switch)
         glDrawElements(GL_TRIANGLES, len(indices) * 3, GL_UNSIGNED_INT, ctypes.c_void_p(0))
-
-
-

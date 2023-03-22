@@ -7,8 +7,8 @@ Sphere Edge module. Contains the SphereEdge class. Edges are drawn between spher
 
 from pyrr import quaternion, Vector3
 # from sphere_iot.uv_socket import *
-from sphere_universe_base.suv_graphic_edge import GraphicEdge
-from sphere_universe_base.suv_serializable import Serializable
+from sphere_base.sphere_universe_base.suv_graphic_edge import GraphicEdge
+from sphere_base.serializable import Serializable
 from collections import OrderedDict
 
 

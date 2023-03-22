@@ -6,7 +6,6 @@ Module Graphic Disc. The graphics disc class is used in all nodes and sockets.
 """
 
 
-
 class EditorGraphicDisc:
     def __init__(self, node: 'SphereNode'):
         """

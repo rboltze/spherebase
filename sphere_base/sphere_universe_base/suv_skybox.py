@@ -29,7 +29,7 @@ class Skybox(GraphicItem):
     
     """
 
-    def __init__(self, universe=None, skybox_set_name=None):
+    def __init__(self, universe=None):
         """
         Constructor of the Skybox class.
 
@@ -129,13 +129,10 @@ class Skybox(GraphicItem):
         """
         Gets the six faces of the Skybox from the image path and adds them to the faces array.
 
-        :param path: path where the 6 images for the current skybox are located.
-        :type path: ``str``
         """
         path = self.get_skybox_path()
 
         if path:
-
             self.faces = []
             face_order = ["right", "left", "top", "bottom", "back", "front"]
             for i, face in enumerate(face_order):

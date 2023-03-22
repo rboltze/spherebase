@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
 """
-This is the ``MouseRay`` module. This module is used for determining which object is on_current_row_changed by the mouse pointer.
+This is the ``MouseRay`` module. This module is used for determining which object is on_current_row_changed
+by the mouse pointer.
 It uses the ``PyBullet`` library to shoot a ray into the ``PyBullet`` physics simulation
-which is a copy of the :class:`~sphere_iot.uv_universe.Universe` with all its ``Model`` objects. It returns the collision
-object the mouse ray hits.
+which is a copy of the :class:`~sphere_iot.uv_universe.Universe` with all its ``Model`` objects.
+It returns the collision object the mouse ray hits.
 
 This module also creates all collision objects in the ``PyBullet`` simulation world for all the models used in the
 :class:`~sphere_iot.uv_universe.Universe` implementation.
@@ -147,8 +148,8 @@ class MouseRay:
         """
         Creating the ``node`` collision object
 
-        :param Node: The model that the collision object belongs to.
-        :type Node: :class:`~sphere_iot.uv_node.SphereNode`
+        :param node: The model that the collision object belongs to.
+        :type node: :class:`~sphere_iot.uv_node.SphereNode`
 
         """
 

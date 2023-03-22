@@ -43,8 +43,6 @@ class Universe(Serializable):
 
         :param parent: Reference to the universe class universe widget.
         :type parent: :class:`~sphere_iot.uv_widget.UV_Widget` or  :class:`~sphere_iot.uv_widget_glfw.UWidgetGLFW`.
-        :param skybox_set_name: The skybox set to instantiate
-        :type skybox_set_name: ``str``
         :param pybullet_key: Used to run the universe in its own physics engine
         :type pybullet_key: ``str``
 
@@ -77,7 +75,8 @@ class Universe(Serializable):
         self._init_variables()
         self._init_listeners()
 
-        self.config = self.__class__.Config_class(self, skybox_img_dir=skybox_img_dir, sphere_texture_dir=sphere_texture_dir)
+        self.config = self.__class__.Config_class(self, skybox_img_dir=skybox_img_dir,
+                                                  sphere_texture_dir=sphere_texture_dir)
         self.shader = self.__class__.Shader_class(self)
         self.cam = self.__class__.Camera_class(self)
         self.models = self.__class__.Models_class(self)
@@ -191,25 +190,23 @@ class Universe(Serializable):
         if sphere in self._spheres:
             self._spheres.remove(sphere)
 
-
     def add_edge(self, edge: 'Edge'):
         """
         Add a new edge to the internal list.
 
-        :param sphere_base: The ``edge`` that will be added to the ``Universe``
-        :type sphere_base: :class:`~sphere_iot.uv_sphere_edge.SphereEdge`
+        :param edge: The ``edge`` that will be added to the ``Universe``
+        :type edge: :class:`~sphere_iot.uv_sphere_edge.SphereEdge`
 
         """
 
         self._edges.append(edge)
 
-
     def remove_edge(self, edge: 'edge'):
         """
         Removing a sphere_base from the internal list.
 
-        :param sphere_base: The ``sphere_base`` that will be removed from the internal list``
-        :type sphere_base: :class:`~sphere_iot.uv_sphere.Sphere`
+        :param edge: The ``edge`` that will be removed from the internal list``
+        :type edge: :class:`~sphere_iot.uv_sphere_edge.SphereEdge`
 
         """
 
@@ -241,7 +238,8 @@ class Universe(Serializable):
         :param sphere: The target sphere_base that is _selected
         :type sphere: :class:`~sphere_iot.uv_sphere.Sphere`
         :param sphere_items: ``list`` of items on the sphere_base
-        :type sphere_items: list with items of type :class:`~sphere_iot.uv_node.SphereNode` or :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
+        :type sphere_items: list with items of type :class:`~sphere_iot.uv_node.SphereNode` or
+        :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
 
         """
         for callback in self._selection_changed_listeners:
@@ -391,7 +389,7 @@ class Universe(Serializable):
             ('target_sphere_id', self.target_sphere.id)
         ])
 
-    def deserialize(self, data:dict, hashmap:dict={}, restore_id:bool=True) -> bool:
+    def deserialize(self, data: dict, hashmap: dict = {}, restore_id: bool = True) -> bool:
         self.clear()
         hashmap = {}
         self.id = data['id']

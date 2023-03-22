@@ -74,7 +74,8 @@ class BaseShader:
         self.a_color = glGetUniformLocation(self.shader_id, "a_color")
         self.transform_loc = glGetUniformLocation(self.shader_id, "transform")
 
-    def shader_from_file(self, file_name):
+    @staticmethod
+    def shader_from_file(file_name):
         """
         Retrieve shader from .glsl file
         :param file_name: Name of the shader to use
@@ -98,13 +99,12 @@ class BaseShader:
         compiling the OpenGL shaders
 
         """
-        geometry_source = ""
+
         vertex_source = self.shader_from_file(self.vertex_shader)
         fragment_source = self.shader_from_file(self.fragment_shader)
-        if self.geometry_shader:
-            geometry_source = self.shader_from_file(self.geometry_shader)
 
         if self.geometry_shader:
+            geometry_source = self.shader_from_file(self.geometry_shader)
             shader_id = compileProgram(compileShader(vertex_source, GL_VERTEX_SHADER),
                                        compileShader(fragment_source, GL_FRAGMENT_SHADER),
                                        compileShader(geometry_source, GL_GEOMETRY_SHADER))
@@ -113,8 +113,6 @@ class BaseShader:
                                        compileShader(fragment_source, GL_FRAGMENT_SHADER))
 
         return shader_id
-
-
 
     def set_environment(self):
         """
@@ -232,8 +230,6 @@ class BaseShader:
         :type scale: ``Vector3``
         :param texture_id: ID of the texture to apply
         :type texture_id: ``int``
-        :param texture_file: The ``texture file`` to put on the ``Mesh``.
-        :type texture_file: ``str``
         :param color: color to apply
         :type color: ``Vector4``
         :param switch: OpenGL shader switch
@@ -309,4 +305,3 @@ class BaseShader:
         glEnd()
         glDisable(GL_LINE_STIPPLE)  # just in case
         glLineWidth(1)
-

@@ -10,4 +10,3 @@ class GraphicItem:
 
         self.id = id(self)
         self.type = item_type
-

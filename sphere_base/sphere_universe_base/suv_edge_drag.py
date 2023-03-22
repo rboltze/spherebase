@@ -16,14 +16,13 @@ class EdgeDrag:
     GraphicsEdge_class = GraphicEdge
     Shader_class = SphereShader
 
-
     """
     This class takes care of dragging a new edge. SLERP-ing Quaternions to determine the angle 
     with the center of the sphere_base.
     
     """
 
-    def __init__(self, Sphere):
+    def __init__(self, sphere):
         """
         Constructor of the edge dragg class.
 
@@ -45,14 +44,15 @@ class EdgeDrag:
         - **radius** - radius of the sphere_base this node is on.
         - **start_socket** - reference to :class:`~sphere_iot.uv_socket.Socket`
         - **xyz** - ``Vector`` location of the loose edge end.
-        - **pos_orientation_offset** - quaternion position of the edge end relative to the zero rotation of the sphere_base.
+        - **pos_orientation_offset** - quaternion position of the edge end relative to the
+          zero rotation of the sphere_base.
 
         : Properties:
             - **dragging** - property flag indicating whether the edge being dragged
 
         """
-        self.sphere = Sphere
-        self.config = Sphere.config
+        self.sphere = sphere
+        self.config = sphere.config
         self._init_variables()
 
     def _init_variables(self):

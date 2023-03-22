@@ -8,7 +8,6 @@ This class contains the class that colors the small overview spheres. It inherit
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from sphere_base.shader.uv_base_shader import BaseShader
-from sphere_base.constants import *
 
 
 class SphereSmallShader(BaseShader):
@@ -28,7 +27,6 @@ class SphereSmallShader(BaseShader):
                      vertices=vertices, position=position, orientation=orientation, scale=scale, texture_id=texture_id,
                      color=color, switch=switch)
 
-        switch = SHADER_SWITCH[object_type]
         glUniform1i(self.switcher_loc, 2)
 
         glUniform4f(self.a_color, *color)

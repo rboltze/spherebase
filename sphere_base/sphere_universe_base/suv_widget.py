@@ -124,10 +124,10 @@ class UV_Widget(QGLWidget):
         self._clicked_on_item, self.clicked_on_item_pos = self.uv.mouse_ray.check_mouse_ray(x, y)
 
         if self._clicked_on_item == self.uv.target_sphere.id:
-            self.handleContextMenu(event)
+            self.handle_context_menu(event)
         return super().contextMenuEvent(event)
 
-    def handleContextMenu(self, event: 'event'):
+    def handle_context_menu(self, event: 'event'):
         """
         Handles context menu
 
@@ -253,7 +253,6 @@ class UV_Widget(QGLWidget):
         x, y = event.x(), event.y()
         self.mouse_x = x
         self.mouse_y = y
-
 
         if self.uv.target_sphere and self.uv.cam.distance_to_target < HOVER_MIN_DISTANCE:
             self.uv.target_sphere.check_for_hover(x, y)

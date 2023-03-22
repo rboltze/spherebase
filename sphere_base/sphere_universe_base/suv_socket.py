@@ -49,7 +49,8 @@ class Socket(Serializable):
             - **collision_object_id** - id of the collision cylinder pointing out.
             - **xyz** - ``Vector`` location of the ``Socket``.
             - **pos_orientation_offset** - copy from quaternion position of the node.
-            - **orientation** - quaternion with the orientation of the disc pointing away from the center of the sphere_base.
+            - **orientation** - quaternion with the orientation of the disc pointing away from the center of
+              the sphere_base.
             - **scale** - scaling the node with the gr_socket.scale value.
             - **texture_id** - ``int`` id of the current texture, image or icon applied to the node disc.
 
@@ -91,7 +92,7 @@ class Socket(Serializable):
         """
         return self.node.sphere.uv.mouse_ray.create_collision_object(self)
 
-    def delete_collision_object(self) -> int:
+    def delete_collision_object(self) -> None:
         """
         Deleting the ``pybullet`` collision object.
         """
@@ -222,4 +223,3 @@ class Socket(Serializable):
 
         self.serialized_detail_scene = data['scene']
         return True
-

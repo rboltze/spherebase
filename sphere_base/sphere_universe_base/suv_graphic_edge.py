@@ -20,7 +20,8 @@ class GraphicEdge:
         """
         Constructor of the ``Graphic Edge`` class .
 
-        :param parent: reference to  :class:`~sphere_iot.uv_edge.SphereSurfaceEdge` or :class:`~sphere_iot.uv_edge_drag.EdgeDrag`.
+        :param parent: reference to  :class:`~sphere_iot.uv_edge.SphereSurfaceEdge` or
+        :class:`~sphere_iot.uv_edge_drag.EdgeDrag`.
         :type parent:  :class:`~sphere_iot.uv_edge.SphereSurfaceEdge` or :class:`~sphere_iot.uv_edge_drag.EdgeDrag`.
 
         :Instance Variables:
@@ -137,6 +138,3 @@ class GraphicEdge:
             self._current_color = self.hover_color
 
         return self._current_color
-
-
-

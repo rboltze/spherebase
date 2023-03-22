@@ -26,12 +26,13 @@ class SphereNode(Serializable):
 
     def __init__(self, target_sphere: 'sphere_base', orientation_offset: 'quaternion' = None, node_type: str = "node"):
         """
-        Constructor of the ``Node`` class. Creates a node and calculates where to place it on the sphere_base. Needs to be
-        overridden in the implementation to allow for other type of nodes.
+        Constructor of the ``Node`` class. Creates a node and calculates where to place it on the sphere_base.
+        Needs to be overridden in the implementation to allow for other type of nodes.
 
         :param target_sphere: The :class:`~sphere_iot.uv_sphere.Sphere` the ``node`` is on.
         :type target_sphere:  :class:`~sphere_iot.uv_sphere.Sphere`
-        :param orientation_offset: Quaternion representing the offset angle with the 0 position of the ``sphere_base``
+        :param orientation_offset: Quaternion representing the offset angle with the 0 position of
+         the ``sphere_base``
         :type orientation_offset: ``Quaternion``
         :param node_type: The type of the node to create
         :type node_type: ``str``
@@ -52,8 +53,10 @@ class SphereNode(Serializable):
             - **radius** - radius of the sphere_base this node is on.
             - **collision_object_id** - id of the collision cylinder pointing out.
             - **collision_object_radius** - radius of the node disc for pybullet collision object.
-            - **pos_orientation_offset** - quaternion position of the node relative to the zero rotation of the sphere_base.
-            - **orientation** - quaternion with the orientation of the disc pointing away from the center of the sphere_base.
+            - **pos_orientation_offset** - quaternion position of the node relative to the zero rotation of the
+              sphere_base.
+            - **orientation** - quaternion with the orientation of the disc pointing away from the center of the
+              sphere_base.
             - **scale** - scaling the node with the gr_node.scale value.
             - **texture_id** - ``int`` id of the current texture, image or icon applied to the node disc.
             - **serialized_detail_scene** - contains the ``json`` data of the detail node editor for this node.
@@ -277,5 +280,3 @@ class SphereNode(Serializable):
         self.update_position()
 
         return True
-
-

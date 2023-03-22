@@ -22,5 +22,3 @@ class FlatShader(BaseShader):
             glUniform4f(self.a_color, *color)
 
         glDrawElements(GL_TRIANGLES, len(indices) * 3, GL_UNSIGNED_INT, ctypes.c_void_p(0))
-
-

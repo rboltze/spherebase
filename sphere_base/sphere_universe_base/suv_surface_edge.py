@@ -7,13 +7,13 @@ Edges are drawn between sockets over the surface of a sphere_base.
 """
 
 from pyrr import quaternion
-# from sphere_iot.uv_socket import *
 from sphere_base.sphere_universe_base.suv_graphic_edge import GraphicEdge
 from sphere_base.serializable import Serializable
 from collections import OrderedDict
 
 
 DEBUG = False
+
 
 class SphereSurfaceEdge(Serializable):
     """
@@ -181,10 +181,6 @@ class SphereSurfaceEdge(Serializable):
         This is called on all sphere_base items but is currently not used on edges.
         Updates the content like icons and images
 
-        :param texture_id: new texture, image or icon
-        :type texture_id: ``int``
-        :param sphere_id: current target_sphere
-        :type sphere_id:  ``int``
         """
         # needs to be overridden
         pass
@@ -264,12 +260,11 @@ class SphereSurfaceEdge(Serializable):
         ])
 
     def deserialize(self, data: dict, hashmap: dict = {}, restore_id: bool = True) -> bool:
-        if restore_id: self.id = data['id']
+        if restore_id:
+            self.id = data['id']
         self.edge_type = data['edge_type']
         self.start_socket = self.sphere.get_item_by_id(data['start_socket_id'])
         self.end_socket = self.sphere.get_item_by_id(data['end_socket_id'])
         self.serialized_detail_scene = data['scene']
         self.update_position()
         return True
-
-

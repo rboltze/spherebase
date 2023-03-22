@@ -41,4 +41,3 @@ class SphereEdgeShader(BaseShader):
 
         glDrawElements(GL_LINES, len(indices) * 3, GL_UNSIGNED_INT, ctypes.c_void_p(0))
         # glDrawArrays(GL_LINES, 0, 2)
-
