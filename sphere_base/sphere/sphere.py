@@ -17,7 +17,7 @@ from sphere_base.sphere_universe_base.suv_surface_edge import SphereSurfaceEdge
 from sphere_base.history import History
 from pyrr import quaternion
 from math import pi
-from sphere_base.sphere_universe_base.suv_calc import UvCalc
+from sphere_base.calc import UvCalc
 import numpy as np
 import pyperclip
 import json

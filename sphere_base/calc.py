@@ -8,7 +8,6 @@ from pyrr import Vector3, Vector4, vector, matrix44, quaternion
 import math
 
 
-
 class UvCalc:
     """
     contains calculation for putting items on a sphere_base. These calculations are used
@@ -19,12 +18,14 @@ class UvCalc:
     def __init__(self):
         pass
 
-    def get_item_direction_pointing_outwards(self, item: ('Node', 'Edge', 'Socket'), sphere: 'Sphere') -> 'Quaternion':
+    @staticmethod
+    def get_item_direction_pointing_outwards(item: ('Node', 'Edge', 'Socket'), sphere: 'Sphere') -> 'Quaternion':
         """
         Calculates the quaternion pointing outwards from the center of the sphere_base through the center of the item
 
         :param item: ``Socket``, ``Node``, ``Edge``
-        :type item: :class:`~sphere_iot.uv_socket.Socket`, :class:`~sphere_iot.uv_edge.SphereSurfaceEdge` :class:`~sphere_iot.uv_node.SphereNode`
+        :type item: :class:`~sphere_iot.uv_socket.Socket`, :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`,
+         :class:`~sphere_iot.uv_node.SphereNode`
         :param sphere: The target ``sphere_base`` the item is on.
         :type sphere: :class:`~sphere_iot.uv_sphere.Sphere`
         :returns: ``Quaternion``
@@ -39,7 +40,8 @@ class UvCalc:
 
         return quaternion.create_from_matrix(m)
 
-    def move_to_position(self, cumulative_orientation: 'Quaternion', sphere: 'Sphere', radius: float) -> 'Vector4':
+    @staticmethod
+    def move_to_position(cumulative_orientation: 'Quaternion', sphere: 'Sphere', radius: float) -> 'Vector4':
         """
 
         :param cumulative_orientation:
@@ -53,12 +55,10 @@ class UvCalc:
         Calculate the xyz position of the item based on the angle with the center of the sphere_base it is on.
         The cumulative angle takes into account that the sphere_base can rotate and is not in the default position.
 
-        The calculation starts with a node vector in the center of the default sphere_base at the [0.0, 0.0, 0.0] position,
-        with a length 1.0 on the y axis. This node vector is then rotated so it points at the cumulative_orientation.
-
-        It is then moved over the radius distance to take its place on the surface of the default sphere_base.
-
-        Finally it needs to be translated to the sphere_base it is actually on.
+        The calculation starts with a node vector in the center of the default sphere_base at the [0.0, 0.0, 0.0]
+        position, with a length 1.0 on the y axis. This node vector is then rotated so it points at the
+        cumulative_orientation. It is then moved over the radius distance to take its place on the surface of the
+        default sphere_base. Finally it needs to be translated to the sphere_base it is actually on.
 
         """
 
@@ -78,7 +78,9 @@ class UvCalc:
 
         return Vector4(xyzw).xyz
 
-    def get_pos_orientation_offset(self, pitch_degrees: float, yaw_degrees: float, orientation_offset: 'Quaternion') -> 'Quaternion':
+    @staticmethod
+    def get_pos_orientation_offset(pitch_degrees: float, yaw_degrees: float,
+                                   orientation_offset: 'Quaternion') -> 'Quaternion':
         """
         :param pitch_degrees: Horizontal movement
         :type pitch_degrees: ``float``
@@ -116,7 +118,8 @@ class UvCalc:
 
         return pos_orientation_offset
 
-    def get_distance_on_sphere(self, point1: Vector3, point2: Vector3, radius: float) -> float:
+    @staticmethod
+    def get_distance_on_sphere(point1: Vector3, point2: Vector3, radius: float) -> float:
         """
         Returns the distance between two points on the surface of a sphere_base. Based on ``Great-circle`` distance
         finding the shortest-distance on a sphere_base.
@@ -198,4 +201,3 @@ class UvCalc:
             return distance_modifier[10]
         else:
             return pow(distance, 2)
-
