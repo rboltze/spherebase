@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """
-Module Sphere. Each sphere_base represents a scene object for ``sphere_base items``. these items include nodes, edges and sockets.
+Module Sphere. Each sphere_base represents a scene object for ``sphere_base items``. these items include nodes,
+edges and sockets.
 One sphere_base at the time can become the 'target sphere_base'.
 
 """
@@ -545,9 +546,7 @@ class Sphere(Serializable):
         for item in self.items_deselected:
             item.on_selected_event(False)
 
-
         self.on_item_selected(self.items_selected)
-
 
     def delete_selected_items(self):
         """
@@ -584,7 +583,6 @@ class Sphere(Serializable):
                         self.select_item(item, True)
                     if selected == item.id and item.type == 'edge':
                         self.select_item(item, True)
-
 
     def check_for_hover(self, mouse_x, mouse_y):
         """
@@ -753,14 +751,14 @@ class Sphere(Serializable):
                 try:
                     new_node = self.get_node_class_from_data(node_data)(self)
                     new_node.deserialize(node_data, hashmap, restore_id)
-                except:
-                    dump_exception()
+                except Exception as e:
+                    dump_exception(e)
             else:
                 try:
                     found.deserialize(node_data, hashmap, restore_id)
                     all_items.remove(found)
-                except:
-                    dump_exception()
+                except Exception as e:
+                    dump_exception(e)
 
         # go through all deserialized edges:
         for edge_data in data['edges']:

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from examples.example_sphere.widget_sphere_settings import *
-from examples.example_sphere.widget_skybox_settings import *
-from examples.example_sphere.widget_textures_settings import *
-from examples.example_sphere.widget_sphere_color_buttons_settings import *
-import sys
+from examples.example_sphere.widget.widget_sphere_settings import *
+from examples.example_sphere.widget.widget_skybox_settings import *
+from examples.example_sphere.widget.widget_textures_settings import *
+from examples.example_sphere.widget.widget_sphere_color_buttons_settings import *
+
 
 class Settings(QWidget):
 

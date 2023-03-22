@@ -7,7 +7,7 @@ A module containing the Main Window menu class
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from sphere_base.utils import dump_exception
-from widget_settings import Settings
+from examples.example_sphere.widget.widget_settings import Settings
 
 
 class SphereMenu(QMenu):
