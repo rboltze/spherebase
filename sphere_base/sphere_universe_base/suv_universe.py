@@ -19,7 +19,7 @@ from sphere_base.shader.uv_default_shader import DefaultShader
 import os.path
 
 DEBUG = False
-TEST_SPHERE_NUMBER = 25
+TEST_SPHERE_NUMBER = 1
 
 
 class Universe(Serializable):

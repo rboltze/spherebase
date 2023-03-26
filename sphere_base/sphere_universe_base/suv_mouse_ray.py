@@ -20,6 +20,19 @@ from pybullet_utils import bullet_client as bc
 
 DEBUG = False
 DEBUG_SHOW_GUI = False
+DEBUG_MOUSE_RAY = False
+
+COLLISION_SHAPES = {
+    "sphere_base": {"type": p.GEOM_SPHERE, "radius": SPHERE_RADIUS, "height": 0, "base_mass": 0,
+                    "baseVisualShapeIndex": -1},
+    "node": {"type": p.GEOM_SPHERE, "radius": NODE_DISC_RADIUS, "height": 0, "base_mass": 0,
+             "baseVisualShapeIndex": -1},
+    "socket": {"type": p.GEOM_CYLINDER, "radius": SOCKET_RADIUS, "height": 0, "base_mass": 0,
+               "baseVisualShapeIndex": -1},
+    "edge": {"type": p.GEOM_MESH, "height": .025, "base_mass": 0, "baseVisualShapeIndex": -1},
+    "sphere_small": {"type": p.GEOM_CYLINDER, "radius": SPHERE_SMALL_RADIUS, "height": .026, "base_mass": 0,
+                     "baseVisualShapeIndex": -1},
+          }
 
 
 class MouseRay:
@@ -33,7 +46,7 @@ class MouseRay:
     def __init__(self, universe: 'Universe', pybullet_key=None):
 
         """
-        Constructor of the ``MousRay`` class.
+        Constructor of the ``MouseRay`` class.
 
         :param universe: The 'PyBullet' physics simulation is a copy of the :class:`~sphere_iot.uv_universe.Universe`
         :type universe:  :class:`~sphere_iot.uv_universe.Universe`
@@ -52,7 +65,11 @@ class MouseRay:
         self._collision_objects = {}
         self.pybullet_key = pybullet_key
         self.client_id = 0
+        self.collision_shapes = {}
+        self.open_bullet_client(self.pybullet_key)
+        self._create_collision_shapes()
 
+    def open_bullet_client(self, pybullet_key):
         if DEBUG_SHOW_GUI:
             p.connect(p.GUI)
         elif pybullet_key:
@@ -61,170 +78,67 @@ class MouseRay:
                 self.bullet = bc.BulletClient(connection_mode=p.DIRECT)
                 self.client_id = self.bullet._client
 
-            except:
-                dump_exception()
+            except Exception as e:
+                dump_exception(e)
 
         else:
             p.connect(p.DIRECT)
-        self._create_collision_shapes()
 
     def _create_collision_shapes(self):
         """
-        Creates. collision shapes used for all models used in the implementation.
+        Creates a dictionary with collision shapes used for all models used in the implementation.
 
         """
-        self.c_shape_sphere_small = self.bullet.createCollisionShape(p.GEOM_SPHERE, radius=SPHERE_SMALL_RADIUS)
-        self.c_shape_sphere = self.bullet.createCollisionShape(p.GEOM_SPHERE, radius=SPHERE_RADIUS)
-        self.c_shape_node_disc = self.bullet.createCollisionShape(p.GEOM_CYLINDER, radius=COLLISION_NODE_DISC_RADIUS, height=.025)
-        self.c_shape_socket = self.bullet.createCollisionShape(p.GEOM_CYLINDER, radius=COLLISION_SOCKET_RADIUS, height=.026)
 
-    def create_collision_object(self, item: ('Sphere', 'Node', 'Socket', 'Edge'), vertices: list = None):
+        self.collision_shapes = {
+            'sphere_small': self.bullet.createCollisionShape(p.GEOM_SPHERE, radius=SPHERE_SMALL_RADIUS, height=0),
+            'sphere_base': self.bullet.createCollisionShape(p.GEOM_SPHERE, radius=SPHERE_RADIUS, height=0),
+            'node': self.bullet.createCollisionShape(p.GEOM_CYLINDER, radius=NODE_DISC_RADIUS, height=0.025),
+            'socket': self.bullet.createCollisionShape(p.GEOM_CYLINDER, radius=SOCKET_RADIUS, height=0.026),
+
+        }
+
+    def create_collision_object(self, obj: ('Sphere', 'Node', 'Socket', 'Edge'), vertices: list = None):
         """
         Allocates the correct collision object.
 
-        :param item: Each item has a type.
-        :param item: Can be: :class:`~sphere_iot.uv_sphere.Sphere`, :class:`~sphere_iot.uv_node.SphereNode`, :class:`~sphere_iot.uv_socket.Socket`, :class:`~sphere_iot.uv_edge.SphereSurfaceEdge``
+        :param obj: Each item has a type.
+        :param obj: Can be: :class:`~sphere_iot.uv_sphere.Sphere`, :class:`~sphere_iot.uv_node.SphereNode`,
+        :class:`~sphere_iot.uv_socket.Socket`, :class:`~sphere_iot.uv_edge.SphereSurfaceEdge``
         :param vertices: when lines are drawn, the vertices determine the collision shape
         :param vertices: ``list``
         """
+        cs = COLLISION_SHAPES
 
-        if item.type == "sphere_base":
-            return self.create_sphere_collision_object(item)
-        if item.type == "node":
-            return self.create_node_collision_object(item)
-        if item.type == "socket":
-            return self.create_socket_collision_object(item)
-        if item.type == "edge":
-            return self.create_edge_element_collision_object(item, vertices)
-        if item.type == "sphere_small":
-            return self.create_sphere_small_collision_object(item)
+        for key in cs.keys():
+            if key == obj.type:
 
+                if key == "edge":
+                    pass
+                    collision_shape = self.bullet.createCollisionShape(p.GEOM_MESH, vertices=vertices)
+                    object_id = self.bullet.createMultiBody(baseMass=cs[key]["base_mass"],
+                                                            baseCollisionShapeIndex=collision_shape,
+                                                            baseVisualShapeIndex=cs[key]["baseVisualShapeIndex"],
+                                                            physicsClientId=self.client_id)
+                else:
 
-    def create_sphere_collision_object(self, sphere: 'Sphere'):
-        """
-        Creating the ``Sphere`` collision object
+                    object_id = self.bullet.createMultiBody(baseMass=cs[key]["base_mass"],
+                                                            baseCollisionShapeIndex=self.collision_shapes[key],
+                                                            baseVisualShapeIndex=cs[key]["baseVisualShapeIndex"],
+                                                            basePosition=[obj.xyz[0], obj.xyz[1], obj.xyz[2]],
+                                                            baseOrientation=obj.orientation,
+                                                            physicsClientId=self.client_id)
 
-        :param sphere: The model that the collision object belongs to.
-        :type sphere: :class:`~sphere_iot.uv_sphere.Sphere`
-
-        """
-        mass = 0
-        visual_shape_id = -1
-
-        object_id = self.bullet.createMultiBody(baseMass=mass,
-                                                baseCollisionShapeIndex=self.c_shape_sphere,
-                                                baseVisualShapeIndex=visual_shape_id,
-                                                basePosition=[sphere.xyz[0], sphere.xyz[1], sphere.xyz[2]],
-                                                baseOrientation=[0, 0, 0, 1],
-                                                physicsClientId=0)
-
-        self._collision_objects[object_id] = sphere.id
-        return object_id
-
-    def create_sphere_small_collision_object(self, sphere: 'Sphere'):
-        """
-        Creating the ``Sphere_small`` collision object
-
-        :param sphere: The model that the collision object belongs to.
-        :type sphere: :class:`~sphere_iot.uv_sphere.Sphere`
-
-        """
-
-        mass = 0
-        visual_shape_id = -1
-
-        object_id = self.bullet.createMultiBody(baseMass=mass,
-                                                baseCollisionShapeIndex=self.c_shape_sphere_small,
-                                                baseVisualShapeIndex=visual_shape_id,
-                                                basePosition=[sphere.xyz[0], sphere.xyz[1], sphere.xyz[2]],
-                                                baseOrientation=[0, 0, 0, 1],
-                                                physicsClientId=self.client_id)
-
-        self._collision_objects[object_id] = sphere.id
-        # print("creating small collision object", self.client_id, object_id)
-        return object_id
-
-    def create_node_collision_object(self, node: 'Node'):
-        """
-        Creating the ``node`` collision object
-
-        :param node: The model that the collision object belongs to.
-        :type node: :class:`~sphere_iot.uv_node.SphereNode`
-
-        """
-
-        mass = 0
-        visual_shape_id = -1
-
-        collision_object_id = self.bullet.createMultiBody(baseMass=mass,
-                                                          baseCollisionShapeIndex=self.c_shape_node_disc,
-                                                          baseVisualShapeIndex=visual_shape_id,
-                                                          basePosition=[node.xyz[0], node.xyz[1], node.xyz[2]],
-                                                          baseOrientation=node.orientation,
-                                                          physicsClientId=self.client_id)
-
-        self._collision_objects[collision_object_id] = node.id
-        if DEBUG and collision_object_id == 1:
-            self.debug_collision_object(collision_object_id, node)
-        return collision_object_id
-
-    def create_socket_collision_object(self, socket: 'Socket'):
-        """
-        Creating the ``Socket`` collision object
-
-        :param socket: The model that the collision object belongs to.
-        :type socket: :class:`~sphere_iot.uv_socket.Socket`
-
-        """
-        mass = 0
-        visual_shape_id = -1
-
-        collision_object_id = self.bullet.createMultiBody(baseMass=mass,
-                                                          baseCollisionShapeIndex=self.c_shape_socket,
-                                                          baseVisualShapeIndex=visual_shape_id,
-                                                          basePosition=[socket.xyz[0], socket.xyz[1], socket.xyz[2]],
-                                                          baseOrientation=socket.orientation,
-                                                          physicsClientId=self.client_id)
-
-        self._collision_objects[collision_object_id] = socket.id
-        if DEBUG and collision_object_id == 1:
-            self.debug_collision_object(collision_object_id, socket)
-        return collision_object_id
-
-    def create_edge_element_collision_object(self, edge, vertices):
-        """
-        Creating an ``Edge`` collision object
-
-        :param edge: The edge that this collision object belongs to.
-        :type edge: :class:`~sphere_iot.uv_surface_edge.SphereSurfaceEdge`
-        :param vertices: The vertices of this edge.
-        :type vertices: ``list``
-
-        """
-        mass = 0
-        visual_shape_id = -1
-
-        if edge.collision_object_id:
-            self.bullet.removeBody(edge.collision_object_id)
-
-        self.c_shape_edge_element = self.bullet.createCollisionShape(p.GEOM_MESH, vertices=vertices)
-
-        collision_object_id = self.bullet.createMultiBody(baseMass=mass,
-                                                          baseCollisionShapeIndex=self.c_shape_edge_element,
-                                                          baseVisualShapeIndex=visual_shape_id,
-                                                          physicsClientId=self.client_id)
-
-        self._collision_objects[collision_object_id] = edge.id
-        if DEBUG and collision_object_id == 1:
-            self.debug_collision_object(collision_object_id, edge)
-        return collision_object_id
+                self._collision_objects[object_id] = obj.id
+                return object_id
 
     def delete_collision_object(self, item: ('Sphere', 'Node', 'Socket', 'Edge')):
         """
         Delete the collision object of the item
 
         :param item: The model the collision object belongs to.
-        :param item: :class:`~sphere_iot.uv_sphere.Sphere`, :class:`~sphere_iot.uv_node.SphereNode`, :class:`~sphere_iot.uv_socket.Socket`, :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
+        :param item: :class:`~sphere_iot.uv_sphere.Sphere`, :class:`~sphere_iot.uv_node.SphereNode`,
+        :class:`~sphere_iot.uv_socket.Socket`, :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
         """
         self.bullet.removeBody(item.collision_object_id, physicsClientId=self.client_id)
 
@@ -233,7 +147,8 @@ class MouseRay:
         Reset the collision object of the item
 
         :param item: The model the collision object belongs to.
-        :param item: :class:`~sphere_iot.uv_sphere.Sphere`, :class:`~sphere_iot.uv_node.SphereNode`, :class:`~sphere_iot.uv_socket.Socket`, :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
+        :param item: :class:`~sphere_iot.uv_sphere.Sphere`, :class:`~sphere_iot.uv_node.SphereNode`,
+        :class:`~sphere_iot.uv_socket.Socket`, :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
 
         .. warning::
 
@@ -249,9 +164,9 @@ class MouseRay:
         # TODO: resetting does not work correctly and we are using a work round of destroying
         #  the current collision object and re-creating it
         # This does not work correctly
-        # self.p0.resetBasePositionAndOrientation(bodyUniqueId=node_disc.collision_object_id,
-        #                                   posObj=[node_disc.xyz[0], node_disc.xyz[1], node_disc.xyz[2]],
-        #                                   ornObj=node_disc.orientation)
+        # self.bullet.resetBasePositionAndOrientation(bodyUniqueId=item.collision_object_id,
+        #                                   posObj=[item.xyz[0], item.xyz[1], item.xyz[2]],
+        #                                   ornObj=item.orientation)
 
         # this seems to work....
 
@@ -275,17 +190,20 @@ class MouseRay:
         """
         ray_world = self.get_mouse_point(mouse_x, mouse_y)
 
-        point_at = self.bullet.rayTest(self.cam.xyz, self.cam.xyz + (ray_world * 100), physicsClientId=self.client_id)
-        object_id = point_at[0][0]
-        # print(object_id)
+        intersection = self.bullet.rayTest(self.cam.xyz, self.cam.xyz + (ray_world * 100),
+                                           physicsClientId=self.client_id)
+        object_id = intersection[0][0]
 
         try:
             if object_id >= 0:
-                return self._collision_objects[object_id], point_at[0][3]
+                if DEBUG_MOUSE_RAY:
+                    self.debug_mouse_ray(intersection)
+                hit_position = intersection[0][3]
+                return self._collision_objects[object_id], hit_position
             else:
                 return None, None
         except Exception as e:
-            print(mouse_x, mouse_y, point_at)
+            print(mouse_x, mouse_y, intersection)
             dump_exception(e)
             return None, None
 
@@ -375,12 +293,23 @@ class MouseRay:
 
         :param collision_object_id: ìd of the collision object
         :param collision_object_id: ``int``
-        :type item: :class:`~sphere_iot.uv_sphere.Sphere`, :class:`~sphere_iot.uv_node.SphereNode`, :class:`~sphere_iot.uv_socket.Socket, :class:`~sphere_iot.uv_edge.SphereSurfaceEdge``
+        :type item: :class:`~sphere_iot.uv_sphere.Sphere`, :class:`~sphere_iot.uv_node.SphereNode`,
+        :class:`~sphere_iot.uv_socket.Socket, :class:`~sphere_iot.uv_edge.SphereSurfaceEdge``
 
         :return:
         """
         print("\n---------------------------")
         print("Node id and collision object id  :             ", item.id, collision_object_id)
         print("Node id and position and rotation :            ", item.xyz, item.orientation)
-        print("Collision object id, position and rotation :   ", self.bullet.getBasePositionAndOrientation(collision_object_id, physicsClientId=self.client_id))
-        print("Collision shape data :                          ", self.bullet.getCollisionShapeData(collision_object_id, -1, physicsClientId=self.client_id))
+        print("Collision object id, position and rotation :   ",
+              self.bullet.getBasePositionAndOrientation(collision_object_id, physicsClientId=self.client_id))
+        print("Collision shape data :                          ",
+              self.bullet.getCollisionShapeData(collision_object_id, -1, physicsClientId=self.client_id))
+
+    def debug_mouse_ray(self, intersection):
+        print("objectUniqueId:", intersection[0][0])
+        print("global collision object id:", self._collision_objects[intersection[0][0]])
+        print("linkIndex:", intersection[0][1])
+        print("hit fraction:", intersection[0][2])
+        print("hit position:", intersection[0][3])
+        print("hit normal:", intersection[0][4])

@@ -20,7 +20,7 @@ Sphere Base
 
 
 
-This package was created to display a sphere within a window and can be used in different projects.
+This package was created in python to display a sphere within a pyqt5 window and can be used in different projects.
 The library uses PyOpenGL and PyQT5
 
 * Free software: BSD license

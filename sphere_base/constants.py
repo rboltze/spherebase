@@ -9,8 +9,8 @@ and resources data.
 """
 SPHERE_SMALL_RADIUS = 0.01
 SPHERE_RADIUS = 1
-COLLISION_NODE_DISC_RADIUS = 0.075
-COLLISION_SOCKET_RADIUS = 0.01
+NODE_DISC_RADIUS = 0.075
+SOCKET_RADIUS = 0.01
 HOVER_MIN_DISTANCE = 3
 
 WIDTH, HEIGHT = 720, 720
@@ -76,7 +76,6 @@ MODELS = {
     "cube": {"model_id": 12, "model_file_name": "vertex1.obj", "shader": "SphereShader",
              "vertex_shader": "vert_sphere.glsl",
              "fragment_shader": "frag_sphere.glsl", "geometry_shader": "none"},
-
 }
 
 SHADER_SWITCH = {"node": 0, "sphere_base": 1, "square1x1": 2, "rubber_band": 2, "sphere_small": 1, "socket": 2, "cube": 1}

@@ -83,7 +83,7 @@ class Socket(Serializable):
         self.edges = []
         self.serialized_detail_scene = None
 
-        self.collision_object_radius = COLLISION_SOCKET_RADIUS
+        self.collision_object_radius = SOCKET_RADIUS
 
     def create_collision_object(self) -> int:
         """

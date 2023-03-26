@@ -26,7 +26,6 @@ class EdgeDrag:
         """
         Constructor of the edge dragg class.
 
-
         :param Sphere: This class is instantiated from the :class:`~sphere_iot.uv_sphere.Sphere`
         :type Sphere: :class:`~sphere_iot.uv_sphere.Sphere`
 
@@ -170,7 +169,7 @@ class EdgeDrag:
             pos = self.gr_edge.get_position(pos_orientation_offset)
             self.pos_array.append([pos[0], pos[1], pos[2]])
 
-    def drag_to(self, pitch_degrees: int, yaw_degrees: int) -> 'Vector3':
+    def drag_to(self, pitch_degrees: float, yaw_degrees: float) -> 'Vector3':
         """
 
         :param pitch_degrees: horizontal rotation
@@ -181,6 +180,11 @@ class EdgeDrag:
         self.pos_orientation_offset = self.calc.get_pos_orientation_offset(pitch_degrees, yaw_degrees,
                                                                            self.pos_orientation_offset)
         return self.gr_edge.get_position(self.pos_orientation_offset)
+
+    def drag_to_mouse_ray(self):
+        # The ray test of return object gives the hit position. This is the position in 3d space where the mouse
+        # ray intersects with the first object.
+        pass
 
     def draw(self):
         """

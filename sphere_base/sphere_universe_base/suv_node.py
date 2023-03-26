@@ -78,7 +78,7 @@ class SphereNode(Serializable):
         self._init_variables()
         self._init_flags()
 
-        self.collision_object_radius = COLLISION_NODE_DISC_RADIUS
+        self.collision_object_radius = NODE_DISC_RADIUS
 
         # radius of the node to the center of the sphere_base. node can hover above surface of sphere_base
         self.radius = target_sphere.radius - 0.01

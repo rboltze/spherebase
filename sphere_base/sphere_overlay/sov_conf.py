@@ -23,7 +23,7 @@ DICTIONARY_SPHERE_NODE_ICONS = \
         "mobile": "mobile_icon", "passport": "passport_icon", "pc": "pc_icon",
         "rfid tag": "rfid_tag_icon", "smart card": "smart_card_icon", "smart tv": "smart_tv_icon",
         "smart phone": "smart_phone_icon", "smart watch": "smart_watch_icon", "tablet": "tablet_icon",
-        "webcam": "webcam_icon", "wifi": "wifi_icon"
+        "webcam": "webcam_icon", "wifi": "icon_wifi.png"
     }
 
 
