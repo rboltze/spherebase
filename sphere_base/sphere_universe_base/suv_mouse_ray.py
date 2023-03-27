@@ -58,18 +58,20 @@ class MouseRay:
 
         """
 
-        # Uses pybullet to detect what the mouse is clicking on
-
         self.uv = universe
         self.cam = universe.cam
-        self._collision_objects = {}
-        self.pybullet_key = pybullet_key
+
         self.client_id = 0
-        self.collision_shapes = {}
-        self.open_bullet_client(self.pybullet_key)
+        self.pybullet_key = pybullet_key
+        self.abs_pos = [0.0, 0.0, 0.0]  # position of mouse ray collision point in world space
+
+        self._collision_objects = {}
+        self._collision_shapes = {}
+
+        self._open_bullet_client(self.pybullet_key)
         self._create_collision_shapes()
 
-    def open_bullet_client(self, pybullet_key):
+    def _open_bullet_client(self, pybullet_key):
         if DEBUG_SHOW_GUI:
             p.connect(p.GUI)
         elif pybullet_key:
@@ -90,7 +92,7 @@ class MouseRay:
 
         """
 
-        self.collision_shapes = {
+        self._collision_shapes = {
             'sphere_small': self.bullet.createCollisionShape(p.GEOM_SPHERE, radius=SPHERE_SMALL_RADIUS, height=0),
             'sphere_base': self.bullet.createCollisionShape(p.GEOM_SPHERE, radius=SPHERE_RADIUS, height=0),
             'node': self.bullet.createCollisionShape(p.GEOM_CYLINDER, radius=NODE_DISC_RADIUS, height=0.025),
@@ -123,7 +125,7 @@ class MouseRay:
                 else:
 
                     object_id = self.bullet.createMultiBody(baseMass=cs[key]["base_mass"],
-                                                            baseCollisionShapeIndex=self.collision_shapes[key],
+                                                            baseCollisionShapeIndex=self._collision_shapes[key],
                                                             baseVisualShapeIndex=cs[key]["baseVisualShapeIndex"],
                                                             basePosition=[obj.xyz[0], obj.xyz[1], obj.xyz[2]],
                                                             baseOrientation=obj.orientation,
@@ -163,12 +165,14 @@ class MouseRay:
         """
         # TODO: resetting does not work correctly and we are using a work round of destroying
         #  the current collision object and re-creating it
-        # This does not work correctly
+        #
+        # This does not work correctly:
         # self.bullet.resetBasePositionAndOrientation(bodyUniqueId=item.collision_object_id,
         #                                   posObj=[item.xyz[0], item.xyz[1], item.xyz[2]],
         #                                   ornObj=item.orientation)
 
-        # this seems to work....
+        # the below works for now.... But it seems to have too much overhead. Instead of moving an
+        # object we are destroying and then recreating it.
 
         self.bullet.removeBody(item.collision_object_id, physicsClientId=self.client_id)
         self.create_collision_object(item)
@@ -198,8 +202,8 @@ class MouseRay:
             if object_id >= 0:
                 if DEBUG_MOUSE_RAY:
                     self.debug_mouse_ray(intersection)
-                hit_position = intersection[0][3]
-                return self._collision_objects[object_id], hit_position
+                self.abs_pos = intersection[0][3]
+                return self._collision_objects[object_id], self.abs_pos
             else:
                 return None, None
         except Exception as e:

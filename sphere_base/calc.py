@@ -5,12 +5,13 @@ Calculation module. Contains calculations used in several modules.
 """
 
 from pyrr import Vector3, Vector4, vector, matrix44, quaternion
+from sphere_base.utils import dump_exception
 import math
 
 
 class UvCalc:
     """
-    contains calculation for putting items on a sphere_base. These calculations are used
+    contains calculation for putting items on a sphere. These calculations are used
     by nodes, sockets and edges.
 
     """
@@ -58,7 +59,7 @@ class UvCalc:
         The calculation starts with a node vector in the center of the default sphere_base at the [0.0, 0.0, 0.0]
         position, with a length 1.0 on the y axis. This node vector is then rotated so it points at the
         cumulative_orientation. It is then moved over the radius distance to take its place on the surface of the
-        default sphere_base. Finally it needs to be translated to the sphere_base it is actually on.
+        default sphere_base. Finally it needs to be translated to the sphere it is actually on.
 
         """
 
@@ -79,6 +80,119 @@ class UvCalc:
         return Vector4(xyzw).xyz
 
     @staticmethod
+    def find_angle2(abs_pos, orientation_offset, sphere, radius, cumulative_orientation):
+        # The move to position function calculates xyz from angles. We inverse this functions
+        # to find the angles from the xyz position
+
+        # create the rotation matrix
+        rm = matrix44.create_from_quaternion(cumulative_orientation)
+
+        # rotating the node vector with the rotation of the sphere
+        node_origin = Vector4([0.0, radius, 0.0, 1.0])
+        xyzw = matrix44.apply_to_vector(rm, node_origin)
+
+        # translation matrix to move the node to world space
+        sphere = Vector4([*sphere.xyz, 1])
+        tm = matrix44.create_from_translation(sphere)
+
+        # moving the node vector
+        xyzw = matrix44.apply_to_vector(tm, xyzw)
+
+        return Vector4(xyzw).xyz
+
+
+    @staticmethod
+    def find_angle(abs_pos, orientation_offset) -> 'quaternion':
+        """
+        given the xyz collision point of the mouse_ray with some sphere, calculate the angle of the
+        point on that sphere.
+
+        The object the mouse_ray collides with should be a sphere. Find the center and the radius.
+        The radius should be known but can also be calculated as: collision point - the center of the
+        sphere. (should be the same as known, but might differ)
+
+        Then bring back the center of the sphere to [0.0, 0.0, 0.0] and correct the collision point.
+        Find the difference of the current sphere rotation with the zero rotation in angles.
+
+        The calculation starts with a node vector in the center of the default sphere with a length 1.0 pointing at
+        the collision point. This node vector is then rotated so it lies on the y-axis. This is the angle we need.
+
+        The inverse of the angle found is what is needed to move a vector of length 1 on the y axis to point to
+        the collision point.
+
+        """
+
+        if abs_pos:
+            try:
+                P1 = [1, 0, 0]
+                P2 = abs_pos
+
+                # αx =−arctan2(y1, x1).
+                # αy = arcsin(x2)−arccos(z1).
+                # αx = arctan2(z2, y2).
+
+                x1 = P1[0]
+                y1 = P1[1]
+                z1 = P1[2]
+
+                x2 = P2[0]
+                y2 = P2[1]
+                z2 = P2[2]
+
+                ax = -math.atan2(y1, x1)
+
+                # The vector [0, 1, 0] is rotated over the z-axis (pitch)
+                ay = math.asin(x2) - math.acos(z1)
+
+                # and then over the x axis (yaw)
+                ax = math.atan2(z2, y2)
+
+                # pitch and yaw in radians
+                # pitch_rad = (math.pi / 180 * ay)
+                # yaw_rad = (math.pi / 180 * ax)
+
+                pitch_rad = ay + ((math.pi / 180) * -90)
+                print(pitch_rad)
+                yaw_rad = ax
+
+                # pitch_rad = ((math.pi / 180) * ay)
+                # yaw_rad = ((math.pi / 180) * ax)
+
+                # rotation quaternions
+                yaw_q = quaternion.create_from_eulers([yaw_rad, 0.0, 0.0])
+                pitch_q = quaternion.create_from_eulers([0.0, pitch_rad, 0.0])
+
+                # first apply the vertical offset to the orientation, to avoid gimbal lock
+                orientation_with_yaw = quaternion.cross(yaw_q, orientation_offset)
+
+                # then the pitch movement over the equator
+                pos_orientation_offset = quaternion.cross(orientation_with_yaw, pitch_q)
+
+                return pos_orientation_offset
+
+            except Exception as e:
+                dump_exception(e)
+
+
+
+
+        # # create the rotation matrix
+        # rm = matrix44.create_from_quaternion(cumulative_orientation)
+        #
+        # # rotating the node vector
+        # node_origin = Vector4([0.0, radius, 0.0, 1.0])
+        # xyzw = matrix44.apply_to_vector(rm, node_origin)
+        #
+        # # translation matrix to move the node to world space
+        # sphere = Vector4([*sphere.xyz, 1])
+        # tm = matrix44.create_from_translation(sphere)
+        #
+        # # moving the node vector
+        # xyzw = matrix44.apply_to_vector(tm, xyzw)
+        #
+        # return Vector4(xyzw).xyz
+
+    @staticmethod
     def get_pos_orientation_offset(pitch_degrees: float, yaw_degrees: float,
                                    orientation_offset: 'Quaternion') -> 'Quaternion':
         """
@@ -95,7 +209,7 @@ class UvCalc:
 
         .. Warning::
 
-            unfortunately I got quite confused with pitch, roll and yaw and how to apply this to a virtual universe
+            Unfortunately I got quite confused with pitch, roll and yaw and how to apply this to a virtual universe
             where up, down, rotation, x, y, and z are interchangeable and prone to conventions and not absolutes.
             The function works as designed but the naming of the variable may be incorrect.
 
@@ -193,7 +307,7 @@ class UvCalc:
 
         """
 
-        distance_modifier = {2: 3, 3: 6, 4: 9, 5: 12, 6: 15, 7: 18, 8: 21, 9: 24, 10: 27}
+        distance_modifier = {2: 3, 3: 6, 4: 9, 5: 12, 6: 15, 7: 18, 8: 21, 9: 24, 10: 30}
         d = int(distance)
         if d in distance_modifier:
             return distance_modifier[int(distance)]

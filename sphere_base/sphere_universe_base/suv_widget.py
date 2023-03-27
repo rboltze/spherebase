@@ -250,6 +250,12 @@ class UV_Widget(QGLWidget):
         :type event: 'event'
 
         """
+
+        # TODO: we need to know the point of the object in world space. This point will be on the sphere.
+        #  We can then calculate the angle of this point on the sphere.
+
+
+
         x, y = event.x(), event.y()
         self.mouse_x = x
         self.mouse_y = y
@@ -268,8 +274,11 @@ class UV_Widget(QGLWidget):
                     self.uv.target_sphere.drag_items(x_offset, y_offset)
                 elif self.uv.target_sphere.selected_item.type == "socket":
                     # drag edge from socket
+                    # We need to pass the current position to collision point
+                    _item, collision_point = self.uv.mouse_ray.check_mouse_ray(self.mouse_x, self.mouse_y)
                     start_socket = self.uv.target_sphere.selected_item
-                    self.uv.target_sphere.drag_edge(start_socket, x_offset, y_offset)
+                    self.uv.target_sphere.drag_edge(start_socket, x_offset, y_offset,
+                                                    mouse_abs_pos=collision_point)
 
             elif self._clicked_on_item and self._clicked_on_item == self.uv.target_sphere.id:
 

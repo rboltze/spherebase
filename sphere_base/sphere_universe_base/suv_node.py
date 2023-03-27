@@ -173,6 +173,7 @@ class SphereNode(Serializable):
         # get the new position orientation offset angle based on pitch and roll
         self.pos_orientation_offset = self.calc.get_pos_orientation_offset(pitch_degrees, roll_degrees,
                                                                            self.pos_orientation_offset)
+
         self.update_position()
 
     def update_position(self):

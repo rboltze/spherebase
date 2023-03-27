@@ -67,7 +67,7 @@ class Camera:
     def _init_variables(self):
         # camera target pointing at origin
         self.target = TARGET
-        self.set_position()
+        self.xyz = DEFAULT_POS
         self.distance_to_target = None
         self.camera_direction = None
         self.camera_up = None
@@ -88,16 +88,13 @@ class Camera:
         camera_right = vector.normalize(Vector3.cross(up, self.camera_direction))
         self.camera_up = Vector3.cross(Vector3(self.camera_direction), Vector3(camera_right))
 
-    def set_position(self):
-        self.xyz = DEFAULT_POS
-
     def set_movement_values(self, min_radius=MIN_RADIUS, cam_movement_steps=CAM_MOVEMENT_STEPS):
         self.cm.set_minimum_values(min_radius, cam_movement_steps)
 
     def reset_to_default_view(self, target_sphere, default_pos=DEFAULT_POS):
         """
         Resetting the camera view to the default view on the sphere_base, without any rotation.
-        :param default_pos: Defult position
+        :param default_pos: Default position
         :param target_sphere: The target :class:`~sphere_iot.uv_sphere.Sphere` the camera is looking at
         :type target_sphere:  :class:`~sphere_iot.uv_sphere.Sphere`
 
@@ -137,8 +134,9 @@ class Camera:
 
         self.process_movement(target_sphere, rotation=x_offset, angle_up=y_offset)
 
-    def process_movement(self, target_sphere: 'sphere_base' = None, rotation: int = 0, angle_up: int = 0,
+    def process_movement(self, target_sphere: 'sphere_base' = None, rotation: float = 0, angle_up: float = 0,
                          radius: int = 0):
+
         """
         Moves the camera around the target sphere_base based on received angles.
 

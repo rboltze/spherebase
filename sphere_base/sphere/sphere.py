@@ -193,7 +193,7 @@ class Sphere(Serializable):
         """
         self._items_deselected_listeners.append(callback)
 
-    def create_new_node(self, node_type: str = "person", mouse_x: int = 0, mouse_y: int = 0) -> 'node':
+    def create_new_node(self, node_type: str = "person", mouse_x: int = 0, mouse_y: int = 0, abs_pos=None) -> 'node':
         """
         Needs to be overridden.
         Can be used to create any type of node at the mouse pointer.
@@ -205,6 +205,8 @@ class Sphere(Serializable):
         :param mouse_y: y position of the mouse
         :type mouse_y: ``float``
         :return: :class:`~sphere_iot.uv_node.SphereNode`
+        :param abs_pos: position in space
+        :type abs_pos:
         """
         # calculate the cumulative angle based on the mouse position
         orientation = self.calc_mouse_position_in_angles(mouse_x, mouse_y)
@@ -291,9 +293,11 @@ class Sphere(Serializable):
         self.items.append(item)
 
     def remove_item(self, item: 'Node or Edge or Socket'):
-        """Remove :class:`~sphere_iot.uv_node.SphereNode` or :class:`~sphere_iot.uv_edge.SphereEdge` from the target `Sphere`.
+        """Remove :class:`~sphere_iot.uv_node.SphereNode` or :class:`~sphere_iot.uv_edge.SphereEdge`
+        from the target `Sphere`.
         :param item: Node or Edge to remove from this `Sphere`
-        :type item: :class:`~sphere_iot.uv_node.SphereNode` or :class:`~sphere_iot.uv_surface_edge.SphereSurfaceEdge` or :class:`~sphere_iot.uv_socket.Socket`
+        :type item: :class:`~sphere_iot.uv_node.SphereNode` or :class:`~sphere_iot.uv_surface_edge.SphereSurfaceEdge`
+        or :class:`~sphere_iot.uv_socket.Socket`
 
         """
         # removing item from sphere_base
@@ -405,6 +409,9 @@ class Sphere(Serializable):
         self.orientation = quaternion.cross(self.orientation, rotation)
         self.update_item_positions()
 
+    def calc_mouse_position_in_angles2(self, mouse_pos):
+        return self.calc.find_angle(mouse_pos, self.orientation)
+
     def calc_mouse_position_in_angles(self, mouse_x: float, mouse_y: float) -> 'quaternion':
         """
         Calculates the angle of the mouse pointer with the center of the target sphere_base. It takes into account the
@@ -421,6 +428,11 @@ class Sphere(Serializable):
         """
 
         # ratio offset from center
+        # center_x = self.uv.view.view_width / 2
+        # center_y = self.uv.view.view_height / 2
+        # x_offset = (mouse_x - center_x) / self.uv.view.view_width
+        # y_offset = (mouse_y - center_y) / self.uv.view.view_height
+
         x_offset = (2.0 * mouse_x) / self.uv.view.view_width - 1.0
         y_offset = 1.0 - (2.0 * mouse_y) / self.uv.view.view_height
 
@@ -428,6 +440,9 @@ class Sphere(Serializable):
         m = self.calc.get_distance_modifier(self.uv.cam.distance_to_target)
         p_x = self.calc.get_position_modifier(x_offset, True)
         p_y = self.calc.get_position_modifier(y_offset, False)
+
+        # p_x = 100 * x_offset
+        # p_y = 100 * y_offset
 
         # mouse pointer offset in radians
         mouse_pitch = -(pi / 180 * (x_offset * p_x * m))
@@ -493,7 +508,7 @@ class Sphere(Serializable):
                 item.drag_to(x_offset, y_offset)
                 self.dragging = item.is_dragging(True)
 
-    def drag_edge(self, start_socket: 'socket', x_offset: float, y_offset: float, dragging: bool = True):
+    def drag_edge(self, start_socket: 'socket', x_offset: float, y_offset: float, dragging: bool = True, mouse_abs_pos=None):
         """
         This methods is the start of creating a new edge.
         A new edge is dragged from the start socket and shown as a dashed line.
@@ -509,12 +524,12 @@ class Sphere(Serializable):
         :type dragging: ``bool``
         """
         self.start_socket = start_socket
-        m = self.calc.get_distance_modifier(self.uv.cam.distance_to_target) * .02
+        m = self.calc.get_distance_modifier(self.uv.cam.distance_to_target) * .021
 
         x_offset *= m
         y_offset *= m
 
-        self.edge_drag.drag(start_socket, x_offset, y_offset, dragging)
+        self.edge_drag.drag(start_socket, x_offset, y_offset, dragging, mouse_abs_pos=mouse_abs_pos)
 
     def select_item(self, item: 'node or edge', shift: bool = False):
         """
