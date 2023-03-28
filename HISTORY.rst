@@ -2,12 +2,17 @@
 History
 =======
 
-0.0.2 (2023-03-21)
+0.0.3 (2023-03-28) Alfa
+------------------
+
+* Updated positioning over the target sphere using mouse_ray_collision_points
+
+0.0.2 (2023-03-21) Alfa
 ------------------
 
 * Added a settings screen to the example to change sphere colors and texture
 
-0.0.1 (2023-03-15)
+0.0.1 (2023-03-15) Alfa
 ------------------
 
 * First release as a library

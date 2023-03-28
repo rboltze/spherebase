@@ -8,6 +8,7 @@ Clipboard module. Contains the clipboard class.
 from collections import OrderedDict
 from pyrr import quaternion, Quaternion
 from sphere_base.sphere_universe_base.suv_surface_edge import SphereSurfaceEdge
+from sphere_base.utils import dump_exception
 
 DEBUG = False
 
@@ -107,52 +108,57 @@ class Clipboard:
             This needs to be looked into in a future iteration.
 
         """
-        hashmap = {}
 
-        # # create each node
-        created_nodes = []
+        try:
+            hashmap = {}
 
-        length = len(data['nodes'])
+            # # create each node
+            created_nodes = []
 
-        for i, node_data in enumerate(data['nodes']):
-            q = Quaternion(node_data['orientation_offset'])
+            length = len(data['nodes'])
 
-            if i == 0:
-                a = q
-                middle = q
-            else:
-                middle = quaternion.slerp(a, q, .5)
+            for i, node_data in enumerate(data['nodes']):
+                q = Quaternion(node_data['orientation_offset'])
 
-        for i, node_data in enumerate(data['nodes']):
+                if i == 0:
+                    a = q
+                    middle = q
+                else:
+                    middle = quaternion.slerp(a, q, .5)
 
-            new_node = self.uv.target_sphere.get_node_class_from_data(node_data)(self.uv.target_sphere)
-            new_node.deserialize(node_data, hashmap, restore_id=False)
-            created_nodes.append(new_node)
+            for i, node_data in enumerate(data['nodes']):
 
-            new_node.on_selected_event(True)
-            self.uv.target_sphere.select_item(new_node, False if i == 0 else True)
+                new_node = self.uv.target_sphere.get_node_class_from_data(node_data)(self.uv.target_sphere)
+                new_node.deserialize(node_data, hashmap, restore_id=False)
+                created_nodes.append(new_node)
 
-            diff = quaternion.cross(quaternion.inverse(new_node.pos_orientation_offset), middle)
+                new_node.on_selected_event(True)
+                self.uv.target_sphere.select_item(new_node, False if i == 0 else True)
 
-            if length == 1:
-                new_center = self.uv.target_sphere.calc_mouse_position_in_angles(self.uv.mouse_x, self.uv.mouse_y)
-                new_node.pos_orientation_offset = new_center
-                new_node.update_position()
-            else:
-                new_center = self.uv.target_sphere.calc_mouse_position_in_angles(self.uv.mouse_x, self.uv.mouse_y)
-                new_node.pos_orientation_offset = quaternion.cross(new_center, diff)
-                new_node.update_position()
+                diff = quaternion.cross(quaternion.inverse(new_node.pos_orientation_offset), middle)
 
-        # create each edge
-        if 'edges' in data:
-            for edge_data in data['edges']:
-                new_edge = SphereSurfaceEdge(self.uv.target_sphere)
-                new_edge.deserialize(edge_data, hashmap, restore_id=False)
+                if length == 1:
+                    new_center = self.uv.target_sphere.calc_mouse_position_in_angles2(self.uv.mouse_x, self.uv.mouse_y)
+                    new_node.pos_orientation_offset = new_center
+                    new_node.update_position()
+                else:
+                    new_center = self.uv.target_sphere.calc_mouse_position_in_angles2(self.uv.mouse_x, self.uv.mouse_y)
+                    new_node.pos_orientation_offset = quaternion.cross(new_center, diff)
+                    new_node.update_position()
 
-        # store history
-        self.uv.target_sphere.history.store_history("Pasted elements in scene", set_modified=True)
+            # create each edge
+            if 'edges' in data:
+                for edge_data in data['edges']:
+                    new_edge = SphereSurfaceEdge(self.uv.target_sphere)
+                    new_edge.deserialize(edge_data, hashmap, restore_id=False)
 
-        return created_nodes
+            # store history
+            self.uv.target_sphere.history.store_history("Pasted elements in scene", set_modified=True)
+
+            return created_nodes
+
+        except Exception as e:
+            dump_exception(e)
 
 
 

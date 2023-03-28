@@ -93,7 +93,7 @@ class GraphicEdge:
 
     def get_cumulative_rotation(self, pos_orientation_offset: 'Quaternion') -> 'Quaternion':
         """
-        Returns the cumulative rotation of the pos_orientation_offset with the sphere_base rotation.
+        Returns the cumulative rotation of the pos_orientation_offset with the sphere rotation.
 
         :param pos_orientation_offset: degree offset from the zero-position of the ``Sphere``.
         :type pos_orientation_offset: ``Quaternion``

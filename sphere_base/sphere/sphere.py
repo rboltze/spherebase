@@ -12,7 +12,7 @@ from sphere_base.serializable import Serializable
 from sphere_base.utils import dump_exception
 from collections import OrderedDict
 from sphere_base.sphere_universe_base.suv_node import SphereNode
-from sphere_base.sphere_universe_base.suv_edge_drag import EdgeDrag
+from sphere_base.sphere.edge_drag import EdgeDrag
 from sphere_base.sphere_universe_base.suv_surface_edge import SphereSurfaceEdge
 from sphere_base.history import History
 from pyrr import quaternion
@@ -194,7 +194,7 @@ class Sphere(Serializable):
         """
         self._items_deselected_listeners.append(callback)
 
-    def create_new_node(self, node_type: str = "person", mouse_x: int = 0, mouse_y: int = 0, abs_pos=None) -> 'node':
+    def create_new_node(self, node_type: str = "person", abs_pos=None) -> 'node':
         """
         Needs to be overridden.
         Can be used to create any type of node at the mouse pointer.
@@ -209,13 +209,15 @@ class Sphere(Serializable):
         :param abs_pos: position in space
         :type abs_pos:
         """
-        # calculate the cumulative angle based on the mouse position
-        orientation = self.calc_mouse_position_in_angles(mouse_x, mouse_y)
+        # # calculate the cumulative angle based on the mouse position
+        # orientation = self.calc_mouse_position_in_angles(mouse_x, mouse_y)
+        #
+        # # create new node at the cumulative angle
+        # node = self.Node(self, orientation)
+        # self.history.store_history("node created", True)
+        # return node
 
-        # create new node at the cumulative angle
-        node = self.Node(self, orientation)
-        self.history.store_history("node created", True)
-        return node
+        return NotImplemented
 
     def on_item_selected(self, items_selected):
         """
@@ -410,10 +412,10 @@ class Sphere(Serializable):
         self.orientation = quaternion.cross(self.orientation, rotation)
         self.update_item_positions()
 
-    def calc_mouse_position_in_angles2(self, mouse_pos):
+    def calc_mouse_position_in_angles(self, mouse_pos):
         return self.calc.find_angle_from_world_pos(mouse_pos, self.orientation)
 
-    def calc_mouse_position_in_angles(self, mouse_x: float, mouse_y: float) -> 'quaternion':
+    def calc_mouse_position_in_angles2(self, mouse_x: float, mouse_y: float) -> 'quaternion':
         """
         Calculates the angle of the mouse pointer with the center of the target sphere_base. It takes into account the
         distance of the camera with the target sphere_base and the distance of the mouse from the center of the screen.
@@ -530,9 +532,7 @@ class Sphere(Serializable):
             for i, item in enumerate(self.items):
                 if item.id == selected_item.id:
                     if item.type == "node":
-                        # remove node, socket and connected items
-                        item.remove(with_edges=True)
-
+                        item.remove(with_edges=True)  # remove node, socket and connected items
                     elif item.type == "edge":
                         self.remove_edges([item])
 

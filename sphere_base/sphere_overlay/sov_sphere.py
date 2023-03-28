@@ -31,12 +31,11 @@ class SplitSphere(Sphere):
             return self.Node
         return get_class_from_type(data['op_code'], SPHERE_NODE_EDITOR)
 
-    def create_new_node(self, node_type=0, mouse_x=0, mouse_y=0, abs_pos=None):
+    def create_new_node(self, node_type=0, mouse_ray_collision_point=None):
         # create new node at the mouse pointer
 
         # calculate the cumulative angle based on the mouse position
-        # orientation = self.calc_mouse_position_in_angles(mouse_x, mouse_y)
-        orientation = self.calc_mouse_position_in_angles2(abs_pos)
+        orientation = self.calc.find_angle_from_world_pos(mouse_ray_collision_point, self.orientation)
 
         # create new node at the cumulative angle
         if node_type:

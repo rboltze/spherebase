@@ -328,10 +328,9 @@ class Universe(Serializable):
         This method is called from the main loop
 
         """
-
         offset = 0
 
-        # rotating the target sphere_base with the left and right arrows
+        # rotating the target sphere with the left and right arrows
         if self.view.arrow_right:
             offset = 1.0  # degree
         if self.view.arrow_left:

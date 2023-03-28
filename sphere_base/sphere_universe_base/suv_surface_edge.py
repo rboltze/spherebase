@@ -7,7 +7,7 @@ Edges are drawn between sockets over the surface of a sphere_base.
 """
 
 from pyrr import quaternion
-from sphere_base.sphere_universe_base.suv_graphic_edge import GraphicEdge
+from sphere_base.sphere.graphic_edge import GraphicEdge
 from sphere_base.serializable import Serializable
 from collections import OrderedDict
 

@@ -173,7 +173,7 @@ class SphereNode(Serializable):
 
         """
         try:
-            Q = quaternion
+            q = quaternion
 
             collision_point = self.calc.find_angle_from_world_pos(mouse_ray_collision_point,
                                                                                self.sphere.orientation)
@@ -181,7 +181,7 @@ class SphereNode(Serializable):
             if self.offset_with_collision_point is None:
                 # starting dragging registering the offset between the mouse_ray collision point and the
                 # center of the node
-                 self.offset_with_collision_point = Q.cross(self.pos_orientation_offset, Q.inverse(collision_point))
+                 self.offset_with_collision_point = q.cross(self.pos_orientation_offset, q.inverse(collision_point))
 
             # The position of the mouse_ray collision point in angles (Quaternion)
             self.pos_orientation_offset = self.calc.find_angle_from_world_pos(mouse_ray_collision_point,
@@ -189,7 +189,7 @@ class SphereNode(Serializable):
 
             # correct the position of the node with the stored difference between the
             # collision point and the center of the node as stored at the start of the dragging action.
-            self.pos_orientation_offset = Q.cross(self.offset_with_collision_point, self.pos_orientation_offset)
+            self.pos_orientation_offset = q.cross(self.offset_with_collision_point, self.pos_orientation_offset)
 
         except Exception as e:
             dump_exception(e)

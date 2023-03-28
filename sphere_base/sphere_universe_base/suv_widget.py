@@ -144,11 +144,11 @@ class UV_Widget(QGLWidget):
         action = context_menu.exec_(self.mapToGlobal(event.pos()))
 
         if action == create_person_node:
-            self.uv.target_sphere.create_new_node(1, x, y, self.clicked_on_item_pos)
+            self.uv.target_sphere.create_new_node(1, self.clicked_on_item_pos)
         elif action == create_item_node:
-            self.uv.target_sphere.create_new_node(2, x, y, self.clicked_on_item_pos)
+            self.uv.target_sphere.create_new_node(2, self.clicked_on_item_pos)
         elif action == create_entity_node:
-            self.uv.target_sphere.create_new_node(1, x, y, self.clicked_on_item_pos)
+            self.uv.target_sphere.create_new_node(1, self.clicked_on_item_pos)
 
     def mousePressEvent(self, event: 'event'):
         """
@@ -171,17 +171,15 @@ class UV_Widget(QGLWidget):
 
             if self._clicked_on_item == self.uv.target_sphere.id:
 
-                # on_current_row_changed on the target sphere_base (background). Release selection
+                # on_current_row_changed on the target sphere (background). Release selection
                 self.uv.target_sphere.selected_item = None
                 self.uv.target_sphere.select_item(None)
                 return
 
             is_sphere = self.uv.set_target_sphere(self._clicked_on_item)
 
-            # if it is not a sphere_base then get the _selected item
-
             if not is_sphere:
-                # set selected sphere_base item
+                # if it is not a sphere then get the _selected item, set selected sphere item
                 self.uv.target_sphere.get_selected_item(self._clicked_on_item, self._shift)
 
         if event.button() == Qt.RightButton:

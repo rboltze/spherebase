@@ -7,9 +7,9 @@ Edge_drag module. contains the EdgeDraw class which is responsible for drawing a
 
 from pyrr import quaternion
 from sphere_base.sphere_universe_base.suv_socket import *
-from sphere_base.sphere_universe_base.suv_graphic_edge import GraphicEdge
+from sphere_base.sphere.graphic_edge import GraphicEdge
 from sphere_base.shader.uv_sphere_shader import SphereShader
-from sphere_base.utils import dump_exception
+
 
 class EdgeDrag:
 
@@ -123,6 +123,7 @@ class EdgeDrag:
 
         # we recalculate the xyz from the angles as there is a discrepancy with the collision point
         self.xyz = self.drag_to(mouse_ray_collision_point)
+
         # self.xyz = Vector3(mouse_ray_collision_point)  # we could use this if there would have been no difference
         self.snap_to_socket()
 
@@ -164,7 +165,7 @@ class EdgeDrag:
             pos_orientation_offset = quaternion.slerp(
                 self.pos_orientation_offset, self.start_socket.pos_orientation_offset, step * i)
 
-            # take the position of each point and add to array
+            # get the position of each point and add to array
             pos = self.gr_edge.get_position(pos_orientation_offset)
             self.pos_array.append([pos[0], pos[1], pos[2]])
 
