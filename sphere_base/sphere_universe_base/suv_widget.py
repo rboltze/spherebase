@@ -234,7 +234,7 @@ class UV_Widget(QGLWidget):
 
                 is_sphere = self.uv.set_target_sphere(self._clicked_on_item)
 
-                # if it is not a sphere_base then get the _selected item
+                # if it is not a sphere then get the _selected item
                 if not is_sphere:
                     item = self.uv.target_sphere.get_selected_item(self._clicked_on_item, self._shift)
                     if item and item.type == "socket":
@@ -276,7 +276,7 @@ class UV_Widget(QGLWidget):
                         # drag edge from socket to the mouse_ray collision point
                         start_socket = self.uv.target_sphere.selected_item
                         self.uv.target_sphere.start_socket = start_socket
-                        self.uv.target_sphere.edge_drag.drag(start_socket, True, mouse_abs_pos=mouse_ray_collision_point)
+                        self.uv.target_sphere.edge_drag.drag(start_socket, True, mouse_ray_collision_point=mouse_ray_collision_point)
 
             elif self._clicked_on_item and self._clicked_on_item == self.uv.target_sphere.id:
 

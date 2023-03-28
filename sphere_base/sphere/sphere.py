@@ -487,6 +487,7 @@ class Sphere(Serializable):
                 # only drag any nodes in the _selected item list
 
                 item.drag_to(mouse_ray_collision_point)
+                item.mouse_ray_collision_point = mouse_ray_collision_point
                 self.dragging = item.is_dragging(True)
 
     def select_item(self, item: 'node or edge', shift: bool = False):

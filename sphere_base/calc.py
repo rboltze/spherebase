@@ -159,12 +159,4 @@ class UvCalc:
         # return the distance on the great circle
         return 2 * phi * radius
 
-    def ang_diff_two_points(self, ang1, ang2):
-        pass
-        """
-        Receive the angles of two points on the surface of a sphere and return the angle between them
-
-        """
-
-        return quaternion.cross(quaternion.inverse(ang1), ang2)
 

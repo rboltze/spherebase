@@ -99,7 +99,7 @@ class GraphicEdge:
         :type pos_orientation_offset: ``Quaternion``
         :returns: ``Quaternion`` cumulative offset
         """
-        # rotation of the sphere_base with rotation offset of the pointer rotation
+        # rotation of the sphere with rotation offset of the pointer rotation
         return quaternion.cross(pos_orientation_offset, quaternion.inverse(self.sphere.orientation))
 
     def on_selected_event(self, event):

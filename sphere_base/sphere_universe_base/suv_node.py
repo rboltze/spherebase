@@ -11,6 +11,7 @@ from sphere_base.sphere_universe_base.suv_graphic_node import GraphicNode
 from sphere_base.sphere_universe_base.suv_socket import Socket
 from sphere_base.constants import *
 # from sphere_iot.uv_calc import UvCalc
+from sphere_base.utils import dump_exception
 import numpy as np
 
 
@@ -105,7 +106,8 @@ class SphereNode(Serializable):
         self.scale = self.gr_node.scale
         self.texture_id = self.gr_node.default_img_id
         self.orientation = None
-        self.offset_with_collision_point = None
+        self.offset_with_collision_point = None  # difference center node with collision point
+        self.mouse_ray_collision_point = None
 
         self.serialized_detail_scene = None
 
@@ -154,12 +156,12 @@ class SphereNode(Serializable):
         elif self._node_moved and not value:
             # end dragging
             self._node_moved = False
+            self.offset_with_collision_point = None
+            self.mouse_ray_collision_point = None
             self.sphere.history.store_history("node moved", True)
         elif not self._node_moved and value:
             # start dragging
             self._node_moved = True
-            # Q = quaternion
-            # self.diff = Q.cross(self.pos_orientation_offset, Q.inverse(self.collision_point))
         return self._node_moved
 
     def drag_to(self, mouse_ray_collision_point=None):
@@ -170,23 +172,27 @@ class SphereNode(Serializable):
         :type mouse_ray_collision_point: ``float``
 
         """
-        Q = quaternion
+        try:
+            Q = quaternion
 
-        collision_point = self.calc.find_angle_from_world_pos(mouse_ray_collision_point,
-                                                                           self.sphere.orientation)
+            collision_point = self.calc.find_angle_from_world_pos(mouse_ray_collision_point,
+                                                                               self.sphere.orientation)
 
-        # find the difference between the center of the node and the mouse_ray collsion point
-        diff = Q.cross(self.pos_orientation_offset, Q.inverse(collision_point))
+            if self.offset_with_collision_point is None:
+                # starting dragging registering the offset between the mouse_ray collision point and the
+                # center of the node
+                 self.offset_with_collision_point = Q.cross(self.pos_orientation_offset, Q.inverse(collision_point))
 
-        # The position of the mouse_ray collision point
-        self.pos_orientation_offset = self.calc.find_angle_from_world_pos(mouse_ray_collision_point,
-                                                                          self.sphere.orientation)
+            # The position of the mouse_ray collision point in angles (Quaternion)
+            self.pos_orientation_offset = self.calc.find_angle_from_world_pos(mouse_ray_collision_point,
+                                                                              self.sphere.orientation)
 
-        #correct the position of the node with the stored difference between the collision point and the node center
-        # self.pos_orientation_offset = Q.cross(self.pos_orientation_offset, Q.inverse(diff))
+            # correct the position of the node with the stored difference between the
+            # collision point and the center of the node as stored at the start of the dragging action.
+            self.pos_orientation_offset = Q.cross(self.offset_with_collision_point, self.pos_orientation_offset)
 
-
-
+        except Exception as e:
+            dump_exception(e)
 
         self.update_position()
 

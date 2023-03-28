@@ -10,8 +10,6 @@ from sphere_base.sphere_universe_base.suv_socket import *
 from sphere_base.sphere_universe_base.suv_graphic_edge import GraphicEdge
 from sphere_base.shader.uv_sphere_shader import SphereShader
 from sphere_base.utils import dump_exception
-from pyrr import Vector3
-
 
 class EdgeDrag:
 
@@ -28,8 +26,8 @@ class EdgeDrag:
         """
         Constructor of the edge dragg class.
 
-        :param Sphere: This class is instantiated from the :class:`~sphere_iot.uv_sphere.Sphere`
-        :type Sphere: :class:`~sphere_iot.uv_sphere.Sphere`
+        :param sphere: This class is instantiated from the :class:`~sphere_iot.uv_sphere.Sphere`
+        :type sphere: :class:`~sphere_iot.uv_sphere.Sphere`
 
         :Instance Attributes:
 
@@ -100,16 +98,14 @@ class EdgeDrag:
         if not self._dragging and value:
             self._dragging = value
 
-    def drag(self, start_socket: 'socket', dragging: bool, mouse_abs_pos=None):
+    def drag(self, start_socket: 'socket', dragging: bool, mouse_ray_collision_point=None):
         """
         Dragging an edge
 
         :param start_socket:
         :type start_socket: :class:`~sphere_iot.uv_socket.Socket`
-        :param x_offset: mouse x-offset
-        :type x_offset: ``float``
-        :param y_offset: mouse y-offset
-        :type y_offset: ``float``
+        :param mouse_ray_collision_point: mouse x-offset
+        :type mouse_ray_collision_point: ``float``
         :param dragging: ``True`` when dragging
         :type dragging: ``bool``
 
@@ -126,8 +122,8 @@ class EdgeDrag:
             return
 
         # we recalculate the xyz from the angles as there is a discrepancy with the collision point
-        self.xyz = self.drag_to(mouse_abs_pos)
-        # self.xyz = Vector3(mouse_abs_pos)
+        self.xyz = self.drag_to(mouse_ray_collision_point)
+        # self.xyz = Vector3(mouse_ray_collision_point)  # we could use this if there would have been no difference
         self.snap_to_socket()
 
         # number of points this edge is made off
@@ -181,11 +177,6 @@ class EdgeDrag:
         """
         self.pos_orientation_offset = self.calc.find_angle_from_world_pos(mouse_abs_pos, self.sphere.orientation)
         return self.gr_edge.get_position(self.pos_orientation_offset)
-
-    def drag_to_mouse_ray(self):
-        # The ray test of return object gives the hit position. This is the position in 3d space where the mouse
-        # ray intersects with the first object.
-        pass
 
     def draw(self):
         """
