@@ -100,7 +100,7 @@ class EdgeDrag:
         if not self._dragging and value:
             self._dragging = value
 
-    def drag(self, start_socket: 'socket', x_offset: float, y_offset: float, dragging: bool, mouse_abs_pos=None):
+    def drag(self, start_socket: 'socket', dragging: bool, mouse_abs_pos=None):
         """
         Dragging an edge
 
@@ -125,32 +125,17 @@ class EdgeDrag:
             self._init_start_dragging(start_socket)
             return
 
-        # the location of the point under the mouse pointer
-        self.xyz = self.drag_to(x_offset, y_offset)
+        # we recalculate the xyz from the angles as there is a discrepancy with the collision point
+        self.xyz = self.drag_to(mouse_abs_pos)
+        # self.xyz = Vector3(mouse_abs_pos)
+        self.snap_to_socket()
 
-        # TODO: we have the point on the sphere under the mouse.
-        #  We now need to translate this point to angles.
+        # number of points this edge is made off
+        n = self.gr_edge.get_number_of_points(self.start_socket.xyz, self.xyz, self.radius, self.unit_length)
 
-        # self.xyz = self.drag_to2(mouse_abs_pos, x_offset, y_offset)
-        # pos_orientation_offset = self.calc.find_angle(mouse_abs_pos, self.sphere.orientation)
-        # self.xyz = self.calc.move_to_position(pos_orientation_offset, self.sphere, 1.2)
-        # m = mouse_abs_pos
-        try:
-
-            # Vector3([m[0], m[1], m[2]])
-            # print(self.xyz, m)
-            # self.xyz = Vector3(m)
-
-            self.snap_to_socket()
-
-            # number of points this edge is made off
-            n = self.gr_edge.get_number_of_points(self.start_socket.xyz, self.xyz, self.radius, self.unit_length)
-
-            if n > 0:
-                step = 1 / n
-                self.update_edge(n, step)
-        except Exception as e:
-            dump_exception(e)
+        if n:
+            step = 1 / n
+            self.update_edge(n, step)
 
     def snap_to_socket(self):
         """
@@ -187,34 +172,14 @@ class EdgeDrag:
             pos = self.gr_edge.get_position(pos_orientation_offset)
             self.pos_array.append([pos[0], pos[1], pos[2]])
 
-    def drag_to2(self, mouse_abs_pos, pitch_degrees, yaw_degrees):
+    def drag_to(self, mouse_abs_pos):
         """
+        Used to Drag a line on the globe to the mouse_ray collision point.
 
-        :param pitch_degrees: horizontal rotation
-        :param yaw_degrees: vertical yaw
+        :param mouse_abs_pos: mouse_ray collision point
         :returns: xyz 'Vector3'
         """
-        # get the new position orientation offset angle based on pitch and yaw
-        # self.pos_orientation_offset = self.calc.get_pos_orientation_offset(pitch_degrees, yaw_degrees,
-        #                                                                    self.pos_orientation_offset)
-        self.pos_orientation_offset = self.calc.find_angle(mouse_abs_pos, self.sphere.orientation)
-        # self.xyz = self.calc.move_to_position(self.pos_orientation_offset, self.sphere, 1.2)
-        self.xyz = Vector3([mouse_abs_pos[0], mouse_abs_pos[1], mouse_abs_pos[2]])
-        # print(self.xyz, m)
-        # self.xyz = Vector3(m)
-
-        return self.xyz
-
-    def drag_to(self, pitch_degrees: float, yaw_degrees: float) -> 'Vector3':
-        """
-
-        :param pitch_degrees: horizontal rotation
-        :param yaw_degrees: vertical yaw
-        :returns: xyz 'Vector3'
-        """
-        # get the new position orientation offset angle based on pitch and yaw
-        self.pos_orientation_offset = self.calc.get_pos_orientation_offset(pitch_degrees, yaw_degrees,
-                                                                           self.pos_orientation_offset)
+        self.pos_orientation_offset = self.calc.find_angle_from_world_pos(mouse_abs_pos, self.sphere.orientation)
         return self.gr_edge.get_position(self.pos_orientation_offset)
 
     def drag_to_mouse_ray(self):

@@ -53,8 +53,9 @@ class UvCalc:
         :type radius: ´´float´´
         :returns: ``Vector4`` position
 
-        Calculate the xyz position of the item based on the angle with the center of the sphere_base it is on.
-        The cumulative angle takes into account that the sphere_base can rotate and is not in the default position.
+        Calculate the xyz position of an item on the surface of a sphere based on the angle with the center of the
+        sphere. The cumulative angle takes into account that the sphere_base can rotate and is not in the
+        default position.
 
         The calculation starts with a node vector in the center of the default sphere_base at the [0.0, 0.0, 0.0]
         position, with a length 1.0 on the y axis. This node vector is then rotated so it points at the
@@ -80,66 +81,31 @@ class UvCalc:
         return Vector4(xyzw).xyz
 
     @staticmethod
-    def find_angle2(abs_pos, orientation_offset, sphere, radius, cumulative_orientation):
-        # The move to position function calculates xyz from angles. We inverse this functions
-        # to find the angles from the xyz position
-
-        # create the rotation matrix
-        rm = matrix44.create_from_quaternion(cumulative_orientation)
-
-        # rotating the node vector with the rotation of the sphere
-        node_origin = Vector4([0.0, radius, 0.0, 1.0])
-        xyzw = matrix44.apply_to_vector(rm, node_origin)
-
-        # translation matrix to move the node to world space
-        sphere = Vector4([*sphere.xyz, 1])
-        tm = matrix44.create_from_translation(sphere)
-
-        # moving the node vector
-        xyzw = matrix44.apply_to_vector(tm, xyzw)
-
-        return Vector4(xyzw).xyz
-
-
-    @staticmethod
-    def find_angle(abs_pos, orientation_offset) -> 'quaternion':
+    def find_angle_from_world_pos(abs_pos, orientation_offset) -> 'quaternion':
         """
-        given the xyz collision point of the mouse_ray with some sphere, calculate the angle of the
-        point on that sphere.
+        given the xyz collision point of the mouse_ray with the target sphere, calculate the angle from a starting
+        point on the surface of the sphere.
 
-        The object the mouse_ray collides with should be a sphere. Find the center and the radius.
-        The radius should be known but can also be calculated as: collision point - the center of the
-        sphere. (should be the same as known, but might differ)
+        Find the center and the radius of the sphere. Then the offset of the sphere rotation with the
+        zero rotation in angles.
 
-        Then bring back the center of the sphere to [0.0, 0.0, 0.0] and correct the collision point.
-        Find the difference of the current sphere rotation with the zero rotation in angles.
+        The calculation starts with a vector of length 1 from the center of the sphere on the y axis.
+        This node vector is then rotated so it points at the collision point. We need the angle that the vector rotates
+        over the z axis and the angle needed to rotate the vector over the x axis
 
-        The calculation starts with a node vector in the center of the default sphere with a length 1.0 pointing at
-        the collision point. This node vector is then rotated so it lies on the y-axis. This is the angle we need.
-
-        The inverse of the angle found is what is needed to move a vector of length 1 on the y axis to point to
-        the collision point.
-
+                # αx =−arctan2(y1, x1).
+                # αy = arcsin(x2)−arccos(z1).
+                # αx = arctan2(z2, y2).
         """
 
         if abs_pos:
             try:
                 P1 = [1, 0, 0]
-                P2 = abs_pos
+                P2 = abs_pos  # The position of the point in world space
 
-                # αx =−arctan2(y1, x1).
-                # αy = arcsin(x2)−arccos(z1).
-                # αx = arctan2(z2, y2).
-
-                x1 = P1[0]
-                y1 = P1[1]
-                z1 = P1[2]
-
-                x2 = P2[0]
-                y2 = P2[1]
-                z2 = P2[2]
-
-                ax = -math.atan2(y1, x1)
+                x1, x2 = P1[0], P2[0]
+                y1, y2 = P1[1], P2[1]
+                z1, z2 = P1[2], P2[2]
 
                 # The vector [0, 1, 0] is rotated over the z-axis (pitch)
                 ay = math.asin(x2) - math.acos(z1)
@@ -147,90 +113,23 @@ class UvCalc:
                 # and then over the x axis (yaw)
                 ax = math.atan2(z2, y2)
 
-                # pitch and yaw in radians
-                # pitch_rad = (math.pi / 180 * ay)
-                # yaw_rad = (math.pi / 180 * ax)
-
-                pitch_rad = ay + ((math.pi / 180) * -90)
-                print(pitch_rad)
+                # Correct the rotation with the default sphere position with the default camera direction
+                pitch_rad = -ay + ((math.pi / 180) * 90)
                 yaw_rad = ax
-
-                # pitch_rad = ((math.pi / 180) * ay)
-                # yaw_rad = ((math.pi / 180) * ax)
 
                 # rotation quaternions
                 yaw_q = quaternion.create_from_eulers([yaw_rad, 0.0, 0.0])
                 pitch_q = quaternion.create_from_eulers([0.0, pitch_rad, 0.0])
 
-                # first apply the vertical offset to the orientation, to avoid gimbal lock
+                # first apply the vertical offset to the current sphere orientation, to avoid gimbal lock
                 orientation_with_yaw = quaternion.cross(yaw_q, orientation_offset)
 
-                # then the pitch movement over the equator
+                # then apply the pitch movement over the equator
                 pos_orientation_offset = quaternion.cross(orientation_with_yaw, pitch_q)
 
                 return pos_orientation_offset
-
             except Exception as e:
                 dump_exception(e)
-
-
-
-
-        # # create the rotation matrix
-        # rm = matrix44.create_from_quaternion(cumulative_orientation)
-        #
-        # # rotating the node vector
-        # node_origin = Vector4([0.0, radius, 0.0, 1.0])
-        # xyzw = matrix44.apply_to_vector(rm, node_origin)
-        #
-        # # translation matrix to move the node to world space
-        # sphere = Vector4([*sphere.xyz, 1])
-        # tm = matrix44.create_from_translation(sphere)
-        #
-        # # moving the node vector
-        # xyzw = matrix44.apply_to_vector(tm, xyzw)
-        #
-        # return Vector4(xyzw).xyz
-
-    @staticmethod
-    def get_pos_orientation_offset(pitch_degrees: float, yaw_degrees: float,
-                                   orientation_offset: 'Quaternion') -> 'Quaternion':
-        """
-        :param pitch_degrees: Horizontal movement
-        :type pitch_degrees: ``float``
-        :param yaw_degrees: Vertical movement
-        :type yaw_degrees: ``float``
-        :param orientation_offset:
-        :type orientation_offset: ``Quaternion``
-        :returns: ``Quaternion``
-
-        function to get new position orientation offset. It returns the new angle based on the
-        old angle adjusted by euler angles.
-
-        .. Warning::
-
-            Unfortunately I got quite confused with pitch, roll and yaw and how to apply this to a virtual universe
-            where up, down, rotation, x, y, and z are interchangeable and prone to conventions and not absolutes.
-            The function works as designed but the naming of the variable may be incorrect.
-
-            This is an area that needs to be looked into, in a later iteration.
-
-        """
-        # pitch and yaw in radians
-        pitch_rad = (math.pi / 180 * -pitch_degrees)
-        yaw_rad = (math.pi / 180 * -yaw_degrees)
-
-        # rotation quaternions
-        yaw_q = quaternion.create_from_eulers([yaw_rad, 0.0, 0.0])
-        pitch_q = quaternion.create_from_eulers([0.0, pitch_rad, 0.0])
-
-        # first apply the vertical offset to the orientation, to avoid gimbal lock
-        orientation_with_yaw = quaternion.cross(yaw_q, orientation_offset)
-
-        # then the pitch movement over the equator
-        pos_orientation_offset = quaternion.cross(orientation_with_yaw, pitch_q)
-
-        return pos_orientation_offset
 
     @staticmethod
     def get_distance_on_sphere(point1: Vector3, point2: Vector3, radius: float) -> float:
@@ -260,58 +159,12 @@ class UvCalc:
         # return the distance on the great circle
         return 2 * phi * radius
 
-    @staticmethod
-    def get_position_modifier(ratio: float, mod_x=True) -> int:
+    def ang_diff_two_points(self, ang1, ang2):
+        pass
         """
-
-        This is a modifier based on the distance between the mouse pointer and the center of the screen.
-        ratio is between 0 and 1. There are some differences between horizontal, vertical, positive and negative.
-
-        :param ratio: ratio modifier between -1.0 and 1.0
-        :type ratio: ``float``
-        :param mod_x: ``True`` if the modifier is meant for the x-axis
-        :type mod_x: ``bool``
-        :return: position modifier ``int``
-        """
-        position_modifier_x = {0: 9, 1: 8, 2: 7, 3: 7, 4: 7, 5: 7, 6: 7, 7: 7, 8: 7, 9: 7,
-                               -1: 7, -2: 6, -3: 6, -4: 6, -5: 6, -6: 6, -7: 6, -8: 6, -9: 7}
-        position_modifier_y = {0: 9, 1: 8, 2: 7, 3: 7, 4: 8, 5: 8, 6: 8, 7: 9, 8: 9, 9: 9,
-                               -1: 7, -2: 6, -3: 7, -4: 8, -5: 8, -6: 8, -7: 9, -8: 9, -9: 9}
-
-        position_modifier = position_modifier_x if mod_x else position_modifier_y
-
-        d = int(ratio * 10)
-        if d in position_modifier:
-            return position_modifier[d]
-        elif d > 10:
-            return position_modifier[10]
-        else:
-            return 9
-
-    @staticmethod
-    def get_distance_modifier(distance: float) -> int:
-        """
-
-        This function returns a modifier based on the distance between the camera and the target sphere_base center.
-        It is used while dragging object and creating new objects. The modifier is larger when the distance is larger.
-
-        :param distance: Distance between camera position and the center of the target sphere_base
-        :type distance: ``float``
-        :return: distance modifier ``int``
-
-        .. note::
-
-           All spheres in the basic implementation use a radius of 1. The minimum workable distance after extensive
-           testing is 1.5. Getting closer to the sphere_base causes sometimes the camera to jump inside the sphere_base.
-           When keeping a minimum distance of 2 this does not happen.
+        Receive the angles of two points on the surface of a sphere and return the angle between them
 
         """
 
-        distance_modifier = {2: 3, 3: 6, 4: 9, 5: 12, 6: 15, 7: 18, 8: 21, 9: 24, 10: 30}
-        d = int(distance)
-        if d in distance_modifier:
-            return distance_modifier[int(distance)]
-        elif d > 10:
-            return distance_modifier[10]
-        else:
-            return pow(distance, 2)
+        return quaternion.cross(quaternion.inverse(ang1), ang2)
+

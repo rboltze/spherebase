@@ -14,6 +14,7 @@ import json
 from OpenGL.GL import *
 from sphere_base.sphere_universe_base.suv_universe import Universe
 from sphere_base.constants import *
+from sphere_base.utils import dump_exception
 
 
 class UV_Widget(QGLWidget):
@@ -225,22 +226,25 @@ class UV_Widget(QGLWidget):
         if selection:
             self.uv.target_sphere.batch_selected_items(selection)
         if self.uv.target_sphere.edge_drag.dragging:
-            self._clicked_on_item, self.clicked_on_item_pos = self.uv.mouse_ray.check_mouse_ray(self.mouse_x,
-                                                                                                self.mouse_y)
-            # self.target_sphere.edge_dragging.dragging = False
-            self.uv.target_sphere.edge_drag.drag(None, None, None, False)
+            try:
+                self._clicked_on_item, self.clicked_on_item_pos = self.uv.mouse_ray.check_mouse_ray(self.mouse_x,
+                                                                                                    self.mouse_y)
+                # self.target_sphere.edge_dragging.dragging = False
+                self.uv.target_sphere.edge_drag.drag(None, False, None)
 
-            is_sphere = self.uv.set_target_sphere(self._clicked_on_item)
+                is_sphere = self.uv.set_target_sphere(self._clicked_on_item)
 
-            # if it is not a sphere_base then get the _selected item
-            if not is_sphere:
-                item = self.uv.target_sphere.get_selected_item(self._clicked_on_item, self._shift)
-                if item and item.type == "socket":
-                    # if edge does not already exist, create it
-                    self.uv.target_sphere.create_edge(item)
-                elif item and item.type == "node":
-                    # if edge does not already exist, create it
-                    self.uv.target_sphere.create_edge(item.socket)
+                # if it is not a sphere_base then get the _selected item
+                if not is_sphere:
+                    item = self.uv.target_sphere.get_selected_item(self._clicked_on_item, self._shift)
+                    if item and item.type == "socket":
+                        # if edge does not already exist, create it
+                        self.uv.target_sphere.create_edge(item)
+                    elif item and item.type == "node":
+                        # if edge does not already exist, create it
+                        self.uv.target_sphere.create_edge(item.socket)
+            except Exception as e:
+                dump_exception(e)
 
     def mouseMoveEvent(self, event: 'event'):
         """
@@ -250,11 +254,6 @@ class UV_Widget(QGLWidget):
         :type event: 'event'
 
         """
-
-        # TODO: we need to know the point of the object in world space. This point will be on the sphere.
-        #  We can then calculate the angle of this point on the sphere.
-
-
 
         x, y = event.x(), event.y()
         self.mouse_x = x
@@ -267,18 +266,17 @@ class UV_Widget(QGLWidget):
 
             if self._clicked_on_item and self.uv.target_sphere.selected_item:
 
-                x_offset, y_offset = self.get_mouse_position_offset(x, y)
+                sphere_id, mouse_ray_collision_point = self.uv.mouse_ray.check_mouse_ray(self.mouse_x, self.mouse_y)
 
-                # dragging _selected items
-                if self.uv.target_sphere.selected_item.type == "node":
-                    self.uv.target_sphere.drag_items(x_offset, y_offset)
-                elif self.uv.target_sphere.selected_item.type == "socket":
-                    # drag edge from socket
-                    # We need to pass the current position to collision point
-                    _item, collision_point = self.uv.mouse_ray.check_mouse_ray(self.mouse_x, self.mouse_y)
-                    start_socket = self.uv.target_sphere.selected_item
-                    self.uv.target_sphere.drag_edge(start_socket, x_offset, y_offset,
-                                                    mouse_abs_pos=collision_point)
+                if sphere_id:
+                    # dragging _selected items
+                    if self.uv.target_sphere.selected_item.type == "node":
+                        self.uv.target_sphere.drag_items(mouse_ray_collision_point)
+                    elif self.uv.target_sphere.selected_item.type == "socket":
+                        # drag edge from socket to the mouse_ray collision point
+                        start_socket = self.uv.target_sphere.selected_item
+                        self.uv.target_sphere.start_socket = start_socket
+                        self.uv.target_sphere.edge_drag.drag(start_socket, True, mouse_abs_pos=mouse_ray_collision_point)
 
             elif self._clicked_on_item and self._clicked_on_item == self.uv.target_sphere.id:
 

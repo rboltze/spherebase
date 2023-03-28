@@ -111,6 +111,7 @@ class Sphere(Serializable):
         self.radius = 1.0
         self.color = [1, 1, 1, 1]
         self.orientation = quaternion.create_from_eulers([0.0, 0.0, 0.0])
+        self.start_socket = None
         self._hovered_item = None
         self.animation = 0  # rotation speed
 
@@ -410,7 +411,7 @@ class Sphere(Serializable):
         self.update_item_positions()
 
     def calc_mouse_position_in_angles2(self, mouse_pos):
-        return self.calc.find_angle(mouse_pos, self.orientation)
+        return self.calc.find_angle_from_world_pos(mouse_pos, self.orientation)
 
     def calc_mouse_position_in_angles(self, mouse_x: float, mouse_y: float) -> 'quaternion':
         """
@@ -427,26 +428,12 @@ class Sphere(Serializable):
         :return: orientation quaternion
         """
 
-        # ratio offset from center
-        # center_x = self.uv.view.view_width / 2
-        # center_y = self.uv.view.view_height / 2
-        # x_offset = (mouse_x - center_x) / self.uv.view.view_width
-        # y_offset = (mouse_y - center_y) / self.uv.view.view_height
+        one_percent_width = self.uv.view.view_width / 100
+        one_percent_height = self.uv.view.view_height / 100
+        print(0.7 * one_percent_width, 1.0 * one_percent_height)
 
-        x_offset = (2.0 * mouse_x) / self.uv.view.view_width - 1.0
-        y_offset = 1.0 - (2.0 * mouse_y) / self.uv.view.view_height
-
-        # camera to center of target sphere_base modifier
-        m = self.calc.get_distance_modifier(self.uv.cam.distance_to_target)
-        p_x = self.calc.get_position_modifier(x_offset, True)
-        p_y = self.calc.get_position_modifier(y_offset, False)
-
-        # p_x = 100 * x_offset
-        # p_y = 100 * y_offset
-
-        # mouse pointer offset in radians
-        mouse_pitch = -(pi / 180 * (x_offset * p_x * m))
-        mouse_roll = -(pi / 180 * (y_offset * p_y * m))
+        mouse_pitch = (pi / 180) * (-(mouse_x - (self.uv.view.view_width / 2)) / (one_percent_width * 0.7))
+        mouse_roll = (pi / 180) * ((mouse_y - (self.uv.view.view_height / 2)) / (one_percent_height * 1.0))
 
         # mouse pointer offset quaternions
         mouse_pitch = quaternion.create_from_eulers([0.0, mouse_pitch, 0.0])
@@ -475,61 +462,32 @@ class Sphere(Serializable):
         # return orientation quaternion
         return orientation
 
-    def drag_items(self, x_offset: float, y_offset: float):
+    def drag_items(self, mouse_ray_collision_point=None ):
         """
         Dragging all _selected items. The offset is the difference between the current and last stored location
         of the mouse pointer on the screen.
 
-        :param x_offset: x_position offset of the current mouse_position and the last stored mouse position.
-        :type x_offset: ``float``
-        :param y_offset: y_position offset of the current mouse_position and the last stored mouse position.
-        :type y_offset: ``float``
+        :param mouse_ray_collision_point:
+        :type mouse_ray_collision_point: ``float``
         :return:
 
         .. note::
 
-           This method uses a distance modifier. The dragging speed depends on the distance
-           of the camera to the center of the target sphere_base.
-
            Only existing nodes need to be dragged, as the position of sockets and edges are
            adjusted automatically. Updating the position of a node trickles down to adjusting the position of the
            center sockets of the _selected nodes and any connected edges.
+
+           It is important to maintain the distance to the mouse. So we need to calculate the difference between the
+           current mouse position and the center of the items we are dragging. Otherwise the node centers jumps to
+           the collision point.
+
         """
-
-        # distance modifier
-        m = self.calc.get_distance_modifier(self.uv.cam.distance_to_target)
-
-        x_offset *= .02 * m
-        y_offset *= .02 * m
-
         for item in self.items_selected:
-            # only drag any nodes in the _selected item list
             if item.type == "node":
-                item.drag_to(x_offset, y_offset)
+                # only drag any nodes in the _selected item list
+
+                item.drag_to(mouse_ray_collision_point)
                 self.dragging = item.is_dragging(True)
-
-    def drag_edge(self, start_socket: 'socket', x_offset: float, y_offset: float, dragging: bool = True, mouse_abs_pos=None):
-        """
-        This methods is the start of creating a new edge.
-        A new edge is dragged from the start socket and shown as a dashed line.
-        This method adds a distance modifier before handing over to the :class:`~sphere_iot.uv_edge_drag.EdgeDrag`
-
-        :param start_socket: starting socket
-        :type start_socket: :class:`~sphere_iot.uv_socket.Socket`
-        :param x_offset: x_position offset of the current mouse_position and the last stored mouse position.
-        :type x_offset: ``float``
-        :param y_offset: y_position offset of the current mouse_position and the last stored mouse position.
-        :type y_offset:  ``float``
-        :param dragging: ``True`` when dragging
-        :type dragging: ``bool``
-        """
-        self.start_socket = start_socket
-        m = self.calc.get_distance_modifier(self.uv.cam.distance_to_target) * .021
-
-        x_offset *= m
-        y_offset *= m
-
-        self.edge_drag.drag(start_socket, x_offset, y_offset, dragging, mouse_abs_pos=mouse_abs_pos)
 
     def select_item(self, item: 'node or edge', shift: bool = False):
         """

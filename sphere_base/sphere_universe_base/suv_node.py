@@ -105,6 +105,7 @@ class SphereNode(Serializable):
         self.scale = self.gr_node.scale
         self.texture_id = self.gr_node.default_img_id
         self.orientation = None
+        self.offset_with_collision_point = None
 
         self.serialized_detail_scene = None
 
@@ -157,29 +158,41 @@ class SphereNode(Serializable):
         elif not self._node_moved and value:
             # start dragging
             self._node_moved = True
+            # Q = quaternion
+            # self.diff = Q.cross(self.pos_orientation_offset, Q.inverse(self.collision_point))
         return self._node_moved
 
-    def drag_to(self, pitch_degrees, roll_degrees):
+    def drag_to(self, mouse_ray_collision_point=None):
         """
         Dragging the node_disc over the surface of the sphere_base
 
-        :param pitch_degrees: vertical degrees over the x as (while roll degrees is 0) in euler degrees
-        :type pitch_degrees: ``float``
-        :param roll_degrees: horizontal degrees following the equator in euler degrees
-        :type roll_degrees: ``float``
+        :param mouse_ray_collision_point: collision point of the mouse_ray with the target sphere
+        :type mouse_ray_collision_point: ``float``
 
         """
+        Q = quaternion
 
-        # get the new position orientation offset angle based on pitch and roll
-        self.pos_orientation_offset = self.calc.get_pos_orientation_offset(pitch_degrees, roll_degrees,
-                                                                           self.pos_orientation_offset)
+        collision_point = self.calc.find_angle_from_world_pos(mouse_ray_collision_point,
+                                                                           self.sphere.orientation)
+
+        # find the difference between the center of the node and the mouse_ray collsion point
+        diff = Q.cross(self.pos_orientation_offset, Q.inverse(collision_point))
+
+        # The position of the mouse_ray collision point
+        self.pos_orientation_offset = self.calc.find_angle_from_world_pos(mouse_ray_collision_point,
+                                                                          self.sphere.orientation)
+
+        #correct the position of the node with the stored difference between the collision point and the node center
+        # self.pos_orientation_offset = Q.cross(self.pos_orientation_offset, Q.inverse(diff))
+
+
+
 
         self.update_position()
 
     def update_position(self):
         """
         update the position of the node_disc on the sphere_base. Calculate the position and the direction.
-        also update the position of the collision object for use with the mouse pointer ray.
         """
         # update the position of the node_disc on the sphere_base
         cumulative_orientation = self.get_cumulative_rotation()

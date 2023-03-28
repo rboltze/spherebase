@@ -35,8 +35,8 @@ class SplitSphere(Sphere):
         # create new node at the mouse pointer
 
         # calculate the cumulative angle based on the mouse position
-        orientation = self.calc_mouse_position_in_angles(mouse_x, mouse_y)
-        # orientation = self.calc_mouse_position_in_angles2(abs_pos)
+        # orientation = self.calc_mouse_position_in_angles(mouse_x, mouse_y)
+        orientation = self.calc_mouse_position_in_angles2(abs_pos)
 
         # create new node at the cumulative angle
         if node_type:
