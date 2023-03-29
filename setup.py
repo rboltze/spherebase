@@ -13,9 +13,9 @@ with open('HISTORY.rst') as history_file:
 with open('requirements.txt') as requirements_file:
     requirements = requirements_file.read()
 
-setup_requirements = [ ]
+setup_requirements = []
 
-test_requirements = [ ]
+test_requirements = []
 
 setup(
     author="Richard Boltze",
@@ -30,7 +30,9 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
-    description="Python Boilerplate contains all the boilerplate you need to create a Python package.",
+    description="This Sphere_base library creates spheres with draggable nodes and edges on its surface. "
+                "Nodes can be placed and removed from the sphere surface. \n"
+                "This library is written in Python, PyOpenGL and PyQT5",
     install_requires=requirements,
     license="BSD license",
     long_description=readme + '\n\n' + history,
@@ -42,6 +44,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/rboltze/sphere_base',
-    version='0.0.2',
+    version='0.0.4 alfa',
     zip_safe=False,
 )

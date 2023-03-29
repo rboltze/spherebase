@@ -72,7 +72,16 @@ class Universe(Serializable):
 
         self.view = parent
 
-        self._init_variables()
+        self._spheres = []
+        self._edges = []
+        self._lens_index = 1  # variable to decide how to texture a sphere_base
+
+        self.mouse_last_x, self.mouse_last_y = self.view.view_width / 2, self.view.view_height / 2
+        self.mouse_x, self.mouse_y = self.mouse_last_x, self.mouse_last_y
+        self.mouse_offset = 0
+        self.target_sphere = None
+        self._has_been_modified = False
+
         self._init_listeners()
 
         self.config = self.__class__.Config_class(self, skybox_img_dir=skybox_img_dir,
@@ -89,17 +98,6 @@ class Universe(Serializable):
 
         if not os.path.exists("default.json"):
             self.create_test_spheres(TEST_SPHERE_NUMBER)
-
-    def _init_variables(self):
-        self._spheres = []
-        self._edges = []
-        self._lens_index = 1  # variable to decide how to texture a sphere_base
-
-        self.mouse_last_x, self.mouse_last_y = self.view.view_width / 2, self.view.view_height / 2
-        self.mouse_x, self.mouse_y = self.mouse_last_x, self.mouse_last_y
-        self.mouse_offset = 0
-        self.target_sphere = None
-        self._has_been_modified = False
 
     def _init_listeners(self):
         # initialize all listeners
@@ -367,6 +365,10 @@ class Universe(Serializable):
         # only process if there is movement
         if rotation or angle_up or radius:
             self.cam.process_movement(self.target_sphere, rotation, angle_up, radius=radius)
+
+    def get_mouse_pos(self):
+        # helper function to get the mouse variables
+        return self.view.get_mouse_pos()
 
     def draw(self):
         for sphere in self._spheres:

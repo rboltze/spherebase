@@ -6,7 +6,7 @@ Using the universe for the detail sphere_base. This universe will only contain a
 
 """
 
-from sphere_base.sphere_universe_base.suv_widget import UV_Widget
+from sphere_base.sphere_universe_base.suv_widget import UVWidget
 from sphere_base.sphere_universe_base.suv_universe import Universe
 from sphere_base.sphere_overlay.sov_sphere import SplitSphere
 
@@ -29,7 +29,7 @@ class SphereUniverse(Universe):
         self.target_sphere.draw()
 
 
-class UVWidget(UV_Widget):
+class UVWidget(UVWidget):
     Universe_class = SphereUniverse
 
     def __init__(self, parent):

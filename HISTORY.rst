@@ -2,6 +2,11 @@
 History
 =======
 
+0.0.4 (2023-03-29) Alfa
+------------------
+
+* Added copying and pasting using the clipboard serialisation
+
 0.0.3 (2023-03-28) Alfa
 ------------------
 

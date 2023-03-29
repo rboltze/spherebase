@@ -17,7 +17,7 @@ from sphere_base.constants import *
 from sphere_base.utils import dump_exception
 
 
-class UV_Widget(QGLWidget):
+class UVWidget(QGLWidget):
     """
     This class represents the ``Universe Widget class`` its a pyqt5 wrapper around the OpenGL widget.
 
@@ -41,30 +41,26 @@ class UV_Widget(QGLWidget):
         super().__init__(parent)
         self.setMinimumSize(640, 480)
 
-        self._init_flags()
-
         self.view_width, self.view_height = self.width(), self.height()
-        self._init_variables()
 
         self.setFocusPolicy(Qt.StrongFocus)
+
         self._delayed_init_listeners = []
         super().setMouseTracking(True)
 
-    def _init_variables(self):
-        self.pybullet_key = None
-
-    def _init_flags(self):
-        self._is_initialized = False
-        self._clicked_on_item = None
-        self._left_mouse_button_down = False
-        self._right_mouse_button_down = False
-        self._middle_mouse_button_down = False
-        self._shift = False
-        self._mouse_button_down = False
-        self._first_mouse = False  # Is true ones after each mouse button press
-
-        self.left, self.right, self.forward, self.back = False, False, False, False
+        self.left, self.right, self.forward, self.back, self._shift = False, False, False, False, False
         self.up, self.down, self.arrow_left, self.arrow_right = False, False, False, False
+        self._left_mouse_button_down, self._right_mouse_button_down = False, False
+        self._middle_mouse_button_down, self._mouse_button_down = False, False
+        self._is_initialized = False
+        self._first_mouse = False  # Is true ones after each mouse button press
+        self.pybullet_key = None
+        self._clicked_on_item = None
+        self.mouse_ray_collision_point = None
+        self.mouse_x, self.mouse_y = None, None
+        self.uv = None
+        self.is_dragging = None
+        self.mouse_last_x, self.mouse_last_y = None, None
 
     def add_to_delayed_init(self, callback: 'function'):
         """
@@ -122,33 +118,21 @@ class UV_Widget(QGLWidget):
 
         """
         x, y = event.x(), event.y()
-        self._clicked_on_item, self.clicked_on_item_pos = self.uv.mouse_ray.check_mouse_ray(x, y)
+        self._clicked_on_item, self.mouse_ray_collision_point = self.uv.mouse_ray.check_mouse_ray(x, y)
 
         if self._clicked_on_item == self.uv.target_sphere.id:
             self.handle_context_menu(event)
         return super().contextMenuEvent(event)
 
-    def handle_context_menu(self, event: 'event'):
+    def get_mouse_pos(self):
         """
-        Handles context menu
-
-        :param event: Handles context menu
-        :type event: 'event
+        Helper function to get the object that the mouse is pointing at and to return the mouse ray collision
+        point coordinates.
 
         """
-        x, y = event.x(), event.y()
-        context_menu = QMenu(self)
-        create_person_node = context_menu.addAction("Person node")  # 1
-        create_item_node = context_menu.addAction("Item node")  # 2
-        create_entity_node = context_menu.addAction("Entity node")  # 3
-        action = context_menu.exec_(self.mapToGlobal(event.pos()))
-
-        if action == create_person_node:
-            self.uv.target_sphere.create_new_node(1, self.clicked_on_item_pos)
-        elif action == create_item_node:
-            self.uv.target_sphere.create_new_node(2, self.clicked_on_item_pos)
-        elif action == create_entity_node:
-            self.uv.target_sphere.create_new_node(1, self.clicked_on_item_pos)
+        self._clicked_on_item, self.mouse_ray_collision_point = self.uv.mouse_ray.check_mouse_ray(self.mouse_x,
+                                                                                                  self.mouse_y)
+        return self._clicked_on_item, self.mouse_ray_collision_point, self.mouse_x, self.mouse_y
 
     def mousePressEvent(self, event: 'event'):
         """
@@ -160,11 +144,14 @@ class UV_Widget(QGLWidget):
         """
 
         x, y = event.x(), event.y()
+        self.mouse_x = x
+        self.mouse_y = y
+        self.get_mouse_pos()
 
         if event.button() == Qt.LeftButton:
             self._first_mouse = True
             self._left_mouse_button_down = True
-            self._clicked_on_item, self.clicked_on_item_pos = self.uv.mouse_ray.check_mouse_ray(x, y)
+            # self._clicked_on_item, self.mouse_ray_collision_point = self.uv.mouse_ray.check_mouse_ray(x, y)
 
             if not self._clicked_on_item:
                 return
@@ -185,7 +172,7 @@ class UV_Widget(QGLWidget):
         if event.button() == Qt.RightButton:
             self._first_mouse = True
             self._right_mouse_button_down = True
-            self._clicked_on_item, self.clicked_on_item_pos = self.uv.mouse_ray.check_mouse_ray(x, y)
+            # self._clicked_on_item, self.mouse_ray_collision_point = self.uv.mouse_ray.check_mouse_ray(x, y)
 
             if not self._clicked_on_item:
                 return
@@ -193,7 +180,7 @@ class UV_Widget(QGLWidget):
         if event.button() == Qt.MiddleButton:
             self._first_mouse = True
             self._middle_mouse_button_down = True
-            self._clicked_on_item, self.clicked_on_item_pos = self.uv.mouse_ray.check_mouse_ray(x, y)
+            # self._clicked_on_item, self.mouse_ray_collision_point = self.uv.mouse_ray.check_mouse_ray(x, y)
 
     def _reset_mouse(self):
         """
@@ -225,8 +212,7 @@ class UV_Widget(QGLWidget):
             self.uv.target_sphere.batch_selected_items(selection)
         if self.uv.target_sphere.edge_drag.dragging:
             try:
-                self._clicked_on_item, self.clicked_on_item_pos = self.uv.mouse_ray.check_mouse_ray(self.mouse_x,
-                                                                                                    self.mouse_y)
+                self.get_mouse_pos()
                 # self.target_sphere.edge_dragging.dragging = False
                 self.uv.target_sphere.edge_drag.drag(None, False, None)
 
@@ -254,8 +240,8 @@ class UV_Widget(QGLWidget):
         """
 
         x, y = event.x(), event.y()
-        self.mouse_x = x
-        self.mouse_y = y
+        self.mouse_x, self.mouse_y = x, y
+        self.get_mouse_pos()
 
         if self.uv.target_sphere and self.uv.cam.distance_to_target < HOVER_MIN_DISTANCE:
             self.uv.target_sphere.check_for_hover(x, y)
@@ -263,18 +249,15 @@ class UV_Widget(QGLWidget):
         if self._left_mouse_button_down:
 
             if self._clicked_on_item and self.uv.target_sphere.selected_item:
-
-                sphere_id, mouse_ray_collision_point = self.uv.mouse_ray.check_mouse_ray(self.mouse_x, self.mouse_y)
-
-                if sphere_id:
-                    # dragging _selected items
-                    if self.uv.target_sphere.selected_item.type == "node":
-                        self.uv.target_sphere.drag_items(mouse_ray_collision_point)
-                    elif self.uv.target_sphere.selected_item.type == "socket":
-                        # drag edge from socket to the mouse_ray collision point
-                        start_socket = self.uv.target_sphere.selected_item
-                        self.uv.target_sphere.start_socket = start_socket
-                        self.uv.target_sphere.edge_drag.drag(start_socket, True, mouse_ray_collision_point=mouse_ray_collision_point)
+                # dragging _selected items
+                if self.uv.target_sphere.selected_item.type == "node":
+                    self.uv.target_sphere.drag_items(self.mouse_ray_collision_point)
+                elif self.uv.target_sphere.selected_item.type == "socket":
+                    # drag edge from socket to the mouse_ray collision point
+                    start_socket = self.uv.target_sphere.selected_item
+                    self.uv.target_sphere.start_socket = start_socket
+                    self.uv.target_sphere.edge_drag.drag(start_socket, True,
+                                                         mouse_ray_collision_point=self.mouse_ray_collision_point)
 
             elif self._clicked_on_item and self._clicked_on_item == self.uv.target_sphere.id:
 
@@ -410,6 +393,27 @@ class UV_Widget(QGLWidget):
         self.mouse_last_y = y_pos
 
         return x_offset, y_offset
+
+    def handle_context_menu(self, event: 'event'):
+        """
+        Handles context menu
+
+        :param event: Handles context menu
+        :type event: 'event
+
+        """
+        context_menu = QMenu(self)
+        create_person_node = context_menu.addAction("Person node")  # 1
+        create_item_node = context_menu.addAction("Item node")  # 2
+        create_entity_node = context_menu.addAction("Entity node")  # 3
+        action = context_menu.exec_(self.mapToGlobal(event.pos()))
+
+        if action == create_person_node:
+            self.uv.target_sphere.create_new_node(1, self.mouse_ray_collision_point)
+        elif action == create_item_node:
+            self.uv.target_sphere.create_new_node(2, self.mouse_ray_collision_point)
+        elif action == create_entity_node:
+            self.uv.target_sphere.create_new_node(1, self.mouse_ray_collision_point)
 
     def save_to_file(self, file_name: str):
         """

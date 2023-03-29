@@ -8,7 +8,7 @@ The position of the socket is always is always in the center of the node disc it
 
 from sphere_base.serializable import Serializable
 from sphere_base.sphere_universe_base.suv_graphic_socket import GraphicSocket
-from sphere_base.calc import UvCalc
+from sphere_base.calc import Calc
 from sphere_base.constants import *
 from collections import OrderedDict
 
@@ -62,7 +62,7 @@ class Socket(Serializable):
         self.circle = self.node.sphere.uv.models.get_model('circle')
 
         self.gr_socket = self.__class__.GraphicSocket_class(self.node)
-        self.calc = UvCalc()
+        self.calc = Calc()
 
         self._init_variables()
 

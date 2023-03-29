@@ -9,7 +9,7 @@ from sphere_base.utils import dump_exception
 import math
 
 
-class UvCalc:
+class Calc:
     """
     contains calculation for putting items on a sphere. These calculations are used
     by nodes, sockets and edges.
@@ -81,10 +81,10 @@ class UvCalc:
         return Vector4(xyzw).xyz
 
     @staticmethod
-    def find_angle_from_world_pos(abs_pos, orientation_offset) -> 'quaternion':
+    def find_angle_from_world_pos(collision_point, sphere_orientation_offset) -> 'quaternion':
         """
-        given the xyz collision point of the mouse_ray with the target sphere, calculate the angle from a starting
-        point on the surface of the sphere.
+        given the xyz collision point of the mouse_ray with the surface of target sphere,
+        calculate the angle from a starting point on the surface of the sphere.
 
         Find the center and the radius of the sphere. Then the offset of the sphere rotation with the
         zero rotation in angles.
@@ -98,10 +98,10 @@ class UvCalc:
                 # αx = arctan2(z2, y2).
         """
 
-        if abs_pos:
+        if collision_point:
             try:
                 P1 = [1, 0, 0]
-                P2 = abs_pos  # The position of the point in world space
+                P2 = collision_point  # The position of the point in world space
 
                 x1, x2 = P1[0], P2[0]
                 y1, y2 = P1[1], P2[1]
@@ -122,12 +122,13 @@ class UvCalc:
                 pitch_q = quaternion.create_from_eulers([0.0, pitch_rad, 0.0])
 
                 # first apply the vertical offset to the current sphere orientation, to avoid gimbal lock
-                orientation_with_yaw = quaternion.cross(yaw_q, orientation_offset)
+                orientation_with_yaw = quaternion.cross(yaw_q, sphere_orientation_offset)
 
                 # then apply the pitch movement over the equator
                 pos_orientation_offset = quaternion.cross(orientation_with_yaw, pitch_q)
 
                 return pos_orientation_offset
+
             except Exception as e:
                 dump_exception(e)
 

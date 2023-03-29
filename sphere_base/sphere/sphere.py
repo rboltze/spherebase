@@ -17,7 +17,7 @@ from sphere_base.sphere_universe_base.suv_surface_edge import SphereSurfaceEdge
 from sphere_base.history import History
 from pyrr import quaternion
 from math import pi
-from sphere_base.calc import UvCalc
+from sphere_base.calc import Calc
 import numpy as np
 import pyperclip
 import json
@@ -34,7 +34,7 @@ class Sphere(Serializable):
 
     Node_class = SphereNode
     Edge_class = SphereSurfaceEdge
-    Calc_class = UvCalc
+    Calc_class = Calc
     Edge_drag_class = EdgeDrag
     History_class = History
 
@@ -79,10 +79,29 @@ class Sphere(Serializable):
         self.texture_id = texture_id
         self.config = universe.config
 
-        self._init_flags()
-        self._init_variables()
-        self._init_listeners()
+        self._has_been_modified = False
+        self._dragging = False
+        self.selected = False
 
+        self.scale = None
+        self.index = 0
+        self.radius = 1.0
+        self.color = [1, 1, 1, 1]
+        self.orientation = quaternion.create_from_eulers([0.0, 0.0, 0.0])
+        self.start_socket = None
+        self._hovered_item = None
+        self.animation = 0  # rotation speed
+        self.node_class_selector = None
+
+        self.selected_item = None
+        self.items = []
+        self.items_selected = []
+        self.items_deselected = []
+        self._selection_changed_listeners = []
+        self._items_deselected_listeners = []
+        self._has_been_modified_listeners = []
+
+        self.model = None
         self.get_model()
 
         # instance attributes
@@ -104,31 +123,6 @@ class Sphere(Serializable):
         # add the sphere_base to the universe
         self.uv.add_sphere(self)
         self.history.store_initial_history_stamp()
-
-    def _init_variables(self):
-        self.scale = None
-        self.index = 0
-        self.radius = 1.0
-        self.color = [1, 1, 1, 1]
-        self.orientation = quaternion.create_from_eulers([0.0, 0.0, 0.0])
-        self.start_socket = None
-        self._hovered_item = None
-        self.animation = 0  # rotation speed
-
-        self.selected_item = None
-        self.items = []
-        self.items_selected = []
-        self.items_deselected = []
-
-    def _init_listeners(self):
-        self._selection_changed_listeners = []
-        self._items_deselected_listeners = []
-        self._has_been_modified_listeners = []
-
-    def _init_flags(self):
-        self._has_been_modified = False
-        self._dragging = False
-        self.selected = False
 
     def get_model(self):
         # likely to be overridden
@@ -201,10 +195,6 @@ class Sphere(Serializable):
 
         :param node_type: can be ``person`` or ``item``
         :type node_type: ``string``
-        :param mouse_x: x position of the mouse
-        :type mouse_x: ``float``
-        :param mouse_y: y position of the mouse
-        :type mouse_y: ``float``
         :return: :class:`~sphere_iot.uv_node.SphereNode`
         :param abs_pos: position in space
         :type abs_pos:
@@ -285,7 +275,8 @@ class Sphere(Serializable):
         return edges
 
     def add_item(self, item: 'Node or Edge or Socket'):
-        """Add :class:`~sphere_iot.uv_node.SphereNode` or :class:`~sphere_iot.uv_edge.SphereSurfaceEdge` to the `Sphere`.
+        """Add :class:`~sphere_iot.uv_node.SphereNode` or :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
+        to the `Sphere`.
 
         :param item: Node or Edge
         :type item: :class:`~sphere_iot.uv_node.SphereNode` or :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
@@ -432,7 +423,7 @@ class Sphere(Serializable):
 
         one_percent_width = self.uv.view.view_width / 100
         one_percent_height = self.uv.view.view_height / 100
-        print(0.7 * one_percent_width, 1.0 * one_percent_height)
+        # print(0.7 * one_percent_width, 1.0 * one_percent_height)
 
         mouse_pitch = (pi / 180) * (-(mouse_x - (self.uv.view.view_width / 2)) / (one_percent_width * 0.7))
         mouse_roll = (pi / 180) * ((mouse_y - (self.uv.view.view_height / 2)) / (one_percent_height * 1.0))
@@ -464,7 +455,7 @@ class Sphere(Serializable):
         # return orientation quaternion
         return orientation
 
-    def drag_items(self, mouse_ray_collision_point=None ):
+    def drag_items(self, mouse_ray_collision_point=None):
         """
         Dragging all _selected items. The offset is the difference between the current and last stored location
         of the mouse pointer on the screen.
@@ -608,7 +599,9 @@ class Sphere(Serializable):
     def edit_paste(self):
         """
         Paste _selected sphere_base items from clipboard to the target sphere_base
+        check that the mouse pointer is above the sphere and get the position of the mouse_ray collision point.
         """
+
         raw_data = pyperclip.paste()
 
         try:

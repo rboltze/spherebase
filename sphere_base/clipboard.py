@@ -9,6 +9,8 @@ from collections import OrderedDict
 from pyrr import quaternion, Quaternion
 from sphere_base.sphere_universe_base.suv_surface_edge import SphereSurfaceEdge
 from sphere_base.utils import dump_exception
+from sphere_base.calc import Calc
+import numpy as np
 
 DEBUG = False
 
@@ -29,9 +31,11 @@ class Clipboard:
 
         self.uv = universe
 
+
     def serialize_selected(self, delete: bool = False) -> 'OrderedDict':
         """
-        Copy to clipboard
+
+        Copy to clipboard, take the selection and serialize it.
 
         :param delete: when ``cutting`` the _selected items
         :type delete: ``bool``
@@ -39,7 +43,8 @@ class Clipboard:
 
         """
 
-        if DEBUG: print("-- COPY TO CLIPBOARD ---")
+        if DEBUG:
+            print("-- COPY TO CLIPBOARD ---")
 
         selected_nodes, selected_sockets_ids, selected_edges = [], [], []
 
@@ -59,14 +64,15 @@ class Clipboard:
         # remove all edges in the list that are not connected on both sides with _selected nodes
         edges_to_remove = []
         for edge in selected_edges:
-             if edge.start_socket.id in selected_sockets_ids and edge.end_socket.id in selected_sockets_ids:
-                 if DEBUG:
-                     print(" edge is ok, connected at both sides with _selected nodes")
-                 pass
-             else:
+            if edge.start_socket.id in selected_sockets_ids and edge.end_socket.id in selected_sockets_ids:
+                if DEBUG:
+                    print(" edge is ok, connected at both sides with _selected nodes")
+                pass
+            else:
                 if DEBUG:
                     print("edge", edge, "is not connected on both sides with _selected nodes")
                 edges_to_remove.append(edge)
+
         for edge in edges_to_remove:
             selected_edges.remove(edge)
 
@@ -98,63 +104,73 @@ class Clipboard:
         :type data: ``OrderedDict``
         :return: list with nodes
 
-        .. warning::
+        when there is one node to be pasted the location is at the mouse_ray_collision_point.
+        When there are multiple objects they will be pasted around a mouse ray collision point.
 
-            Pasting a group of sphere_base nodes does locate the nodes in the expected position. The nodes are pasted
-            inverse of what is expected. The top node is pasted at the bottom and the bottom node is pasted at the top.
-
-            Also the connected edges are not copied and pasted.
-
-            This needs to be looked into in a future iteration.
+        The edges need to be connected to the new sockets. We need to first map the old sockets with the new ones.
 
         """
+        if DEBUG:
+            print("-- PASTE FROM CLIPBOARD ---")
 
         try:
             hashmap = {}
-
-            # # create each node
             created_nodes = []
-
             length = len(data['nodes'])
 
+            sphere_id, cp, mouse_x, mouse_y = self.uv.get_mouse_pos()
+            orientation = Calc.find_angle_from_world_pos(cp, self.uv.target_sphere.orientation)
+
+            if DEBUG:
+                print("     mouse_ray_collision point - xyz:\n     ", cp)
+                print("     pos_orientation_offset - quaternion:\n        ", orientation)
+
+            # Find the middle between the nodes
+            middle, first_node = None, None
             for i, node_data in enumerate(data['nodes']):
                 q = Quaternion(node_data['orientation_offset'])
-
                 if i == 0:
-                    a = q
+                    first_node = q
                     middle = q
                 else:
-                    middle = quaternion.slerp(a, q, .5)
+                    middle = quaternion.slerp(first_node, q, .5)
 
+            sockets_map = {}
             for i, node_data in enumerate(data['nodes']):
-
                 new_node = self.uv.target_sphere.get_node_class_from_data(node_data)(self.uv.target_sphere)
                 new_node.deserialize(node_data, hashmap, restore_id=False)
                 created_nodes.append(new_node)
-
                 new_node.on_selected_event(True)
+
+                # create a map linking each old socket with the newly created ones
+                sockets_map[node_data['socket_id']] = new_node.socket.id
+
                 self.uv.target_sphere.select_item(new_node, False if i == 0 else True)
 
-                diff = quaternion.cross(quaternion.inverse(new_node.pos_orientation_offset), middle)
+                # find the distance between the original node position and the mouse_ray_collision point
+                diff = quaternion.cross(middle, new_node.pos_orientation_offset)
 
                 if length == 1:
-                    new_center = self.uv.target_sphere.calc_mouse_position_in_angles2(self.uv.mouse_x, self.uv.mouse_y)
-                    new_node.pos_orientation_offset = new_center
+                    new_node.pos_orientation_offset = orientation
                     new_node.update_position()
                 else:
-                    new_center = self.uv.target_sphere.calc_mouse_position_in_angles2(self.uv.mouse_x, self.uv.mouse_y)
+                    new_center = orientation
+                    # apply the offset with the mouse_ray_collision point
                     new_node.pos_orientation_offset = quaternion.cross(new_center, diff)
                     new_node.update_position()
 
             # create each edge
             if 'edges' in data:
                 for edge_data in data['edges']:
+                    # find the old id matching the new id in the sockets map
+                    edge_data['start_socket_id'] = sockets_map[edge_data['start_socket_id']]
+                    edge_data['end_socket_id'] = sockets_map[edge_data['end_socket_id']]
                     new_edge = SphereSurfaceEdge(self.uv.target_sphere)
+
                     new_edge.deserialize(edge_data, hashmap, restore_id=False)
 
             # store history
-            self.uv.target_sphere.history.store_history("Pasted elements in scene", set_modified=True)
-
+            self.uv.target_sphere.history.store_history("Pasted elements on globe", set_modified=True)
             return created_nodes
 
         except Exception as e:

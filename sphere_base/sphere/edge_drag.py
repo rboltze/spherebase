@@ -69,7 +69,7 @@ class EdgeDrag:
         self.pos_array = []
 
         self.gr_edge = self.__class__.GraphicsEdge_class(self)
-        self.calc = UvCalc()
+        self.calc = Calc()
 
     def _init_start_dragging(self, start_socket: 'Socket'):
         # dragging start point is the start socket

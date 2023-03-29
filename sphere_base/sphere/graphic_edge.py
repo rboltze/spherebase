@@ -6,7 +6,7 @@ Module Graphic Edge. The graphics edge is used with edges.
 """
 
 from pyrr import quaternion
-from sphere_base.calc import UvCalc
+from sphere_base.calc import Calc
 
 
 class GraphicEdge:
@@ -14,7 +14,7 @@ class GraphicEdge:
     Base class for Graphics Edge
     """
 
-    calc_class = UvCalc
+    calc_class = Calc
 
     def __init__(self, parent=None):
         """

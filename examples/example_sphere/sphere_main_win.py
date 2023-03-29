@@ -19,6 +19,7 @@ class MainWindow(QMainWindow):
 
         self.name_company = 'rboltze'
         self.name_product = 'sphere_base'
+        self.version = '0.0.4 Alfa'
 
         self.filename = None
         self._set_win_properties()
@@ -66,10 +67,13 @@ class MainWindow(QMainWindow):
         return name + ("*" if self.sphere_widget.has_been_modified() else "")
 
     def on_about(self):
-        QMessageBox.about(self, "About  Sphere Base",
-                          "The <b>Sphere Baser</b> is a Python program to visualize a sphere and connected "
-                          "nodes on its surface. Written by: Richard Boltze, "
-                          "email: rboltze@protonmail.com</a>")
+        msg = QMessageBox()
+        msg.setWindowTitle("About Sphere Base")
+        msg.setIcon(QMessageBox.Information)
+        msg.setText("<b>Sphere Base</b> is a Python program to visualize a sphere with a number of connected nodes "
+                    "on its surface. Written by: Richard Boltze, email: <a>rboltze@protonmail.com")
+        msg.setInformativeText("version: " + self.version)
+        msg.exec_()
 
     def closeEvent(self, event):
         """

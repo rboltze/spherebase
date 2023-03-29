@@ -76,8 +76,14 @@ class SphereNode(Serializable):
         self.Socket = self.__class__.Socket_class  # initiate later
 
         self._init_inner_classes()
-        self._init_variables()
-        self._init_flags()
+        self.scale = self.gr_node.scale
+        self.texture_id = self.gr_node.default_img_id
+        self.orientation = None
+        self.offset_with_collision_point = None  # difference center node with collision point
+        self.mouse_ray_collision_point = None
+        self.grNode = None
+        self.serialized_detail_scene = None
+        self._node_moved = False
 
         self.collision_object_radius = NODE_DISC_RADIUS
 
@@ -101,18 +107,6 @@ class SphereNode(Serializable):
 
         self.sphere.add_item(self)
         self.sphere.add_item(self.socket)
-
-    def _init_variables(self):
-        self.scale = self.gr_node.scale
-        self.texture_id = self.gr_node.default_img_id
-        self.orientation = None
-        self.offset_with_collision_point = None  # difference center node with collision point
-        self.mouse_ray_collision_point = None
-
-        self.serialized_detail_scene = None
-
-    def _init_flags(self):
-        self._node_moved = False
 
     def _init_inner_classes(self):
         """
@@ -168,33 +162,37 @@ class SphereNode(Serializable):
         """
         Dragging the node_disc over the surface of the sphere_base
 
+        The difference between the mouse_ray collision point and the center of the disc is stored at the start of
+        the dragging. This difference is applied during the dragging and makes sure that the distance between the
+        collision point and the disc remains the same. This is very important when dragging groups of objects. Not
+        using this would mean that all objects would collect under the mouse pointer.
+
         :param mouse_ray_collision_point: collision point of the mouse_ray with the target sphere
         :type mouse_ray_collision_point: ``float``
 
         """
+
         try:
             q = quaternion
-
-            collision_point = self.calc.find_angle_from_world_pos(mouse_ray_collision_point,
-                                                                               self.sphere.orientation)
+            cp = self.calc.find_angle_from_world_pos(mouse_ray_collision_point, self.sphere.orientation)
 
             if self.offset_with_collision_point is None:
-                # starting dragging registering the offset between the mouse_ray collision point and the
-                # center of the node
-                 self.offset_with_collision_point = q.cross(self.pos_orientation_offset, q.inverse(collision_point))
+                # store offset between mouse_ray collision point and the center of the node at the start of dragging
+                self.offset_with_collision_point = q.cross(self.pos_orientation_offset, q.inverse(cp))
 
             # The position of the mouse_ray collision point in angles (Quaternion)
             self.pos_orientation_offset = self.calc.find_angle_from_world_pos(mouse_ray_collision_point,
                                                                               self.sphere.orientation)
 
-            # correct the position of the node with the stored difference between the
-            # collision point and the center of the node as stored at the start of the dragging action.
+            # correct the position of the node with the difference stored
             self.pos_orientation_offset = q.cross(self.offset_with_collision_point, self.pos_orientation_offset)
 
         except Exception as e:
             dump_exception(e)
 
         self.update_position()
+
+        return self.pos_orientation_offset
 
     def update_position(self):
         """
@@ -287,7 +285,7 @@ class SphereNode(Serializable):
 
     def deserialize(self, data: dict, hashmap: dict = {}, restore_id: bool = True) -> bool:
         """
-        copy, cut paste also uses this. When pasting rtore id is false and new id's are created.
+        copy, cut paste also uses this. When pasting restore_id is false and new id's are created.
         """
         if restore_id:
             self.id = data['id']
