@@ -40,6 +40,7 @@ class Mesh:
 
         self.vertices = np.array(vertices, dtype=np.float32)  # vertex coordinates
         self.indices = np.array(indices, dtype='uint32')
+        self.indices_len = len(self.indices)
         self.buffer = np.array(buffer, dtype=np.float32)
 
     def draw(self, shader: 'Shader', model_id: int, position: 'Vector3', orientation: 'Quaternion', scale: list = None,
@@ -71,7 +72,6 @@ class Mesh:
                          object_type=self.model.type,
                          mesh_index=self.mesh_id,
                          indices=self.indices,
-                         vertices=self.vertices,
                          position=position,
                          orientation=orientation,
                          scale=scale,
