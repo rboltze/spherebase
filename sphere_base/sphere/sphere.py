@@ -11,9 +11,9 @@ from random import *
 from sphere_base.serializable import Serializable
 from sphere_base.utils import dump_exception
 from collections import OrderedDict
-from sphere_base.sphere_universe_base.suv_node import SphereNode
+from sphere_base.node.sphere_node import SphereNode
 from sphere_base.sphere.edge_drag import EdgeDrag
-from sphere_base.sphere_universe_base.suv_surface_edge import SphereSurfaceEdge
+from sphere_base.edge.surface_edge import SurfaceEdge
 from sphere_base.history import History
 from pyrr import quaternion
 from math import pi
@@ -33,7 +33,7 @@ class Sphere(Serializable):
     """
 
     Node_class = SphereNode
-    Edge_class = SphereSurfaceEdge
+    Edge_class = SurfaceEdge
     Calc_class = Calc
     Edge_drag_class = EdgeDrag
     History_class = History

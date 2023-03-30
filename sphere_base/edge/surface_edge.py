@@ -15,7 +15,7 @@ from collections import OrderedDict
 DEBUG = False
 
 
-class SphereSurfaceEdge(Serializable):
+class SurfaceEdge(Serializable):
     """
     Class representing an ``Edge`` on a ``Sphere``. ``Edges`` are drawn between ``Sphere Sockets``.
 
@@ -56,7 +56,7 @@ class SphereSurfaceEdge(Serializable):
         .. note::
 
             There is no difference between start and end socket. It is not relevant in the current deployment. In
-            future iterations this is likely to change as the direction of the edge may become significant.
+            future iterations this is likely to change as the direction of the edge may have significant.
 
         """
 
@@ -64,11 +64,10 @@ class SphereSurfaceEdge(Serializable):
         self.sphere = target_sphere
         self.calc = self.sphere.calc
 
-        self._start_socket = None
-        self._end_socket = None
-
+        self._start_socket, self._end_socket = None, None
         self.start_socket = socket_start if socket_start else None
         self.end_socket = socket_end if socket_end else None
+
         self.gr_edge = self.__class__.GraphicsEdge_class(self)
         self.uv = self.sphere.uv
         self.shader = self.sphere.shader
@@ -226,7 +225,7 @@ class SphereSurfaceEdge(Serializable):
         """
         Renders the edge.
         """
-        # TODO, in some cases color turns to none. The reason is not known. The following line patches this problem
+        # in some cases color turns to none. The reason is not known. The following line patches this problem
         self.color = [0.0, 0.0, 0.0, 0.5] if not self.color else self.color
         self.shader.draw_edge(self.pos_array, width=1.5, color=self.color, dotted=False)
 

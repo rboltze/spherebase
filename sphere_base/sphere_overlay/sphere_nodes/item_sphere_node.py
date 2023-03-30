@@ -2,7 +2,7 @@
 
 
 from sphere_base.sphere_overlay.sov_sphere_node_base import SphereNodeBase
-from sphere_base.sphere_universe_base.suv_graphic_node import GraphicNode
+from sphere_base.node.graphic_node import GraphicNode
 from sphere_base.sphere_overlay.sov_conf import *
 
 # GENDER = ["Male", "Female", "LGBT"]

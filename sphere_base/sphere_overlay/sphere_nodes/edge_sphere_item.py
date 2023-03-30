@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from sphere_base.sphere_overlay.sov_sphere_node_base import SphereNodeBase
-from sphere_base.sphere_universe_base.suv_surface_edge import SphereSurfaceEdge
+from sphere_base.edge.surface_edge import SurfaceEdge
 from sphere_base.sphere_overlay.sov_conf import *
 
 @register_node(OP_SPHERE_EDGE, SPHERE_NODE_EDITOR)
-class SphereEdge(SphereSurfaceEdge):
+class SphereEdge(SurfaceEdge):
     op_code = OP_SPHERE_EDGE
     op_title = "EdgeNode"
 

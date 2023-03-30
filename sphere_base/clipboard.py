@@ -7,7 +7,7 @@ Clipboard module. Contains the clipboard class.
 
 from collections import OrderedDict
 from pyrr import quaternion, Quaternion
-from sphere_base.sphere_universe_base.suv_surface_edge import SphereSurfaceEdge
+from sphere_base.edge.surface_edge import SurfaceEdge
 from sphere_base.utils import dump_exception
 from sphere_base.calc import Calc
 
@@ -163,7 +163,7 @@ class Clipboard:
                     # find the old id matching the new id in the sockets map
                     edge_data['start_socket_id'] = sockets_map[edge_data['start_socket_id']]
                     edge_data['end_socket_id'] = sockets_map[edge_data['end_socket_id']]
-                    new_edge = SphereSurfaceEdge(self.uv.target_sphere)
+                    new_edge = SurfaceEdge(self.uv.target_sphere)
 
                     new_edge.deserialize(edge_data, hashmap, restore_id=False)
 

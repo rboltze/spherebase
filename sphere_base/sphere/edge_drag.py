@@ -6,7 +6,7 @@ Edge_drag module. contains the EdgeDraw class which is responsible for drawing a
 """
 
 from pyrr import quaternion
-from sphere_base.sphere_universe_base.suv_socket import *
+from sphere_base.node.socket import *
 from sphere_base.sphere.graphic_edge import GraphicEdge
 from sphere_base.shader.uv_sphere_shader import SphereShader
 

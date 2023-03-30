@@ -6,7 +6,7 @@ Module Graphic Disc. The graphics disc class is used in all nodes and sockets.
 """
 
 
-class EditorGraphicDisc:
+class GraphicDisc:
     def __init__(self, node: 'SphereNode'):
         """
         Constructor of the ``Editor Graphic Disc`` class. Contains graphic elements.
@@ -30,17 +30,27 @@ class EditorGraphicDisc:
         """
 
         self.node = node
-        self._init_flags()
-        self._init_variables()
-        self.init_assets()
-
-    def _init_flags(self):
         self._hover = False
         self._selected = False
-
-    def _init_variables(self):
         self.current_img_id = None
         self.last_img_id = None
+        self.default_img_id, self.selected_img_id, self.hover_img_id = None, None, None
+        self.current_img_id, self.last_img_id = None, None
+
+        self.scale, self.circle_scale, self.default_img_id, self.selected_img_id = None, None, None, None
+        self.hover_img_id, self.main_image_color, self.default_background_color = None, None, None
+
+        self.selected_background_color, self.hover_background_color, self.default_border_color = None, None, None
+        self.selected_border_color, self.hover_border_color, self.default_border_width = None, None, None
+        self.selected_border_width, self.hover_border_width = None, None
+
+        self.current_img_id = self.default_img_id
+        self.current_background_color = self.default_background_color
+        self.current_border_color = self.default_border_color
+        self.current_border_width = self.default_border_width
+
+        self.last_img_id = self.default_img_id
+        self.init_assets()
 
     def _init_unified_icons(self, img_id: int) -> int:
         """

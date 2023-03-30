@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-from sphere_base.sphere_universe_base.suv_node import SphereNode
-from sphere_base.sphere_universe_base.suv_graphic_node import GraphicNode
+from sphere_base.node.sphere_node import SphereNode
+from sphere_base.node.graphic_node import GraphicNode
 from sphere_base.sphere_overlay.sov_conf import *
 
 

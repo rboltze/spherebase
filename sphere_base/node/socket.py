@@ -7,7 +7,7 @@ The position of the socket is always is always in the center of the node disc it
 
 
 from sphere_base.serializable import Serializable
-from sphere_base.sphere_universe_base.suv_graphic_socket import GraphicSocket
+from sphere_base.node.graphic_socket import GraphicSocket
 from sphere_base.calc import Calc
 from sphere_base.constants import *
 from collections import OrderedDict

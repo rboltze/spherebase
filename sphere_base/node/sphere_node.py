@@ -7,10 +7,9 @@ Module Node. A node is the basis for all nodes. Further nodes are derived from S
 from pyrr import quaternion
 from sphere_base.serializable import Serializable
 from collections import OrderedDict
-from sphere_base.sphere_universe_base.suv_graphic_node import GraphicNode
-from sphere_base.sphere_universe_base.suv_socket import Socket
+from sphere_base.node.graphic_node import GraphicNode
+from sphere_base.node.socket import Socket
 from sphere_base.constants import *
-# from sphere_iot.uv_calc import UvCalc
 from sphere_base.utils import dump_exception
 import numpy as np
 
