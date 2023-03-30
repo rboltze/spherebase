@@ -5,7 +5,7 @@ DEBUG = False
 
 """
 Handwritten .obj file loader. The main PyAssimp file loader could not be installed on MAC.
-This file loader is based on code from an OpenGl you tube course (ES
+This replacement file loader is based on code from an OpenGl you tube course (ES
 OpenGL in python e15 - loading 3D .obj files) and only works with .obj wavefront files and glDrawArrays.
 
 The code has been modified as there was several errors related to the indices.
@@ -25,13 +25,12 @@ class ObjectFileLoader:
         self.index = 0
 
     def get_meshes(self, file_name):
-        # Creates
+        # Creates:
         indices = []  # The number of all_indices
         vert = []  # vertex coordinates
         tex = []  # texture coordinates
         norm = []  # vertex normals
         all_indices = []  # indices for indexed drawing
-        test = []
 
         try:
             with open(file_name, 'r') as f:
@@ -99,8 +98,9 @@ class ObjectFileLoader:
 
     @staticmethod
     def non_blank_lines(f):
-        for l in f:
-            line = l.rstrip()
+        # removes blank lines
+        for line in f:
+            line = line.rstrip()
             if line:
                 yield line
 
@@ -151,11 +151,12 @@ class ObjectFileLoader:
                   0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0.]
         return vert, ind, buffer
 
-    def load_node_disc(self):
+    @staticmethod
+    def load_node_disc():
         # a manual way to load object node_disc
         vert = [
-            -0.003901779,-0.0196157, 0.0, 0.0196157, -0.003901779, 0.0, 0.00390172, 0.0196157, 0.0, 0.00390172,
-            0.0196157,0.0, 0.0, 0.01999998, 0.0, -0.003901779, 0.0196157, 0.0, -0.003901779, 0.0196157, 0.0,
+            -0.003901779, -0.0196157, 0.0, 0.0196157, -0.003901779, 0.0, 0.00390172, 0.0196157, 0.0, 0.00390172,
+            0.0196157, 0.0, 0.0, 0.01999998, 0.0, -0.003901779, 0.0196157, 0.0, -0.003901779, 0.0196157, 0.0,
             -0.007653653, 0.01847755, 0.0, 0.00390172, 0.0196157, 0.0, -0.007653653, 0.01847755, 0.0, -0.01111137,
             0.01662939, 0.0, 0.00390172, 0.0196157, 0.0, -0.01111137, 0.01662939, 0.0, -0.01414209, 0.01414209,
             0.0, -0.01662939, 0.01111137, 0.0, -0.01662939, 0.01111137, 0.0, -0.01847755, 0.007653653, 0.0,
@@ -163,7 +164,7 @@ class ObjectFileLoader:
             0.01662939, 0.0, -0.0196157, 0.003901779, 0.0, -0.01999998, 0.0, 0.0, -0.0196157, -0.003901779,
             0.0, -0.0196157, -0.003901779, 0.0, -0.01847755, -0.007653653, 0.0, -0.0196157, 0.003901779, 0.0,
             -0.01847755, -0.007653653, 0.0, -0.01662939, -0.01111137, 0.0, -0.0196157, 0.003901779, 0.0, -0.01662939,
-            -0.01111137, 0.0, -0.01414209, -0.01414209, 0.0, -0.01111137, -0.01662939, 0.0, -0.01111137,-0.01662939,
+            -0.01111137, 0.0, -0.01414209, -0.01414209, 0.0, -0.01111137, -0.01662939, 0.0, -0.01111137, -0.01662939,
             0.0, -0.007653653, -0.01847755, 0.0, -0.003901779, -0.0196157, 0.0, -0.003901779, -0.0196157, 0.0,
             0.0, -0.01999998, 0.0, 0.003901779, -0.0196157, 0.0, 0.003901779, -0.0196157, 0.0, 0.007653653,
             -0.01847755, 0.0, -0.003901779, -0.0196157, 0.0, 0.007653653, -0.01847755, 0.0, 0.01111137, -0.01662933,

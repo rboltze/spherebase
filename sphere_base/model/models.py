@@ -112,9 +112,6 @@ class Models:
         Gets all the images and textures in the config dictionary. Retrieves image file location and
         loads them into OpenGl
 
-        :param textures: list of textures
-        :type textures: list of ``named tuples``
-
         """
 
         self.config.textures = glGenTextures(len(self.uv.config.all_textures))

@@ -5,7 +5,7 @@ Default shader. This module contains the Default shader class.
 
 """
 
-from sphere_base.shader.uv_base_shader import BaseShader
+from sphere_base.shader.base_shader import BaseShader
 
 DEBUG = False
 

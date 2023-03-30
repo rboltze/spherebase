@@ -9,7 +9,7 @@ the circle shader uses an OpenGL geometry shader to draw circles around node dis
 
 from OpenGL.GL import *
 from OpenGL.GLU import *
-from sphere_base.shader.uv_base_shader import BaseShader
+from sphere_base.shader.base_shader import BaseShader
 from pyrr import matrix44
 
 

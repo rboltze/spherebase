@@ -42,7 +42,6 @@ class Mesh:
         self.indices = np.array(indices, dtype='uint32')
         self.buffer = np.array(buffer, dtype=np.float32)
 
-
     def draw(self, shader: 'Shader', model_id: int, position: 'Vector3', orientation: 'Quaternion', scale: list = None,
              texture_id: int = 0, color: list = None, switch: int = 0):
         """
@@ -60,8 +59,6 @@ class Mesh:
         :type scale: ``Vector3`` scale of the Mesh
         :param texture_id: The ``id`` of the texture to put on the ``Mesh``.
         :type texture_id: ``int``
-        :param texture_file: The ``texture file`` to put on the ``Mesh``.
-        :type texture_file: ``str``
         :param color: ``rbg array``
         :type color: ``Array``
         :param switch: Switch used in the shader to switch from one behaviour to another.

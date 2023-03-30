@@ -403,58 +403,6 @@ class Sphere(Serializable):
         self.orientation = quaternion.cross(self.orientation, rotation)
         self.update_item_positions()
 
-    def calc_mouse_position_in_angles(self, mouse_pos):
-        return self.calc.find_angle_from_world_pos(mouse_pos, self.orientation)
-
-    def calc_mouse_position_in_angles2(self, mouse_x: float, mouse_y: float) -> 'quaternion':
-        """
-        Calculates the angle of the mouse pointer with the center of the target sphere_base. It takes into account the
-        distance of the camera with the target sphere_base and the distance of the mouse from the center of the screen.
-
-        Todo: this is not a correct calculation and needs to be revised. The new calculation needs to find the point
-              where the mouse_ray hits the sphere. And this pint needs to be calculated in angles.
-
-        :param mouse_x: x-position of the mouse pointer
-        :type mouse_x: ``float``
-        :param mouse_y: y-position of the mouse pointer
-        :type mouse_y: ``float``
-        :return: orientation quaternion
-        """
-
-        one_percent_width = self.uv.view.view_width / 100
-        one_percent_height = self.uv.view.view_height / 100
-        # print(0.7 * one_percent_width, 1.0 * one_percent_height)
-
-        mouse_pitch = (pi / 180) * (-(mouse_x - (self.uv.view.view_width / 2)) / (one_percent_width * 0.7))
-        mouse_roll = (pi / 180) * ((mouse_y - (self.uv.view.view_height / 2)) / (one_percent_height * 1.0))
-
-        # mouse pointer offset quaternions
-        mouse_pitch = quaternion.create_from_eulers([0.0, mouse_pitch, 0.0])
-        mouse_roll = quaternion.create_from_eulers([mouse_roll, 0.0, 0.0])
-
-        # camera direction in radians
-        pitch, roll = self.uv.cam.get_angles()
-        cam_roll = (pi / 180 * (90 - roll))
-        cam_pitch = (pi / 180 * (pitch + 90))
-        yaw = 0.0  # no yaw
-
-        # camera direction offset quaternions
-        camera_pitch = quaternion.create_from_eulers([0.0, cam_pitch, yaw])
-        camera_roll = quaternion.create_from_eulers([cam_roll, 0.0, yaw])
-
-        # vertical angles first
-        roll = quaternion.cross(mouse_roll, camera_roll)
-
-        # horizontal adjustment
-        pitch = quaternion.cross(mouse_pitch, camera_pitch)
-
-        # join all offsets
-        orientation = quaternion.cross(roll, pitch)
-        orientation = quaternion.cross(orientation, self.orientation)
-
-        # return orientation quaternion
-        return orientation
-
     def drag_items(self, mouse_ray_collision_point=None):
         """
         Dragging all _selected items. The offset is the difference between the current and last stored location

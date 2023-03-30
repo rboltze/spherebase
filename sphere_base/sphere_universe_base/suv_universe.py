@@ -15,7 +15,7 @@ from sphere_base.sphere_universe_base.suv_skybox import Skybox
 from sphere_base.sphere_universe_base.suv_rubber_band import RubberBand
 from sphere_base.clipboard import Clipboard
 from sphere_base.config import UvConfig
-from sphere_base.shader.uv_default_shader import DefaultShader
+from sphere_base.shader.default_shader import DefaultShader
 import os.path
 
 DEBUG = False

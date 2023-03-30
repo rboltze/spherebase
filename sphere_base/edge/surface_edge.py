@@ -27,8 +27,21 @@ class SurfaceEdge(Serializable):
 
         Currently all lines are drawn using OpenGL begin..end methods,
         instead of modern opengl methods with VBO, VBA.
-
         This needs to be corrected in a future iteration as 'apparently' this method is very slow.
+
+        How it should work:
+        The edge starts at the start socket and ends at the end socket. It takes the shortest distance over the
+        surface of the sphere.
+
+        All the variables needed are known:
+
+            - Start_socket angle with origin sphere
+            - end socket angle with origin sphere
+            - radius of the sphere
+
+            We then can decide how many points we need to plot between start and end based on the distance
+            over the sphere.
+
 
     """
     GraphicsEdge_class = GraphicEdge
@@ -221,14 +234,6 @@ class SurfaceEdge(Serializable):
         """
         self.color = self.gr_edge.on_hover_event(event)
 
-    def draw(self):
-        """
-        Renders the edge.
-        """
-        # in some cases color turns to none. The reason is not known. The following line patches this problem
-        self.color = [0.0, 0.0, 0.0, 0.5] if not self.color else self.color
-        self.shader.draw_edge(self.pos_array, width=1.5, color=self.color, dotted=False)
-
     def remove(self):
         """
         Removes the edge and the collision object
@@ -241,6 +246,14 @@ class SurfaceEdge(Serializable):
 
         if self.collision_object_id:
             self.sphere.uv.mouse_ray.delete_collision_object(self)
+
+    def draw(self):
+        """
+        Renders the edge.
+        """
+        # in some cases color turns to none. The reason is not known. The following line patches this problem
+        self.color = [0.0, 0.0, 0.0, 0.5] if not self.color else self.color
+        self.shader.draw_edge(self.pos_array, width=1.5, color=self.color, dotted=False)
 
     def serialize(self):
         return OrderedDict([

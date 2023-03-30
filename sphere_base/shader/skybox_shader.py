@@ -7,7 +7,7 @@
 
 from OpenGL.GL import *
 from pyrr import Vector3, matrix44
-from sphere_base.shader.uv_base_shader import BaseShader
+from sphere_base.shader.base_shader import BaseShader
 
 
 class SkyboxShader(BaseShader):

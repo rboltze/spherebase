@@ -1,15 +1,25 @@
 # -*- coding: utf-8 -*-
 
-"""
-- **model** - :class:`~sphere_iot.uv_models.Model`
-"""
-
+# Do not remove these!!!
+from sphere_base.shader.skybox_shader import SkyboxShader
+from sphere_base.shader.sphere_shader import SphereShader
+from sphere_base.shader.node_shader import NodeShader
+from sphere_base.shader.socket_shader import SocketShader
+from sphere_base.shader.flat_shader import FlatShader
+from sphere_base.shader.default_shader import DefaultShader
+from sphere_base.shader.circle_shader import CircleShader
+from sphere_base.shader.square_shader import SquareShader
+from sphere_base.shader.sphere_edge_shader import SphereEdgeShader
+from sphere_base.shader.cross_shader import CrossShader
+from sphere_base.shader.holo_sphere_shader import HoloSphereShader
+from sphere_base.shader.sphere_small_shader import SphereSmallShader
 from sphere_base.sphere_universe_base.suv_graphic_item import GraphicItem
 from sphere_base.model.mesh import Mesh
 from sphere_base.model.obj_file_loader import ObjectFileLoader
 import pathlib
 
 DEBUG = True
+
 
 class Model(GraphicItem):
     Mesh_class = Mesh
@@ -46,7 +56,7 @@ class Model(GraphicItem):
             - **models** - :class:`~sphere_iot.uv_models.Models`
             - **model_id** - ``int`` id of this ``Model``
             - **shader** - specific class inherited from :class:`~sphere_iot.shader.uv_base_shader.Shader`
-            - **model** - ``model`` loaded from ``Pyassimp``
+            - **model** - ``model`` loaded
 
         .. note::
 
@@ -126,16 +136,3 @@ class Model(GraphicItem):
 # from sphere_base.shader.uv_cross_shader import CrossShader
 # from sphere_base.shader.uv_holo_sphere_shader import HoloSphereShader
 # from sphere_base.shader.uv_sphere_small_shader import SphereSmallShader
-
-from sphere_base.shader.uv_skybox_shader import SkyboxShader
-from sphere_base.shader.uv_sphere_shader import SphereShader
-from sphere_base.shader.uv_node_shader import NodeShader
-from sphere_base.shader.uv_socket_shader import SocketShader
-from sphere_base.shader.uv_flat_shader import FlatShader
-from sphere_base.shader.uv_default_shader import DefaultShader
-from sphere_base.shader.uv_circle_shader import CircleShader
-from sphere_base.shader.uv_square_shader import SquareShader
-from sphere_base.shader.uv_sphere_edge_shader import SphereEdgeShader
-from sphere_base.shader.uv_cross_shader import CrossShader
-from sphere_base.shader.uv_holo_sphere_shader import HoloSphereShader
-from sphere_base.shader.uv_sphere_small_shader import SphereSmallShader

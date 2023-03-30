@@ -63,6 +63,8 @@ class BaseShader:
         self.a_color = []
         self.light_id = None
 
+        self.projection_matrix = None
+
     def _init_locations(self):
         """
         can be partially or completely overridden.
