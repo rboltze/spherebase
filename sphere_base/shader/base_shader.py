@@ -203,7 +203,7 @@ class BaseShader:
 
         return matrix44.create_from_scale(scale)
 
-    def draw(self, object_index: int = 0, object_type: str = "", mesh_index: int = 0, indices_len=0, indices: list = None,
+    def draw(self, object_index: int = 0, object_type: str = "", mesh_index: int = 0, indices_len=0,
              position: 'Vector3' = None, orientation: 'Quaternion' = None,
              scale: 'Vector3' = None, texture_id: int = 0, color: 'Vector4' = None,
              switch: int = 0, ):

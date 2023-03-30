@@ -44,7 +44,7 @@ class SkyboxShader(BaseShader):
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE)
 
-    def draw(self, object_index=0, object_type="", mesh_index=0, indices_len=0, indices=None,
+    def draw(self, object_index=0, object_type="", mesh_index=0, indices_len=0,
              position=None, orientation=None, scale=None, texture_id=0,
              color=None, switch=0):
 
@@ -57,7 +57,7 @@ class SkyboxShader(BaseShader):
         glUniformMatrix4fv(self.model_loc, 1, GL_FALSE, obj_pos)
 
         glDepthMask(GL_FALSE)
-        glDrawElements(GL_TRIANGLES, len(indices) * 3, GL_UNSIGNED_INT, ctypes.c_void_p(0))
+        glDrawElements(GL_TRIANGLES, indices_len * 3, GL_UNSIGNED_INT, ctypes.c_void_p(0))
 
         # clean up code
         glDepthMask(GL_TRUE)
