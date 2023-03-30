@@ -10,7 +10,6 @@ from pyrr import quaternion, Quaternion
 from sphere_base.sphere_universe_base.suv_surface_edge import SphereSurfaceEdge
 from sphere_base.utils import dump_exception
 from sphere_base.calc import Calc
-import numpy as np
 
 DEBUG = False
 
@@ -30,7 +29,6 @@ class Clipboard:
         """
 
         self.uv = universe
-
 
     def serialize_selected(self, delete: bool = False) -> 'OrderedDict':
         """
@@ -175,9 +173,3 @@ class Clipboard:
 
         except Exception as e:
             dump_exception(e)
-
-
-
-
-
-

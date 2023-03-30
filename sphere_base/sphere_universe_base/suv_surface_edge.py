@@ -70,14 +70,6 @@ class SphereSurfaceEdge(Serializable):
         self.start_socket = socket_start if socket_start else None
         self.end_socket = socket_end if socket_end else None
         self.gr_edge = self.__class__.GraphicsEdge_class(self)
-        self._init_variables()
-        self._init_flags()
-
-        # register the edge to the sphere_base for rendering
-        self.sphere.add_item(self)
-        self.update_position()
-
-    def _init_variables(self):
         self.uv = self.sphere.uv
         self.shader = self.sphere.shader
 
@@ -85,11 +77,13 @@ class SphereSurfaceEdge(Serializable):
         self.pos_array = []
         self.collision_object_id = None
         self.color = self.gr_edge.color
-        self._edge_type = 0
+        self.edge_type = 0
         self.serialized_detail_scene = None
-
-    def _init_flags(self):
         self._edge_moved = False
+
+        # register the edge to the sphere_base for rendering
+        self.sphere.add_item(self)
+        self.update_position()
 
     @property
     def start_socket(self):
@@ -253,13 +247,13 @@ class SphereSurfaceEdge(Serializable):
         return OrderedDict([
             ('id', self.id),
             ('type', self.type),
-            ('edge_type', self._edge_type),
+            ('edge_type', self.edge_type),
             ('start_socket_id', self.start_socket.id),
             ('end_socket_id', self.end_socket.id),
             ('scene', self.serialized_detail_scene)
         ])
 
-    def deserialize(self, data: dict, hashmap: dict = {}, restore_id: bool = True) -> bool:
+    def deserialize(self, data: dict, hashmap: dict = None, restore_id: bool = True) -> bool:
         if restore_id:
             self.id = data['id']
         self.edge_type = data['edge_type']

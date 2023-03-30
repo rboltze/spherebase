@@ -111,12 +111,13 @@ class Universe(Serializable):
 
     @lens_index.setter
     def lens_index(self, value):
-        self._lens_index = value
+        pass
+        # self._lens_index = value
 
         # Change the relevance colors of all spheres
-        for sphere in self._spheres:
-            pass
-            # sphere.on_lens_index_changed()
+        # for sphere in self._spheres:
+        #     pass
+        # sphere.on_lens_index_changed()
 
     def clear(self):
         """
@@ -390,9 +391,9 @@ class Universe(Serializable):
             ('target_sphere_id', self.target_sphere.id)
         ])
 
-    def deserialize(self, data: dict, hashmap: dict = {}, restore_id: bool = True) -> bool:
+    def deserialize(self, data: dict, hashmap: dict = None, restore_id: bool = True) -> bool:
         self.clear()
-        hashmap = {}
+        hashmap = hashmap if hashmap else {}
         self.id = data['id']
         self.mouse_ray.reset()
 

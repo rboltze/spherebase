@@ -64,14 +64,6 @@ class Socket(Serializable):
         self.gr_socket = self.__class__.GraphicSocket_class(self.node)
         self.calc = Calc()
 
-        self._init_variables()
-
-        # create a collision object (cylinder) pointing out from the center of the sphere_base
-        self.collision_object_id = self.create_collision_object()
-
-        self.update_position()
-
-    def _init_variables(self):
         self.scale = self.gr_socket.scale
         self.texture_id = self.gr_socket.default_img_id
 
@@ -84,6 +76,11 @@ class Socket(Serializable):
         self.serialized_detail_scene = None
 
         self.collision_object_radius = SOCKET_RADIUS
+
+        # create a collision object (cylinder) pointing out from the center of the sphere_base
+        self.collision_object_id = self.create_collision_object()
+
+        self.update_position()
 
     def create_collision_object(self) -> int:
         """
@@ -216,7 +213,7 @@ class Socket(Serializable):
             ('scene', self.serialized_detail_scene),
         ])
 
-    def deserialize(self, data, hashmap={}, restore_id=True):
+    def deserialize(self, data, hashmap=None, restore_id=True):
         # not needed - not used, is included in node
         if restore_id:
             self.id = data['id']

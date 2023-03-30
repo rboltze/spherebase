@@ -25,7 +25,7 @@ class SphereNode(Serializable):
     NodeContent_class = None
     Socket_class = Socket
 
-    def __init__(self, target_sphere: 'sphere_base', orientation_offset: 'quaternion' = None, node_type: str = "node"):
+    def __init__(self, target_sphere: 'sphere', orientation_offset: 'quaternion' = None, node_type: str = "node"):
         """
         Constructor of the ``Node`` class. Creates a node and calculates where to place it on the sphere_base.
         Needs to be overridden in the implementation to allow for other type of nodes.
@@ -188,6 +188,9 @@ class SphereNode(Serializable):
             self.pos_orientation_offset = q.cross(self.offset_with_collision_point, self.pos_orientation_offset)
 
         except Exception as e:
+            print('collision_point', cp)
+            print('pos_orientation_offset', self.pos_orientation_offset)
+            print('offset_with_collision_point', self.offset_with_collision_point)
             dump_exception(e)
 
         self.update_position()
@@ -283,10 +286,13 @@ class SphereNode(Serializable):
 
         ])
 
-    def deserialize(self, data: dict, hashmap: dict = {}, restore_id: bool = True) -> bool:
+    def deserialize(self, data: dict, hashmap: dict = None, restore_id: bool = True) -> bool:
         """
         copy, cut paste also uses this. When pasting restore_id is false and new id's are created.
         """
+
+        # hashmap = {} if hashmap is None else hashmap
+
         if restore_id:
             self.id = data['id']
             self.socket.id = data['socket_id']

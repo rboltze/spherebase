@@ -50,7 +50,16 @@ class Camera:
 
         """
 
-        self._init_variables()
+        # camera target pointing at origin
+        self.target = TARGET
+        self.xyz = DEFAULT_POS
+        self.distance_to_target = None
+        self.camera_direction = None
+        self.camera_up = None
+
+        self.mouse_sensitivity = MOUSE_SENSITIVITY
+        self.movement_stack = []
+        self.target_stack = []
 
         self.shader = parent.shader
         self.config = parent.config
@@ -63,18 +72,6 @@ class Camera:
 
         view = self.get_view_matrix()
         self.config.set_view_loc(view)
-
-    def _init_variables(self):
-        # camera target pointing at origin
-        self.target = TARGET
-        self.xyz = DEFAULT_POS
-        self.distance_to_target = None
-        self.camera_direction = None
-        self.camera_up = None
-
-        self.mouse_sensitivity = MOUSE_SENSITIVITY
-        self.movement_stack = []
-        self.target_stack = []
 
     def _set_view(self):
         # distance to target
@@ -135,7 +132,7 @@ class Camera:
         self.process_movement(target_sphere, rotation=x_offset, angle_up=y_offset)
 
     def process_movement(self, target_sphere: 'sphere_base' = None, rotation: float = 0, angle_up: float = 0,
-                         radius: int = 0):
+                         radius: float = 0):
 
         """
         Moves the camera around the target sphere_base based on received angles.

@@ -7,7 +7,8 @@ A module containing Serializable "Interface". We pretend its an abstract class
 
 from collections import OrderedDict
 
-class Serializable():
+
+class Serializable:
     def __init__(self, item_type=None):
         """
         Default constructor automatically creates data which are common to any serializable object.
@@ -26,7 +27,9 @@ class Serializable():
         """
         raise NotImplemented()
 
-    def deserialize(self, data:dict, hashmap:dict={}, restore_id:bool=True) -> bool:
+    def deserialize(self, data: dict, hashmap: dict = None, restore_id: bool = True) -> bool:
+        hashmap = hashmap if hashmap else {}
+        print(hashmap)
         """
         Deserialization method which take data in python ``dict`` format with helping `hashmap` containing
         references to existing entities.
@@ -41,4 +44,4 @@ class Serializable():
         :return: ``True`` if deserialization was successful, otherwise ``False``
         :rtype: ``bool``
         """
-        raise NotImplemented()
+        return NotImplemented

@@ -41,8 +41,8 @@ SKYBOX_IMG_DIR = "..//sphere_base/model/resources/textures/skybox/"
 
 MODELS = {
     "sphere_base": {"model_id": 1, "model_file_name": "sphere1.obj", "shader": "SphereShader",
-               "vertex_shader": "vert_sphere.glsl",
-               "fragment_shader": "frag_sphere.glsl", "geometry_shader": "none"},
+                    "vertex_shader": "vert_sphere.glsl",
+                    "fragment_shader": "frag_sphere.glsl", "geometry_shader": "none"},
     "holo_sphere": {"model_id": 2, "model_file_name": "sphere1.obj", "shader": "HoloSphereShader",
                     "vertex_shader": "vert_holo_sphere.glsl", "fragment_shader": "frag_holo_sphere.glsl",
                     "geometry_shader": "none"},
@@ -78,7 +78,8 @@ MODELS = {
              "fragment_shader": "frag_sphere.glsl", "geometry_shader": "none"},
 }
 
-SHADER_SWITCH = {"node": 0, "sphere_base": 1, "square1x1": 2, "rubber_band": 2, "sphere_small": 1, "socket": 2, "cube": 1}
+SHADER_SWITCH = {"node": 0, "sphere_base": 1, "square1x1": 2, "rubber_band": 2, "sphere_small":
+                 1, "socket": 2, "cube": 1}
 
 EDGE_TYPE_DIRECT = 1
 #

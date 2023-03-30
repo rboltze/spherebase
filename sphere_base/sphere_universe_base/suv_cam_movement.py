@@ -28,7 +28,11 @@ class CameraMovement:
 
         """
         self.cam = camera
-        self._init_variables()
+        self.yaw = 0
+        self.rotation = ROTATION
+        self.radius = self.cam.get_distance_to_target()
+        self.min_radius = 0
+        self.cam_movement_steps = 0
 
     def _init_variables(self):
         self.yaw = 0
@@ -47,7 +51,7 @@ class CameraMovement:
         """
         self._init_variables()
 
-    def orbit_around_target(self, target: 'Sphere', rotation: int = 0, yaw: int = 0, offset: float = 0):
+    def orbit_around_target(self, target: 'Sphere', rotation: float = 0, yaw: float = 0, offset: float = 0):
         """
         Camera orbits around a ``Target Sphere``
 

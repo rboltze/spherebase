@@ -100,12 +100,12 @@ class Calc:
 
         if collision_point:
             try:
-                P1 = [1, 0, 0]
-                P2 = collision_point  # The position of the point in world space
+                p1 = [1, 0, 0]
+                p2 = collision_point  # The position of the point in world space
 
-                x1, x2 = P1[0], P2[0]
-                y1, y2 = P1[1], P2[1]
-                z1, z2 = P1[2], P2[2]
+                x1, x2 = p1[0], p2[0]
+                y1, y2 = p1[1], p2[1]
+                z1, z2 = p1[2], p2[2]
 
                 # The vector [0, 1, 0] is rotated over the z-axis (pitch)
                 ay = math.asin(x2) - math.acos(z1)
@@ -159,5 +159,3 @@ class Calc:
 
         # return the distance on the great circle
         return 2 * phi * radius
-
-
