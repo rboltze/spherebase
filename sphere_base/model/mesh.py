@@ -71,6 +71,7 @@ class Mesh:
                          object_index=model_id,
                          object_type=self.model.type,
                          mesh_index=self.mesh_id,
+                         indices_len=self.indices_len,
                          indices=self.indices,
                          position=position,
                          orientation=orientation,

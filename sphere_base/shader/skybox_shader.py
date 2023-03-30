@@ -44,7 +44,7 @@ class SkyboxShader(BaseShader):
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE)
 
-    def draw(self, object_index=0, object_type="", mesh_index=0, indices=None,
+    def draw(self, object_index=0, object_type="", mesh_index=0, indices_len=0, indices=None,
              position=None, orientation=None, scale=None, texture_id=0,
              color=None, switch=0):
 

@@ -203,7 +203,7 @@ class BaseShader:
 
         return matrix44.create_from_scale(scale)
 
-    def draw(self, object_index: int = 0, object_type: str = "", mesh_index: int = 0, indices: list = None,
+    def draw(self, object_index: int = 0, object_type: str = "", mesh_index: int = 0, indices_len=0, indices: list = None,
              position: 'Vector3' = None, orientation: 'Quaternion' = None,
              scale: 'Vector3' = None, texture_id: int = 0, color: 'Vector4' = None,
              switch: int = 0, ):
@@ -220,8 +220,8 @@ class BaseShader:
         :type object_type: ``str``
         :param mesh_index: ID of the Mesh
         :type mesh_index: ``int``
-        :param indices: List of Indices
-        :type indices: ``list``
+        :param indices_len: length of Indices
+        :type indices_len: ``int``
         :param vertices: List of vertex coordinates
         :type indices: ``list``
         :param position: Position of the object
