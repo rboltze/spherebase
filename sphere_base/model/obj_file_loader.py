@@ -51,7 +51,7 @@ class ObjectFileLoader:
                             indices.append(self.index)
                             self.index += 1
 
-            self.create_sorted_vertex_buffer(all_indices, vert, tex, norm)
+            self.buffer = self.create_sorted_vertex_buffer(all_indices, vert, tex, norm)
             self.indices = indices
 
             if self.model.name == "square1x1" or self.model.name == "rubber_band":
@@ -78,23 +78,25 @@ class ObjectFileLoader:
 
         return self.meshes
 
-    def create_sorted_vertex_buffer(self, indices_data, vertices, textures, normals):
+    @staticmethod
+    def create_sorted_vertex_buffer(indices_data, vertices, textures, normals):
         # sorted vertex buffer for use with glDrawArrays function
-
+        buffer = []
         for i, ind in enumerate(indices_data):
 
             if i % 3 == 0:  # sort the vertex coordinates
                 start = ind * 3
                 end = start + 3
-                self.buffer.extend(vertices[start:end])
+                buffer.extend(vertices[start:end])
             elif i % 3 == 1:  # sort the texture coordinates
                 start = ind * 2
                 end = start + 2
-                self.buffer.extend(textures[start:end])
+                buffer.extend(textures[start:end])
             elif i % 3 == 2:  # sort the normal vectors
                 start = ind * 3
                 end = start + 3
-                self.buffer.extend(normals[start:end])
+                buffer.extend(normals[start:end])
+        return buffer
 
     @staticmethod
     def non_blank_lines(f):

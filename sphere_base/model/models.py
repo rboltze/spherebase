@@ -59,8 +59,7 @@ class Models:
             shader = MODELS[_name]["shader"]
             vertex_shader = MODELS[_name]["vertex_shader"]
             fragment_shader = MODELS[_name]["fragment_shader"]
-            geometry_shader = MODELS[_name]["geometry_shader"]
-            geometry_shader = None if geometry_shader == "none" else geometry_shader
+            geometry_shader = None if MODELS[_name]["geometry_shader"] == "none" else MODELS[_name]["geometry_shader"]
 
             # Create a new model
             model = self.Model(self, model_id, model_name, model_file, shader, vertex_shader, fragment_shader,

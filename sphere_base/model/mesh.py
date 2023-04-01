@@ -35,13 +35,12 @@ class Mesh:
         """
         self.model = model
         self.shader = model.shader
-        self.model_id = model.id
         self.mesh_id = mesh_id
 
         self.vertices = np.array(vertices, dtype=np.float32)  # vertex coordinates
         self.indices = np.array(indices, dtype='uint32')
-        self.indices_len = len(self.indices)
         self.buffer = np.array(buffer, dtype=np.float32)
+        self.indices_len = len(self.indices)
 
     def draw(self, shader: 'Shader', model_id: int, position: 'Vector3', orientation: 'Quaternion', scale: list = None,
              texture_id: int = 0, color: list = None, switch: int = 0):

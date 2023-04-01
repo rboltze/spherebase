@@ -305,5 +305,5 @@ class BaseShader:
         for point in points:
             glVertex3f(point[0], point[1], point[2])
         glEnd()
-        glDisable(GL_LINE_STIPPLE)  # just in case
+        glDisable(GL_LINE_STIPPLE)  # just in case ....
         glLineWidth(1)
