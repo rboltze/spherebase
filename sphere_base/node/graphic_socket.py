@@ -13,12 +13,12 @@ class GraphicSocket(GraphicDisc):
         """
         Constructor of the ``Graphic Socket`` class. Contains graphic elements.
 
-        :param node: reference to any inherited class of :class:`~sphere_iot.uv_node.SphereNode`.
-        :type node:  :class:`~sphere_iot.uv_node.SphereNode`
+        :param node: reference to any inherited class of :class:`~sphere_iot.uv_node.Node`.
+        :type node:  :class:`~sphere_iot.uv_node.Node`
 
         :Instance Variables:
 
-            - **node** - :class:`~sphere_iot.uv_node.SphereNode`.
+            - **node** - :class:`~sphere_iot.uv_node.Node`.
             - **scale** - ``Vector3`` for scaling the node.
             - **circle_scale** - ``Vector3`` for scaling the outside circle.
             - **default_img_id** - id of the default image

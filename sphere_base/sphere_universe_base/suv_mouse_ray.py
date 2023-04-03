@@ -105,7 +105,7 @@ class MouseRay:
         Allocates the correct collision object.
 
         :param obj: Each item has a type.
-        :param obj: Can be: :class:`~sphere_iot.uv_sphere.Sphere`, :class:`~sphere_iot.uv_node.SphereNode`,
+        :param obj: Can be: :class:`~sphere_iot.uv_sphere.Sphere`, :class:`~sphere_iot.uv_node.Node`,
         :class:`~sphere_iot.uv_socket.Socket`, :class:`~sphere_iot.uv_edge.SphereSurfaceEdge``
         :param vertices: when lines are drawn, the vertices determine the collision shape
         :param vertices: ``list``
@@ -139,7 +139,7 @@ class MouseRay:
         Delete the collision object of the item
 
         :param item: The model the collision object belongs to.
-        :param item: :class:`~sphere_iot.uv_sphere.Sphere`, :class:`~sphere_iot.uv_node.SphereNode`,
+        :param item: :class:`~sphere_iot.uv_sphere.Sphere`, :class:`~sphere_iot.uv_node.Node`,
         :class:`~sphere_iot.uv_socket.Socket`, :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
         """
         self.bullet.removeBody(item.collision_object_id, physicsClientId=self.client_id)
@@ -149,7 +149,7 @@ class MouseRay:
         Reset the collision object of the item
 
         :param item: The model the collision object belongs to.
-        :param item: :class:`~sphere_iot.uv_sphere.Sphere`, :class:`~sphere_iot.uv_node.SphereNode`,
+        :param item: :class:`~sphere_iot.uv_sphere.Sphere`, :class:`~sphere_iot.uv_node.Node`,
         :class:`~sphere_iot.uv_socket.Socket`, :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
 
         .. warning::
@@ -297,7 +297,7 @@ class MouseRay:
 
         :param collision_object_id: ìd of the collision object
         :param collision_object_id: ``int``
-        :type item: :class:`~sphere_iot.uv_sphere.Sphere`, :class:`~sphere_iot.uv_node.SphereNode`,
+        :type item: :class:`~sphere_iot.uv_sphere.Sphere`, :class:`~sphere_iot.uv_node.Node`,
         :class:`~sphere_iot.uv_socket.Socket, :class:`~sphere_iot.uv_edge.SphereSurfaceEdge``
 
         :return:

@@ -31,7 +31,7 @@ class Socket(Serializable):
         overridden in the implementation to allow for other type of nodes.
 
         :param node: The ``node`` the ``socket`` belongs to.
-        :type node:  :class:`~sphere_iot.uv_node.SphereNode`
+        :type node:  :class:`~sphere_iot.uv_node.Node`
 
 
         :Instance Attributes:

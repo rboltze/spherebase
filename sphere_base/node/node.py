@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Module Node. A node is the basis for all nodes. Further nodes are derived from SphereNode
+Module Node. A node is the basis for all nodes. Further nodes are derived from Node
 """
 
 from pyrr import quaternion
@@ -14,7 +14,7 @@ from sphere_base.utils import dump_exception
 import numpy as np
 
 
-class SphereNode(Serializable):
+class Node(Serializable):
     """
     Class representing a ``Node`` on a ``Sphere``. Each node can represent a person, an object or any entity.
     ``Sphere Nodes`` are sphere_base items like ``Sphere Edges`` and ``Sphere Sockets``.

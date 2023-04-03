@@ -128,7 +128,7 @@ class EdgeDrag:
         self.snap_to_socket()
 
         # number of points this edge is made off
-        n = self.gr_edge.get_number_of_points(self.start_socket.xyz, self.xyz, self.radius, self.unit_length)
+        n = self.gr_edge.get_number_of_vertices(self.start_socket.xyz, self.xyz, self.radius, self.unit_length)
 
         if n:
             step = 1 / n

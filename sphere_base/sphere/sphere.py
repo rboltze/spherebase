@@ -11,7 +11,7 @@ from random import *
 from sphere_base.serializable import Serializable
 from sphere_base.utils import dump_exception
 from collections import OrderedDict
-from sphere_base.node.sphere_node import SphereNode
+from sphere_base.node.node import Node
 from sphere_base.sphere.edge_drag import EdgeDrag
 from sphere_base.edge.surface_edge import SurfaceEdge
 from sphere_base.history import History
@@ -32,7 +32,7 @@ class Sphere(Serializable):
     or items. These `items` can include persons, entities or objects. They can have a relationship between each other.
     """
 
-    Node_class = SphereNode
+    Node_class = Node
     Edge_class = SurfaceEdge
     Calc_class = Calc
     Edge_drag_class = EdgeDrag
@@ -51,7 +51,7 @@ class Sphere(Serializable):
 
         :Instance Attributes:
 
-            - **node** - Instance of :class:`~sphere_iot.uv_node.SphereNode`
+            - **node** - Instance of :class:`~sphere_iot.uv_node.Node`
             - **edge** - Instance of :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
             - **calc** - Instance of :class:`~sphere_iot.uv_calc.UvCalc`
             - **config** - Instance of :class:`~sphere_iot.uv_config.UvConfig`
@@ -195,7 +195,7 @@ class Sphere(Serializable):
 
         :param node_type: can be ``person`` or ``item``
         :type node_type: ``string``
-        :return: :class:`~sphere_iot.uv_node.SphereNode`
+        :return: :class:`~sphere_iot.uv_node.Node`
         :param abs_pos: position in space
         :type abs_pos:
         """
@@ -223,7 +223,7 @@ class Sphere(Serializable):
         Handles item deselection and triggers event `Items deselected`. Not used in the current implementation.
 
         :param item: Node or Edge
-        :type item: :class:`~sphere_iot.uv_node.SphereNode` or :class:`~sphere_iot.uv_surface_edge.SphereSurfaceEdge`
+        :type item: :class:`~sphere_iot.uv_node.Node` or :class:`~sphere_iot.uv_surface_edge.SphereSurfaceEdge`
         """
         for callback in self._items_deselected_listeners:
             callback(self, item)
@@ -235,7 +235,7 @@ class Sphere(Serializable):
 
         :param item_id: The id of the item to be returned
         :type item_id: ``int``
-        :return: :class:`~sphere_iot.uv_node.SphereNode` or :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
+        :return: :class:`~sphere_iot.uv_node.Node` or :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
         """
         for item in self.items:
             if item.id == item_id:
@@ -250,7 +250,7 @@ class Sphere(Serializable):
         :type selected_item_id: ``int``
         :param shift: ``True`` means that the shift is hold down while selecting
         :type shift: ``bool``
-        :return: :class:`~sphere_iot.uv_node.SphereNode` or :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
+        :return: :class:`~sphere_iot.uv_node.Node` or :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
         """
 
         for item in self.items:
@@ -275,11 +275,11 @@ class Sphere(Serializable):
         return edges
 
     def add_item(self, item: 'Node or Edge or Socket'):
-        """Add :class:`~sphere_iot.uv_node.SphereNode` or :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
+        """Add :class:`~sphere_iot.uv_node.Node` or :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
         to the `Sphere`.
 
         :param item: Node or Edge
-        :type item: :class:`~sphere_iot.uv_node.SphereNode` or :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
+        :type item: :class:`~sphere_iot.uv_node.Node` or :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
                     or :class:`~sphere_iot.uv_socket.Socket`
         """
 
@@ -287,10 +287,10 @@ class Sphere(Serializable):
         self.items.append(item)
 
     def remove_item(self, item: 'Node or Edge or Socket'):
-        """Remove :class:`~sphere_iot.uv_node.SphereNode` or :class:`~sphere_iot.uv_edge.SphereEdge`
+        """Remove :class:`~sphere_iot.uv_node.Node` or :class:`~sphere_iot.uv_edge.SphereEdge`
         from the target `Sphere`.
         :param item: Node or Edge to remove from this `Sphere`
-        :type item: :class:`~sphere_iot.uv_node.SphereNode` or :class:`~sphere_iot.uv_surface_edge.SphereSurfaceEdge`
+        :type item: :class:`~sphere_iot.uv_node.Node` or :class:`~sphere_iot.uv_surface_edge.SphereSurfaceEdge`
         or :class:`~sphere_iot.uv_socket.Socket`
 
         """
@@ -437,7 +437,7 @@ class Sphere(Serializable):
         Sockets cannot be _selected.
 
         :param item: ``Node`` or ``Edge``
-        :type item: :class:`~sphere_iot.uv_node.SphereNode` or :class:`~sphere_iot.uv_surface_edge.SphereSurfaceEdge`
+        :type item: :class:`~sphere_iot.uv_node.Node` or :class:`~sphere_iot.uv_surface_edge.SphereSurfaceEdge`
         :param shift: ``bool``, ``True`` when shift is down while clicking on an item
         """
 
@@ -590,7 +590,7 @@ class Sphere(Serializable):
         Takes `Node` serialized data and determines which `Node Class` to instantiate according to the description
         in the serialized Node.
         """
-        return SphereNode if self.node_class_selector is None else self.node_class_selector(data)
+        return Node if self.node_class_selector is None else self.node_class_selector(data)
 
     def draw(self):
         """

@@ -26,7 +26,7 @@ class Calc:
 
         :param item: ``Socket``, ``Node``, ``Edge``
         :type item: :class:`~sphere_iot.uv_socket.Socket`, :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`,
-         :class:`~sphere_iot.uv_node.SphereNode`
+         :class:`~sphere_iot.uv_node.Node`
         :param sphere: The target ``sphere_base`` the item is on.
         :type sphere: :class:`~sphere_iot.uv_sphere.Sphere`
         :returns: ``Quaternion``

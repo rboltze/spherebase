@@ -46,7 +46,7 @@ class GraphicEdge:
         self._selected = False
         self._current_color = None
 
-        self.unit_length = 0.1
+        self.unit_length = 0.01
         self.color = [0, 0, 0, .5]
 
     def _init_assets(self):
@@ -55,7 +55,7 @@ class GraphicEdge:
         self.selected_color = [255, 0, 0, 1]
         self.hover_color = [191, 255, 0, 1]
 
-    def get_number_of_points(self, start_xyz: 'Vector3', end_xyz: 'Vector3', radius: float, unit_length: float):
+    def get_number_of_vertices(self, start_xyz: 'Vector3', end_xyz: 'Vector3', radius: float, unit_length: float):
         """
         Returns the number of vertices on the edge.
 

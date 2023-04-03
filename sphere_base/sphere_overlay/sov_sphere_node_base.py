@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from sphere_base.node.sphere_node import SphereNode
+from sphere_base.node.node import Node
 from sphere_base.node.graphic_node import GraphicNode
 from sphere_base.sphere_overlay.sov_conf import *
 
@@ -12,7 +12,7 @@ class GraphicSphereNode(GraphicNode):
         super().__init__(node)
 
 
-class SphereNodeBase(SphereNode):
+class SphereNodeBase(Node):
     GraphicNode_class = GraphicSphereNode
     op_code = OP_SPHERE_NODE_BASE
 

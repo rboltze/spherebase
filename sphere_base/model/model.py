@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Do not remove these!!!
-# -------------- these will be dynamically read! -----------------------
+# -------------- these will be dynamically late loaded! -----------------------
 from sphere_base.shader.skybox_shader import SkyboxShader
 from sphere_base.shader.sphere_shader import SphereShader
 from sphere_base.shader.node_shader import NodeShader
@@ -14,6 +14,7 @@ from sphere_base.shader.sphere_edge_shader import SphereEdgeShader
 from sphere_base.shader.cross_shader import CrossShader
 from sphere_base.shader.holo_sphere_shader import HoloSphereShader
 from sphere_base.shader.sphere_small_shader import SphereSmallShader
+from sphere_base.shader.dynamic_shader import DynamicShader
 # -----------------------------------------------------------------------
 
 from sphere_base.sphere_universe_base.suv_graphic_item import GraphicItem

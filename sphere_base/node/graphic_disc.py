@@ -7,16 +7,16 @@ Module Graphic Disc. The graphics disc class is used in all nodes and sockets.
 
 
 class GraphicDisc:
-    def __init__(self, node: 'SphereNode'):
+    def __init__(self, node: 'Node'):
         """
         Constructor of the ``Editor Graphic Disc`` class. Contains graphic elements.
 
-        :param node: reference to  :class:`~sphere_iot.uv_node.SphereNode`.
-        :type node:  :class:`~sphere_iot.uv_node.SphereNode`
+        :param node: reference to  :class:`~sphere_iot.uv_node.Node`.
+        :type node:  :class:`~sphere_iot.uv_node.Node`
 
         :Instance Variables:
 
-            - **node** - :class:`~sphere_iot.uv_node.SphereNode`.
+            - **node** - :class:`~sphere_iot.uv_node.Node`.
             - **current_img_id** - id of the current active image.
             - **last_img_id** - id of the last active image.
             - **default_img_id** - id of the default image

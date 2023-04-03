@@ -237,7 +237,7 @@ class Universe(Serializable):
         :param sphere: The target sphere_base that is _selected
         :type sphere: :class:`~sphere_iot.uv_sphere.Sphere`
         :param sphere_items: ``list`` of items on the sphere_base
-        :type sphere_items: list with items of type :class:`~sphere_iot.uv_node.SphereNode` or
+        :type sphere_items: list with items of type :class:`~sphere_iot.uv_node.Node` or
         :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
 
         """
