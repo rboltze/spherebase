@@ -87,7 +87,7 @@ class Model(GraphicItem):
         self.shader = eval(shader)(self, vertex_shader, fragment_shader, geometry_shader)
 
         if ".obj" == pathlib.Path(obj_file).suffix:
-            self.loader = ObjectFileLoader(self)
+            self.loader = ObjectFileLoader(self, config=self.config)
             self.meshes = self.loader.get_meshes(obj_file)
         else:
             print("not a .obj file")
@@ -113,6 +113,8 @@ class Model(GraphicItem):
         :type scale:   ``list``
 
         """
+        # if self.model_id in [12, 13, 14, 15]:
+        #     print(self.meshes)
 
         # draws all meshes
         color = color if color else [1.0, 1.0, 1.0, 1.0]

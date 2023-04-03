@@ -13,20 +13,24 @@ from sphere_base.shader.dynamic_shader import DynamicShader
 
 # -----------------------------------------------------------------------
 
-from pyrr import quaternion
+from pyrr import quaternion, vector, Vector3
 from sphere_base.sphere.graphic_edge import GraphicEdge
 from sphere_base.serializable import Serializable
+from sphere_base.model.model import Model
+from sphere_base.model.mesh import Mesh
+from sphere_base.model.obj_file_loader import ObjectFileLoader
 from collections import OrderedDict
 from sphere_base.utils import dump_exception
 import numpy as np
 from sphere_base.constants import *
 from OpenGL.GL import *
 
-
 DEBUG = False
 
 
 class SurfaceEdge(Serializable):
+    Mesh_class = Mesh
+
     """
     Class representing an ``Edge`` on a ``Sphere``. ``Edges`` are drawn between ``Sphere Sockets``.
 
@@ -39,16 +43,7 @@ class SurfaceEdge(Serializable):
     There is no difference between start and end socket. It is not relevant in the current deployment. In
     future iterations this is likely to change as the direction of the edge may have significance.
 
-
-    .. warning::
-
-        Currently all lines are drawn using OpenGL begin..end methods,
-        instead of modern opengl methods with VBO, VBA.
-        This needs to be corrected in a future iteration as 'apparently' this method is very slow.
-
-        How it should work:
-        The edge starts at the start socket and ends at the end socket. It takes the shortest distance over the
-        surface of the sphere.
+    The edge starts and ends at sockets. It takes the shortest distance over the surface of the sphere.
 
         All the variables needed are known:
 
@@ -56,8 +51,7 @@ class SurfaceEdge(Serializable):
             - end socket angle with origin sphere
             - radius of the sphere
 
-        We then can decide how many points we need to plot between start and end based on the distance
-        over the sphere.
+        We then need to plot points between start and end over the great sphere based on the distance over the sphere.
 
         When creating or dragging a node with an edge, the vertices change and need to replace the existing
         vertices before drawing the new ones.
@@ -92,32 +86,50 @@ class SurfaceEdge(Serializable):
         self.sphere = target_sphere
         self.calc = self.sphere.calc
         self.config = self.sphere.config
+        self.uv = self.sphere.uv
 
         self._start_socket, self._end_socket = None, None
         self.start_socket = socket_start if socket_start else None
         self.end_socket = socket_end if socket_end else None
+        self.xyz = None
+        self.orientation = None
 
         self.gr_edge = self.__class__.GraphicsEdge_class(self)
-        self.uv = self.sphere.uv
 
-        self.shader = None
-        self.shader = self.set_up_shader()
+        self.model = self.set_up_model('edge1')
+        self.shader = self.model.shader
+
+        self.loader = ObjectFileLoader(self.model, self.config)
 
         # ------------------------------------------------------------
 
-        self.mesh_id = glGenVertexArrays(1)
-        self.buffer_id = glGenBuffers(1)
+        # self.mesh_id = glGenVertexArrays(1)
+        self.mesh_id = self.loader.create_buffers(1)
+        self.model.model_id = self.mesh_id
+        self.scale = [1.0, 1.0, 1.0]
 
         self.shader.mesh_id = self.mesh_id
+
+        self.buffer_id = glGenBuffers(1)
         self.shader.buffer_id = self.buffer_id
+
+        # self.VAO_id = glGenVertexArrays(1)
+        # self.VBO_id = glGenBuffers(1)
+        # self.EBO_id = glGenBuffers(1)
 
         self.vertices = np.array([], dtype=np.float32)  # vertex coordinates
         self.buffer = np.array([], dtype=np.float32)
+        self.indices = np.array([], dtype='uint32')
+
+        self.mesh = self.__class__.Mesh_class(self.model, self.mesh_id, vertices=[], indices=[], buffer=[])
+        self.model.meshes.append(self.mesh)
+        # position_orientation (angle) of the node on the sphere_base relative to the zero rotation of the
+        # sphere_base is the same as the starting socket
+        self.pos_orientation_offset = None
 
         # ------------------------------------------------------------
 
-        self.radius = self.sphere.radius
-        self.pos_array = []
+        self.radius = self.sphere.radius - 0.01
         self.collision_object_id = None
         self.color = self.gr_edge.color
         self.edge_type = 0
@@ -126,56 +138,30 @@ class SurfaceEdge(Serializable):
 
         # register the edge to the sphere_base for rendering
         self.sphere.add_item(self)
-        self.update_position()
+        # self.update_position()
+        self.create_edge()
 
-    def set_up_shader(self):
+    def set_up_model(self, model_name):
+        shader, vertex_shader, fragment_shader, geometry_shader = None, None, None, None
+
         for _name in MODELS.keys():
-            if _name == "edge1":
+            if _name == model_name:
                 shader = MODELS[_name]["shader"]
                 vertex_shader = MODELS[_name]["vertex_shader"]
                 fragment_shader = MODELS[_name]["fragment_shader"]
                 geometry_shader = MODELS[_name]["geometry_shader"]
                 geometry_shader = None if geometry_shader == "none" else geometry_shader
 
-                # setup and return the found shader
-                shader = eval(shader)(self, vertex_shader, fragment_shader, geometry_shader)
-                return shader
-
-    def load_mesh_into_opengl(self):
-        try:
-            pass
-            glBindVertexArray(self.mesh_id)
-
-            # vertex Buffer Object
-            glBindBuffer(GL_ARRAY_BUFFER, self.buffer_id)
-            glBufferData(GL_ARRAY_BUFFER, self.buffer.nbytes, self.buffer, GL_STATIC_DRAW)
-
-            # # vertex positions
-            # Enable the Vertex Attribute so that OpenGL knows to use it
-            glEnableVertexAttribArray(0)
-            # Configure the Vertex Attribute so that OpenGL knows how to read the VBO
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, self.buffer.itemsize * 8, ctypes.c_void_p(0))
-            #
-            # # # textures
-            # # # Enable the Vertex Attribute so that OpenGL knows to use it
-            # # glEnableVertexAttribArray(1)
-            # # # Configure the Vertex Attribute so that OpenGL knows how to read the VBO
-            # # glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, buffer.itemsize * 8, ctypes.c_void_p(12))
-            #
-            # # # normals
-            # # # Enable the Vertex Attribute so that OpenGL knows to use it
-            # # glEnableVertexAttribArray(2)
-            # # # Configure the Vertex Attribute so that OpenGL knows how to read the VBO
-            # # glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, self.buffer.itemsize * 8, ctypes.c_void_p(20))
-            #
-            # #  Bind the VBO, VAO to 0 so that we don't accidentally modify the VAO and VBO we created
-            glBindBuffer(GL_ARRAY_BUFFER, 0)
-            glBindVertexArray(0)
-
-            self.shader.set_environment()
-
-        except Exception as e:
-            dump_exception(e)
+        model = Model(
+                      models=self.uv.models,
+                      model_id=0,
+                      model_name=model_name,
+                      obj_file="",
+                      shader=shader,
+                      vertex_shader=vertex_shader,
+                      fragment_shader=fragment_shader,
+                      geometry_shader=geometry_shader)
+        return model
 
     @property
     def start_socket(self):
@@ -201,6 +187,8 @@ class SurfaceEdge(Serializable):
         # add edge to the new socket class
         if self.start_socket is not None:
             self.start_socket.add_edge(self)
+            self.xyz = self.sphere.xyz
+            self.pos_orientation_offset = self.start_socket.pos_orientation_offset
 
     @property
     def end_socket(self):
@@ -229,9 +217,18 @@ class SurfaceEdge(Serializable):
 
     def update_position(self):
         """
-        Updates the position of the edge. First calculates the number of vertices to use.
-        Then calls 'update_line_points_position' for the calculation of the position of each of the vertices.
+        Updates the position of the edge.
+
         """
+        # self.pos_orientation_offset = self.start_socket.pos_orientation_offset
+        # cumulative_orientation = self.get_cumulative_rotation()
+        # self.xyz = self.calc.move_to_position(cumulative_orientation, self.sphere, self.radius)
+        #
+        # self.orientation = self.start_socket.orientation  # same orientation as the start socket
+        #
+        # # self.node.sphere.uv.mouse_ray.reset_position_collision_object(self)
+        #
+
         # get number of vertices on the edge
         if self.start_socket and self.end_socket:
             number_of_vertices = self.gr_edge.get_number_of_vertices(self.start_socket.xyz, self.end_socket.xyz,
@@ -241,12 +238,33 @@ class SurfaceEdge(Serializable):
             if number_of_vertices > 0:
                 self.update_line_points_position(number_of_vertices, step)
 
-            self.load_mesh_into_opengl()
+            self.loader.load_mesh_into_opengl(self.mesh_id, self.mesh.buffer, self.mesh.indices, self.shader)
+            # self.load_mesh_into_opengl(self.mesh_id, self.mesh.buffer, self.mesh.indices, self.shader)
+
+    def create_edge(self):
+        # create an edge for the first time or recreate it during dragging
+        if self.start_socket and self.end_socket:
+            number_of_vertices = self.gr_edge.get_number_of_vertices(self.start_socket.xyz, self.end_socket.xyz,
+                                                                     self.sphere.radius, self.gr_edge.unit_length)
+            step = 1 / number_of_vertices if number_of_vertices > 1 else 1
+
+            if number_of_vertices > 0:
+                self.update_line_points_position(number_of_vertices, step)
+
+
+
+    def get_cumulative_rotation(self):
+        """
+        Helper function returns a quaternion with a cumulative rotation of both the rotation
+        offset of the edge with the rotation of the sphere_base.
+        """
+
+        return quaternion.cross(self.pos_orientation_offset, quaternion.inverse(self.sphere.orientation))
 
     def update_line_points_position(self, number_of_vertices: int, step: float):
         """
         Creates an array of vertex locations. SLERP is used to find angles with the center of the sphere_base for
-        each of the points.
+        each of the points. Each point receives also a normal.
 
         :param number_of_vertices: Number of points on the edge
         :type number_of_vertices: ``int``
@@ -255,19 +273,36 @@ class SurfaceEdge(Serializable):
         """
 
         start, end = self.get_edge_start_end()
-        self.pos_array = []
+        vert = []  # vertex coordinates
+        vertex = []  # vertex coordinates
+        buffer = []
+        indices = []
 
         for i in range(number_of_vertices):
             pos_orientation_offset = quaternion.slerp(start, end, step * i)
-            pos = self.gr_edge.get_position(pos_orientation_offset)
-            self.pos_array.append([pos[0], pos[1], pos[2]])
+            p = self.gr_edge.get_position(pos_orientation_offset)  # finding the vertex xyz
+            n = vector.normalize(Vector3(p) - Vector3(self.sphere.xyz))  # finding the normal of the vertex
 
-        # creating a collision object for mouse picking
-        self.collision_object_id = self.sphere.uv.mouse_ray.create_collision_object(self, self.pos_array)
+            vert.append([p[0], p[1], p[2]])  # we need this for pybullet
+            vertex.extend(p)  # extending the vertices list with the vertex
+            buffer.extend(p)  # extending the buffer with the vertex
+            buffer.extend(n)  # extending the buffer with the normal
+            indices.append(i)
 
-        # self.xyz = self.sphere.xyz
-        self.xyz = self.end_socket.xyz
-        self.update_buffers(self.pos_array)
+        # creating a collision object for mouse ray collisions
+        self.collision_object_id = self.sphere.uv.mouse_ray.create_collision_object(self, vert)
+
+        self.shader.vertices = np.array(vertex, dtype=np.float32)
+        self.shader.buffer = np.array(buffer, dtype=np.float32)
+
+        self.mesh.vertices = np.array(vertex, dtype=np.float32)
+        self.mesh.indices = np.array(indices, dtype='uint32')
+        self.mesh.buffer = np.array(buffer, dtype=np.float32)
+
+        self.orientation = self.start_socket.orientation
+        self.mesh.indices_len = len(indices)
+
+        self.loader.load_mesh_into_opengl(self.mesh_id, self.mesh.buffer, self.mesh.indices, self.shader)
 
     def get_edge_start_end(self):
         # get clearance from start socket
@@ -281,19 +316,6 @@ class SurfaceEdge(Serializable):
         start = quaternion.slerp(s_angle, end, t)
 
         return start, end
-
-    def update_buffers(self, pos_array):
-        # takes the list with points and puts them in one list
-        vertices = []
-        for point in pos_array:
-            vertices.append(point[0])
-            vertices.append(point[1])
-            vertices.append(point[2])
-
-        self.vertices = np.array(vertices, dtype=np.float32)
-        self.buffer = np.array(self.vertices, dtype=np.float32)
-        self.shader.vertices = self.vertices
-        self.shader.buffer = self.buffer
 
     def update_content(self, value, item_id):
         """
@@ -358,17 +380,19 @@ class SurfaceEdge(Serializable):
 
         try:
             pass
-            self.shader.draw(
-                                object_index=0,
-                                object_type="",
-                                mesh_index=self.mesh_id,
-                                indices_len=0,
-                                position=self.sphere.xyz,
-                                orientation=self.sphere.orientation,
-                                scale=None,
-                                texture_id=0,
-                                color=[1.0, 1.0, 1.0, 1.0],
-                                switch=0)
+            # self.shader.draw(
+            #     object_index=0,
+            #     object_type="",
+            #     mesh_index=self.mesh_id,
+            #     indices_len=0,
+            #     position=self.sphere.xyz,
+            #     orientation=self.sphere.orientation,
+            #     scale=None,
+            #     texture_id=0,
+            #     color=[1.0, 1.0, 1.0, 1.0],
+            #     switch=0)
+
+            self.model.draw(self)
 
         except Exception as e:
             dump_exception(e)

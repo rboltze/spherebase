@@ -33,9 +33,9 @@ class UvConfig:
         self.view_loc = None
 
         # project wide opengl buffers
-        self.VAO = None  # Vertex arrays objects indexes
-        self.VBO = None  # Vertex buffers objects indexes
-        self.EBO = None  # Element array buffer object indexes
+        self.VAO = []  # Vertex arrays objects indexes
+        self.VBO = []  # Vertex buffers objects indexes
+        self.EBO = []  # Element array buffer object indexes
 
         self.mesh_id_counter = 0  # used in creating new indexes for meshes
 

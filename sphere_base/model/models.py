@@ -6,9 +6,8 @@ The ``Models`` class holds all textures and all models used in this implementati
 
 from collections import namedtuple
 from sphere_base.constants import *
-from PIL import Image
-from OpenGL.GL import *
 from sphere_base.model.model import Model
+from sphere_base.model.obj_file_loader import ObjectFileLoader
 
 
 class Models:
@@ -39,8 +38,8 @@ class Models:
         self.config = universe.config
 
         self._models = []
-
-        self.load_textures_into_opengl()
+        self.loader = ObjectFileLoader(config=self.config)
+        self.loader.load_all_textures_into_opengl()
         self.Model = self.__class__.Model_class
         self.setup_models()
         self.create_all_meshes()
@@ -71,19 +70,7 @@ class Models:
             # calculate total number of meshes
             no_of_meshes += model.get_number_of_meshes_in_model()
 
-        self.create_buffers(no_of_meshes)
-
-    def create_buffers(self, size):
-        """
-        Creates the 'size' number of Vertex Array Objects, Vertex Buffer Objects and Element Buffer Objects
-
-        :param size: Number of ``buffers`` to create
-        :type size: ``int``
-
-        """
-        self.config.VAO = glGenVertexArrays(size)
-        self.config.VBO = glGenBuffers(size)
-        self.config.EBO = glGenBuffers(size)
+        self.loader.create_buffers(no_of_meshes)
 
     def create_all_meshes(self):
         """
@@ -91,7 +78,8 @@ class Models:
         """
         for model in self._models:
             for mesh in model.meshes:
-                self.load_mesh_into_opengl(mesh.mesh_id, mesh.buffer, mesh.indices, mesh.shader)
+                self.loader.load_mesh_into_opengl(mesh.mesh_id, mesh.buffer, mesh.indices, mesh.shader)
+                mesh.save_memory()
 
     def get_model(self, model_type) -> 'Model':
         """
@@ -106,101 +94,4 @@ class Models:
             if model.type and model.type == model_type:
                 return model
 
-    def load_textures_into_opengl(self):
-        """
-        Gets all the images and textures in the config dictionary. Retrieves image file location and
-        loads them into OpenGl
 
-        """
-
-        self.config.textures = glGenTextures(len(self.uv.config.all_textures))
-        for index, item in enumerate(self.uv.config.all_textures.values()):
-            self.load_texture_into_opengl(item['file_dir_name'], item['img_id'] + 1)
-
-    def load_mesh_into_opengl(self, mesh_id=0, buffer=[], indices=[], shader=""):
-        """
-        Loads a single mesh into Opengl buffers
-
-        :param mesh_id: id of the :class:`~sphere_iot.uv_models.Mesh` to store into ``OpenGl``
-        :type mesh_id: ``int``
-        :param buffer: Buffer array
-        :type buffer: ``np.array``
-        :param indices: Indices array
-        :type indices: ``np.array``
-        :param shader: 'Shader' to use for this :class:`~sphere_iot.uv_models.Mesh`
-        :type shader: Overridden version of :class:`~sphere_iot.shader.uv_base_shader.BaseShader`
-
-        """
-
-        glBindVertexArray(self.config.VAO[mesh_id])
-
-        # vertex Buffer Object
-        glBindBuffer(GL_ARRAY_BUFFER, self.config.VBO[mesh_id])
-        glBufferData(GL_ARRAY_BUFFER, buffer.nbytes, buffer, GL_STATIC_DRAW)
-
-        # element Buffer Object
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self.config.EBO[mesh_id])
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.nbytes, indices, GL_STATIC_DRAW)
-
-        # vertex positions
-        # Enable the Vertex Attribute so that OpenGL knows to use it
-        glEnableVertexAttribArray(0)
-        # Configure the Vertex Attribute so that OpenGL knows how to read the VBO
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, buffer.itemsize * 8, ctypes.c_void_p(0))
-
-        # textures
-        # Enable the Vertex Attribute so that OpenGL knows to use it
-        glEnableVertexAttribArray(1)
-        # Configure the Vertex Attribute so that OpenGL knows how to read the VBO
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, buffer.itemsize * 8, ctypes.c_void_p(12))
-
-        # normals
-        # Enable the Vertex Attribute so that OpenGL knows to use it
-        glEnableVertexAttribArray(2)
-        # Configure the Vertex Attribute so that OpenGL knows how to read the VBO
-        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, buffer.itemsize * 8, ctypes.c_void_p(20))
-
-        #  Bind the VBO, VAO to 0 so that we don't accidentally modify the VAO and VBO we created
-        glBindBuffer(GL_ARRAY_BUFFER, 0)
-        glBindVertexArray(0)
-        # Bind the EBO to 0 so that we don't accidentally modify it
-        # MAKE SURE TO UNBIND IT AFTER UNBINDING THE VAO, as the EBO is linked in the VAO
-        # This does not apply to the VBO because the VBO is already linked to the VAO during glVertexAttribPointer
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0)
-
-        shader.set_environment()
-
-    @staticmethod
-    def load_texture_into_opengl(texture_path, texture_id):
-        """
-        Load a texture into ``OpenGl``
-
-        :param texture_path: Texture path and texture name
-        :type texture_path: ``str``
-        :param texture_id: Id of the texture to load
-        :type texture_id: ``int``
-
-        """
-
-        glBindTexture(GL_TEXTURE_2D, texture_id)
-
-        # Set the texture wrapping parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
-
-        # Set texture filtering parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-
-        # Mip_maps
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR)
-
-        # load image
-        img = Image.open(texture_path)
-        img = img.transpose(Image.FLIP_TOP_BOTTOM)
-        img_data = img.convert("RGBA").tobytes()
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img.width, img.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img_data)
-        glGenerateMipmap(GL_TEXTURE_2D)
-
-        #  Bind to 0 so it cannot be changed by mistake
-        glBindTexture(GL_TEXTURE_2D, 0)

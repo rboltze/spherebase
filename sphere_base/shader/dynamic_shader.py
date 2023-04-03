@@ -249,6 +249,7 @@ class DynamicShader(BaseShader):
 
         glBindBuffer(GL_ARRAY_BUFFER, self.buffer_id)
         glBufferData(GL_ARRAY_BUFFER, len(self.vertices) * 3, self.vertices, GL_STATIC_DRAW)
+        # glBufferData(GL_ARRAY_BUFFER, self.buffer.nbytes, self.buffer, GL_STATIC_DRAW)
 
         glEnableVertexAttribArray(0)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, self.buffer.itemsize * 3, ctypes.c_void_p(0))

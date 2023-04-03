@@ -7,6 +7,8 @@
 import numpy as np
 from sphere_base.utils import dump_exception
 
+DEBUG = False
+
 
 class Mesh:
     def __init__(self, model, mesh_id, vertices, indices, buffer):
@@ -42,6 +44,20 @@ class Mesh:
         self.buffer = np.array(buffer, dtype=np.float32)
         self.indices_len = len(self.indices)
 
+    def save_memory(self):
+        """
+        During setup static model meshes are stored in the VBO,
+        after that the memory can be released as it is not used anymore.
+
+        Dynamic models will need these variables as the model will change and needs to be reloaded
+        in the VBO.
+
+        :return:
+        """
+        self.vertices = None
+        self.indices = None
+        self.buffer = None
+
     def draw(self, shader: 'Shader', model_id: int, position: 'Vector3', orientation: 'Quaternion', scale: list = None,
              texture_id: int = 0, color: list = None, switch: int = 0):
         """
@@ -64,6 +80,16 @@ class Mesh:
         :param switch: Switch used in the shader to switch from one behaviour to another.
         :type switch: ``int``
         """
+
+        if DEBUG:
+            if model_id in [12, 13, 14, 15]:
+                print("model", model_id, self.model.type)
+                print("mesh_id", self.mesh_id)
+                print("indices_len", self.indices_len)
+                print("position", position)
+                print("orientation", orientation)
+                print("scale", scale)
+                print("texture_id", texture_id)
 
         try:
             shader.draw(

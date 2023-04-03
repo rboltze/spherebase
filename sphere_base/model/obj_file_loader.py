@@ -1,14 +1,16 @@
+# -*- coding: utf-8 -*-
+
 from sphere_base.model.mesh import Mesh
 from sphere_base.utils import dump_exception
+from OpenGL.GL import *
+from PIL import Image
 
 DEBUG = False
 
 """
-Handwritten .obj file loader. The main PyAssimp file loader could not be installed on MAC.
-This replacement file loader is based on code from an OpenGl you tube course (ES
-OpenGL in python e15 - loading 3D .obj files) and only works with .obj wavefront files and glDrawArrays.
-
-The code has been modified as there was several errors related to the indices.
+Wavefront .obj file loader, replacing PyAssimp file loader which could not be installed on MAC.
+This replacement file loader is based on code from an OpenGl youtube course (ES
+OpenGL in python e15 - loading 3D .obj files) and only works with .obj wavefront files.
 
 """
 
@@ -16,21 +18,43 @@ The code has been modified as there was several errors related to the indices.
 class ObjectFileLoader:
     Mesh_class = Mesh
 
-    def __init__(self, model):
-        self.meshes = []
-        self.buffer = []
-        self.indices = []  # how many f x/x/x indices there are
+    def __init__(self, model=None, config=None):
         self.model = model
-        self.config = model.config
+        self.config = config
         self.index = 0
+
+    def create_buffers(self, size=1):
+        """
+        Creates the 'size' number of Vertex Array Objects, Vertex Buffer Objects and Element Buffer Objects
+
+        :param size: Number of ``buffers`` to create
+        :type size: ``int``
+
+        """
+        VAO = glGenVertexArrays(size)
+        VBO = glGenBuffers(size)
+        EBO = glGenBuffers(size)
+
+        if size == 1:
+            self.config.VAO.append(VAO)  # I know, I know, I could also use the value here
+            self.config.VBO.append(VBO)
+            self.config.EBO.append(EBO)
+        else:
+            for counter, value in enumerate(VAO):
+                self.config.VAO.append(VAO[counter])  # I know, I know, I could also use the value here
+                self.config.VBO.append(VBO[counter])
+                self.config.EBO.append(EBO[counter])
+
+        return len(self.config.VAO) - 1
 
     def get_meshes(self, file_name):
         # Creates:
-        indices = []  # The number of all_indices
+        indices = []  # how many f x/x/x indices there are
         vert = []  # vertex coordinates
         tex = []  # texture coordinates
         norm = []  # vertex normals
         all_indices = []  # indices for indexed drawing
+        meshes, buffer = [], []
 
         try:
             with open(file_name, 'r') as f:
@@ -51,32 +75,31 @@ class ObjectFileLoader:
                             indices.append(self.index)
                             self.index += 1
 
-            self.buffer = self.create_sorted_vertex_buffer(all_indices, vert, tex, norm)
-            self.indices = indices
+            buffer = self.create_sorted_vertex_buffer(all_indices, vert, tex, norm)
 
             if self.model.name == "square1x1" or self.model.name == "rubber_band":
-                vert, self.indices, self.buffer = self.load_square1x1()
+                vert, indices, buffer = self.load_square1x1()
             elif self.model.name == "circle" or self.model.name == "square" or self.model.name == "cross_hair1":
-                vert, self.indices, self.buffer = self.load_vertex1()
+                vert, indices, buffer = self.load_vertex1()
             elif self.model.name == "node" or self.model.name == "socket":
-                vert, self.indices, self.buffer = self.load_node_disc()
+                vert, indices, buffer = self.load_node_disc()
 
             mesh_id = self.config.get_mesh_id()
-            mesh = self.__class__.Mesh_class(self.model, mesh_id, vertices=vert, indices=self.indices,
-                                             buffer=self.buffer)
-            self.meshes.append(mesh)
+            mesh = self.__class__.Mesh_class(self.model, mesh_id, vertices=vert, indices=indices,
+                                             buffer=buffer)
+            meshes.append(mesh)
         except Exception as e:
             dump_exception(e)
 
         if DEBUG:
             if self.model.name == "node":
                 print("vertices", self.model.name, vert)
-                print("indices", self.model.name, self.indices)
-                print("buffer", self.model.name, self.buffer)
-                self.show_buffer_data(self.buffer)
+                print("indices", self.model.name, indices)
+                print("buffer", self.model.name, buffer)
+                self.show_buffer_data(buffer)
                 print("\n")
 
-        return self.meshes
+        return meshes
 
     @staticmethod
     def create_sorted_vertex_buffer(indices_data, vertices, textures, normals):
@@ -125,6 +148,106 @@ class ObjectFileLoader:
             start = i * 8
             end = start + 8
             print(buffer[start:end])
+
+    def load_mesh_into_opengl(self, mesh_id=0, buffer=[], indices=[], shader=""):
+        """
+        Loads a single mesh into Opengl buffers
+
+        :param mesh_id: id of the :class:`~sphere_iot.uv_models.Mesh` to store into ``OpenGl``
+        :type mesh_id: ``int``
+        :param buffer: Buffer array
+        :type buffer: ``np.array``
+        :param indices: Indices array
+        :type indices: ``np.array``
+        :param shader: 'Shader' to use for this :class:`~sphere_iot.uv_models.Mesh`
+        :type shader: Overridden version of :class:`~sphere_iot.shader.uv_base_shader.BaseShader`
+
+        """
+
+        glBindVertexArray(self.config.VAO[mesh_id])
+
+        # vertex Buffer Object
+        glBindBuffer(GL_ARRAY_BUFFER, self.config.VBO[mesh_id])
+        glBufferData(GL_ARRAY_BUFFER, buffer.nbytes, buffer, GL_STATIC_DRAW)
+
+        # element Buffer Object
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self.config.EBO[mesh_id])
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.nbytes, indices, GL_STATIC_DRAW)
+
+        # vertex positions
+        # Enable the Vertex Attribute so that OpenGL knows to use it
+        glEnableVertexAttribArray(0)
+        # Configure the Vertex Attribute so that OpenGL knows how to read the VBO
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, buffer.itemsize * 8, ctypes.c_void_p(0))
+
+        # textures
+        # Enable the Vertex Attribute so that OpenGL knows to use it
+        glEnableVertexAttribArray(1)
+        # Configure the Vertex Attribute so that OpenGL knows how to read the VBO
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, buffer.itemsize * 8, ctypes.c_void_p(12))
+
+        # normals
+        # Enable the Vertex Attribute so that OpenGL knows to use it
+        glEnableVertexAttribArray(2)
+        # Configure the Vertex Attribute so that OpenGL knows how to read the VBO
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, buffer.itemsize * 8, ctypes.c_void_p(20))
+
+        #  Bind the VBO, VAO to 0 so that we don't accidentally modify the VAO and VBO we created
+        glBindBuffer(GL_ARRAY_BUFFER, 0)
+        glBindVertexArray(0)
+        # Bind the EBO to 0 so that we don't accidentally modify it
+        # MAKE SURE TO UNBIND IT AFTER UNBINDING THE VAO, as the EBO is linked in the VAO
+        # This does not apply to the VBO because the VBO is already linked to the VAO during glVertexAttribPointer
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0)
+
+        shader.set_environment()
+
+    def load_all_textures_into_opengl(self):
+        """
+        Gets all the images and textures in the config dictionary. Retrieves image file location and
+        loads them into OpenGl
+
+        """
+
+        self.config.textures = glGenTextures(len(self.config.all_textures))
+        for index, item in enumerate(self.config.all_textures.values()):
+            self.load_texture_into_opengl(item['file_dir_name'], item['img_id'] + 1)
+
+    @staticmethod
+    def load_texture_into_opengl(texture_path, texture_id):
+        """
+        Load a texture into ``OpenGl``
+
+        :param texture_path: Texture path and texture name
+        :type texture_path: ``str``
+        :param texture_id: Id of the texture to load
+        :type texture_id: ``int``
+
+        """
+
+        glBindTexture(GL_TEXTURE_2D, texture_id)
+
+        # Set the texture wrapping parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
+
+        # Set texture filtering parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+
+        # Mip_maps
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR)
+
+        # load image
+        img = Image.open(texture_path)
+        img = img.transpose(Image.FLIP_TOP_BOTTOM)
+        img_data = img.convert("RGBA").tobytes()
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img.width, img.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img_data)
+        glGenerateMipmap(GL_TEXTURE_2D)
+
+        #  Bind to 0 so it cannot be changed by mistake
+        glBindTexture(GL_TEXTURE_2D, 0)
+
 
     @staticmethod
     def load_square1x1():
