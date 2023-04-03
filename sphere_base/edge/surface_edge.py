@@ -23,7 +23,6 @@ from collections import OrderedDict
 from sphere_base.utils import dump_exception
 import numpy as np
 from sphere_base.constants import *
-from OpenGL.GL import *
 
 DEBUG = False
 
@@ -97,29 +96,11 @@ class SurfaceEdge(Serializable):
         self.gr_edge = self.__class__.GraphicsEdge_class(self)
 
         self.model = self.set_up_model('edge1')
-        self.shader = self.model.shader
-
         self.loader = ObjectFileLoader(self.model, self.config)
 
-        # ------------------------------------------------------------
-
-        # self.mesh_id = glGenVertexArrays(1)
         self.mesh_id = self.loader.create_buffers(1)
         self.model.model_id = self.mesh_id
         self.scale = [1.0, 1.0, 1.0]
-
-        self.shader.mesh_id = self.mesh_id
-
-        self.buffer_id = glGenBuffers(1)
-        self.shader.buffer_id = self.buffer_id
-
-        # self.VAO_id = glGenVertexArrays(1)
-        # self.VBO_id = glGenBuffers(1)
-        # self.EBO_id = glGenBuffers(1)
-
-        self.vertices = np.array([], dtype=np.float32)  # vertex coordinates
-        self.buffer = np.array([], dtype=np.float32)
-        self.indices = np.array([], dtype='uint32')
 
         self.mesh = self.__class__.Mesh_class(self.model, self.mesh_id, vertices=[], indices=[], buffer=[])
         self.model.meshes.append(self.mesh)
@@ -232,26 +213,24 @@ class SurfaceEdge(Serializable):
         # get number of vertices on the edge
         if self.start_socket and self.end_socket:
             number_of_vertices = self.gr_edge.get_number_of_vertices(self.start_socket.xyz, self.end_socket.xyz,
-                                                                     self.sphere.radius, self.gr_edge.unit_length)
+                                                                     self.radius, self.gr_edge.unit_length)
             step = 1 / number_of_vertices if number_of_vertices > 1 else 1
 
             if number_of_vertices > 0:
                 self.update_line_points_position(number_of_vertices, step)
 
-            self.loader.load_mesh_into_opengl(self.mesh_id, self.mesh.buffer, self.mesh.indices, self.shader)
+            self.loader.load_mesh_into_opengl(self.mesh_id, self.mesh.buffer, self.mesh.indices, self.model.shader)
             # self.load_mesh_into_opengl(self.mesh_id, self.mesh.buffer, self.mesh.indices, self.shader)
 
     def create_edge(self):
         # create an edge for the first time or recreate it during dragging
         if self.start_socket and self.end_socket:
             number_of_vertices = self.gr_edge.get_number_of_vertices(self.start_socket.xyz, self.end_socket.xyz,
-                                                                     self.sphere.radius, self.gr_edge.unit_length)
+                                                                     self.radius, self.gr_edge.unit_length)
             step = 1 / number_of_vertices if number_of_vertices > 1 else 1
 
             if number_of_vertices > 0:
                 self.update_line_points_position(number_of_vertices, step)
-
-
 
     def get_cumulative_rotation(self):
         """
@@ -292,17 +271,17 @@ class SurfaceEdge(Serializable):
         # creating a collision object for mouse ray collisions
         self.collision_object_id = self.sphere.uv.mouse_ray.create_collision_object(self, vert)
 
-        self.shader.vertices = np.array(vertex, dtype=np.float32)
-        self.shader.buffer = np.array(buffer, dtype=np.float32)
-
         self.mesh.vertices = np.array(vertex, dtype=np.float32)
         self.mesh.indices = np.array(indices, dtype='uint32')
         self.mesh.buffer = np.array(buffer, dtype=np.float32)
 
-        self.orientation = self.start_socket.orientation
+        self.orientation = self.sphere.orientation
         self.mesh.indices_len = len(indices)
 
-        self.loader.load_mesh_into_opengl(self.mesh_id, self.mesh.buffer, self.mesh.indices, self.shader)
+        #     position=self.sphere.xyz,
+        #     orientation=self.sphere.orientation,
+
+        self.loader.load_mesh_into_opengl(self.mesh_id, self.mesh.buffer, self.mesh.indices, self.model.shader)
 
     def get_edge_start_end(self):
         # get clearance from start socket
@@ -375,25 +354,9 @@ class SurfaceEdge(Serializable):
         """
         # in some cases color turns to none. The reason is not known. The following line patches this problem
         self.color = [0.0, 0.0, 0.0, 0.5] if not self.color else self.color
-        # self.shader.draw_edge(self.pos_array, width=1.5, color=self.color, dotted=False)
-        # self.model.shader.draw_edge(self.pos_array, width=4, color=self.color, dotted=False)
 
         try:
-            pass
-            # self.shader.draw(
-            #     object_index=0,
-            #     object_type="",
-            #     mesh_index=self.mesh_id,
-            #     indices_len=0,
-            #     position=self.sphere.xyz,
-            #     orientation=self.sphere.orientation,
-            #     scale=None,
-            #     texture_id=0,
-            #     color=[1.0, 1.0, 1.0, 1.0],
-            #     switch=0)
-
             self.model.draw(self)
-
         except Exception as e:
             dump_exception(e)
 

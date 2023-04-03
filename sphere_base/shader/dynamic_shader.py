@@ -37,11 +37,6 @@ class DynamicShader(BaseShader):
         self.width = self.config.view.view_width
         self.height = self.config.view.view_height
 
-        self.mesh_id = None
-        self.buffer_id = None
-        self.vertices = None
-        self.buffer = None
-
         self.vertex_shader = vertex_shader
         self.fragment_shader = fragment_shader
         self.geometry_shader = geometry_shader
@@ -244,80 +239,19 @@ class DynamicShader(BaseShader):
         :type switch: ``int``
         """
 
-        glUseProgram(self.shader_id)
-        glBindVertexArray(self.mesh_id)
+        super().draw(object_index=object_index, object_type=object_type, mesh_index=mesh_index, indices_len=indices_len,
+                     position=position, orientation=orientation, scale=scale, texture_id=texture_id,
+                     color=color, switch=switch)
 
-        glBindBuffer(GL_ARRAY_BUFFER, self.buffer_id)
-        glBufferData(GL_ARRAY_BUFFER, len(self.vertices) * 3, self.vertices, GL_STATIC_DRAW)
-        # glBufferData(GL_ARRAY_BUFFER, self.buffer.nbytes, self.buffer, GL_STATIC_DRAW)
+        # glUniform1i(self.switcher_loc, switch)
+        glUniform4f(self.a_color, *color)
 
-        glEnableVertexAttribArray(0)
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, self.buffer.itemsize * 3, ctypes.c_void_p(0))
+        # One way to draw with indexes
+        glEnable(GL_CULL_FACE)
+        glDrawElements(GL_POINTS, indices_len * 3, GL_UNSIGNED_INT, ctypes.c_void_p(0))
 
-        obj_pos = matrix44.create_from_translation(Vector3(position))
-        glUniformMatrix4fv(self.model_loc, 1, GL_FALSE, obj_pos)
+        # alternative possibility drawing arrays.....
+        # glDrawArrays(GL_TRIANGLES, 0, len(vertices))
+        glDisable(GL_CULL_FACE)
+        glStencilFunc(GL_ALWAYS, object_index, -1)
 
-        if color:
-            glUniform4f(self.a_color, *color)
-
-        rm = matrix44.create_from_inverse_of_quaternion(orientation)
-        sm = self.create_scale_matrix(scale)
-
-        # combined transformation matrix rotation and scale
-        tm = matrix44.multiply(sm, rm)
-        glUniformMatrix4fv(self.transform_loc, 1, GL_FALSE, tm)
-
-        glDrawArrays(GL_POINTS, 0, len(self.vertices) * 3)
-
-        glBindBuffer(GL_ARRAY_BUFFER, 0)
-        glBindVertexArray(0)
-
-    def draw_edge(self, points, width=1.5, color=None, dotted=False, switch=0):
-        """
-        Drawing edges. Using direct Open GL
-
-        :param points: list of Vector3 points positions
-        :type points: ``list``
-        :param width: width of the line
-        :type width: ``float``
-        :param color: color of the line
-        :type color: ``Vector4``
-        :param dotted: is the line dotted
-        :type dotted: ``bool``
-        :param switch: OpenGL switch
-        :type switch: ``int``
-
-        .. Warning::
-
-            This method is using obsolete direct OpenGL instead of modern OpenGL.
-            This needs to be updated in a future iteration.
-
-        """
-        # TODO: still needed do not remove yet
-        # drawing lines
-        glUseProgram(self.shader_id)  # using the standard shader
-        glUniform1i(self.switcher_loc, 3)  # switch to use fragment and vertex shader for lines
-        glLineWidth(width)
-
-        if color:
-            # enable blending
-            # glEnable(GL_BLEND)
-            glUniform4f(self.a_color, *color)
-            # glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-            glEnable(GL_LINE_SMOOTH)
-            glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
-
-        if dotted:
-            # dotted line for dragging
-            glLineStipple(4, 0xAAAA)
-            glEnable(GL_LINE_STIPPLE)
-        else:
-            # reset to normal
-            glDisable(GL_LINE_STIPPLE)
-
-        glBegin(GL_LINE_STRIP)
-        for point in points:
-            glVertex3f(point[0], point[1], point[2])
-        glEnd()
-        glDisable(GL_LINE_STIPPLE)  # just in case ....
-        glLineWidth(1)
