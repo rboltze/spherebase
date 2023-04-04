@@ -9,8 +9,9 @@ from OpenGL.GL import *
 from pyrr import Vector3, matrix44
 import pyrr
 from OpenGL.GL.shaders import compileProgram, compileShader
-
 from sphere_base.constants import *
+
+DEBUG = False
 
 
 class BaseShader:
@@ -34,6 +35,8 @@ class BaseShader:
         self.config = parent.config
         self.width = self.config.view.view_width
         self.height = self.config.view.view_height
+
+        self.projection_matrix = None
 
         self.vertex_shader = vertex_shader
         self.fragment_shader = fragment_shader
@@ -237,6 +240,15 @@ class BaseShader:
         :param switch: OpenGL shader switch
         :type switch: ``int``
         """
+
+        if DEBUG:
+            if object_type == "edge1":
+                print("-------------- DRAW MESH -----------")
+                print("mesh_id", mesh_index)
+                print("position", position)
+                print("orientation", orientation)
+                print("scale", scale)
+                print("texture_id", texture_id, "\n")
 
         glUseProgram(self.shader_id)
         glBindVertexArray(self.config.VAO[mesh_index])

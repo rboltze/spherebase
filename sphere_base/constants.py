@@ -67,7 +67,7 @@ MODELS = {
     "square": {"model_id": 9, "model_file_name": "vertex1.obj", "shader": "SquareShader",
                "vertex_shader": "vert_square.glsl",
                "fragment_shader": "frag_square.glsl", "geometry_shader": "geom_square.glsl"},
-    "edge1": {"model_id": 10, "model_file_name": "line_1x1.obj", "shader": "DynamicShader",
+    "edge1": {"model_id": 10, "model_file_name": "line_1x1.obj", "shader": "EdgeShader",
              "vertex_shader": "vert_sphere_edge.glsl",
              "fragment_shader": "frag_sphere_edge.glsl", "geometry_shader": "none"},
     "cross_hair1": {"model_id": 11, "model_file_name": "vertex1.obj", "shader": "CrossShader",

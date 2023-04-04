@@ -12,7 +12,7 @@ from sphere_base.serializable import Serializable
 from sphere_base.utils import dump_exception
 from collections import OrderedDict
 from sphere_base.node.node import Node
-from sphere_base.sphere.edge_drag import EdgeDrag
+from sphere_base.edge.edge_drag import EdgeDrag
 from sphere_base.edge.surface_edge import SurfaceEdge
 from sphere_base.history import History
 from pyrr import quaternion

@@ -60,15 +60,16 @@ class Models:
             fragment_shader = MODELS[_name]["fragment_shader"]
             geometry_shader = None if MODELS[_name]["geometry_shader"] == "none" else MODELS[_name]["geometry_shader"]
 
-            # Create a new model
-            model = self.Model(self, model_id, model_name, model_file, shader, vertex_shader, fragment_shader,
-                               geometry_shader)
+            if 'edge' not in model_name:
+                # Create a new model
+                model = self.Model(self, model_id, model_name, model_file, shader, vertex_shader, fragment_shader,
+                                   geometry_shader)
 
-            # add model to internal list
-            self._models.append(model)
+                # add model to internal list
+                self._models.append(model)
 
-            # calculate total number of meshes
-            no_of_meshes += model.get_number_of_meshes_in_model()
+                # calculate total number of meshes
+                no_of_meshes += model.get_number_of_meshes_in_model()
 
         self.loader.create_buffers(no_of_meshes)
 

@@ -9,12 +9,10 @@ Edges are drawn between sockets over the surface of a sphere_base.
 # Do not remove these!!!
 # -------------- these will be dynamically read! -----------------------
 
-from sphere_base.shader.dynamic_shader import DynamicShader
-
 # -----------------------------------------------------------------------
 
 from pyrr import quaternion, vector, Vector3
-from sphere_base.sphere.graphic_edge import GraphicEdge
+from sphere_base.edge.graphic_edge import GraphicEdge
 from sphere_base.serializable import Serializable
 from sphere_base.model.model import Model
 from sphere_base.model.mesh import Mesh
@@ -55,11 +53,10 @@ class SurfaceEdge(Serializable):
         When creating or dragging a node with an edge, the vertices change and need to replace the existing
         vertices before drawing the new ones.
 
-
     """
     GraphicsEdge_class = GraphicEdge
 
-    def __init__(self, target_sphere: 'sphere_base', socket_start: 'socket' = None, socket_end: 'socket' = None):
+    def __init__(self, target_sphere: 'sphere', socket_start: 'socket' = None, socket_end: 'socket' = None):
         """
         Constructor of the edge class. Creates an edge between a start and an end socket.
 
@@ -90,41 +87,36 @@ class SurfaceEdge(Serializable):
         self._start_socket, self._end_socket = None, None
         self.start_socket = socket_start if socket_start else None
         self.end_socket = socket_end if socket_end else None
-        self.xyz = None
-        self.orientation = None
-
-        self.gr_edge = self.__class__.GraphicsEdge_class(self)
-
-        self.model = self.set_up_model('edge1')
-        self.loader = ObjectFileLoader(self.model, self.config)
-
-        self.mesh_id = self.loader.create_buffers(1)
-        self.model.model_id = self.mesh_id
-        self.scale = [1.0, 1.0, 1.0]
-
-        self.mesh = self.__class__.Mesh_class(self.model, self.mesh_id, vertices=[], indices=[], buffer=[])
-        self.model.meshes.append(self.mesh)
-        # position_orientation (angle) of the node on the sphere_base relative to the zero rotation of the
-        # sphere_base is the same as the starting socket
-        self.pos_orientation_offset = None
-
-        # ------------------------------------------------------------
-
-        self.radius = self.sphere.radius - 0.01
+        self.xyz, self.orientation = None, None
         self.collision_object_id = None
-        self.color = self.gr_edge.color
-        self.edge_type = 0
         self.serialized_detail_scene = None
         self._edge_moved = False
 
+        self.mesh_id = None
+        self.model = self.set_up_model('edge1')
+
+        self.mesh_id = self.model.meshes[0].mesh_id
+        self.gr_edge = self.__class__.GraphicsEdge_class(self)
+
+        self.scale = [1.0, 1.0, 1.0]
+        self.color = self.gr_edge.color
+        self.edge_type = 0
+
+        # position_orientation (angle) of the node on the sphere_base relative to the zero rotation of the
+        # sphere_base is the same as the starting socket
+        self.pos_orientation_offset = None
+        self.radius = self.sphere.radius - 0.01
+
         # register the edge to the sphere_base for rendering
         self.sphere.add_item(self)
+
         # self.update_position()
         self.create_edge()
 
     def set_up_model(self, model_name):
         shader, vertex_shader, fragment_shader, geometry_shader = None, None, None, None
 
+        # get the shaders for the edgel
         for _name in MODELS.keys():
             if _name == model_name:
                 shader = MODELS[_name]["shader"]
@@ -135,13 +127,14 @@ class SurfaceEdge(Serializable):
 
         model = Model(
                       models=self.uv.models,
-                      model_id=0,
-                      model_name=model_name,
+                      model_id=self.mesh_id,
+                      model_name=model_name + str(self.mesh_id),
                       obj_file="",
                       shader=shader,
                       vertex_shader=vertex_shader,
                       fragment_shader=fragment_shader,
                       geometry_shader=geometry_shader)
+
         return model
 
     @property
@@ -219,9 +212,6 @@ class SurfaceEdge(Serializable):
             if number_of_vertices > 0:
                 self.update_line_points_position(number_of_vertices, step)
 
-            self.loader.load_mesh_into_opengl(self.mesh_id, self.mesh.buffer, self.mesh.indices, self.model.shader)
-            # self.load_mesh_into_opengl(self.mesh_id, self.mesh.buffer, self.mesh.indices, self.shader)
-
     def create_edge(self):
         # create an edge for the first time or recreate it during dragging
         if self.start_socket and self.end_socket:
@@ -271,17 +261,17 @@ class SurfaceEdge(Serializable):
         # creating a collision object for mouse ray collisions
         self.collision_object_id = self.sphere.uv.mouse_ray.create_collision_object(self, vert)
 
-        self.mesh.vertices = np.array(vertex, dtype=np.float32)
-        self.mesh.indices = np.array(indices, dtype='uint32')
-        self.mesh.buffer = np.array(buffer, dtype=np.float32)
+        self.model.meshes[0].vertices = np.array(vertex, dtype=np.float32)
+        self.model.meshes[0].indices = np.array(indices, dtype='uint32')
+        self.model.meshes[0].buffer = np.array(buffer, dtype=np.float32)
 
         self.orientation = self.sphere.orientation
-        self.mesh.indices_len = len(indices)
+        self.model.meshes[0].indices_len = len(indices)
 
         #     position=self.sphere.xyz,
         #     orientation=self.sphere.orientation,
 
-        self.loader.load_mesh_into_opengl(self.mesh_id, self.mesh.buffer, self.mesh.indices, self.model.shader)
+        self.model.loader.load_mesh_into_opengl(self.mesh_id, self.model.meshes[0].buffer, self.model.meshes[0].indices, self.model.shader)
 
     def get_edge_start_end(self):
         # get clearance from start socket

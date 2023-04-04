@@ -14,7 +14,7 @@ from sphere_base.shader.sphere_edge_shader import SphereEdgeShader
 from sphere_base.shader.cross_shader import CrossShader
 from sphere_base.shader.holo_sphere_shader import HoloSphereShader
 from sphere_base.shader.sphere_small_shader import SphereSmallShader
-from sphere_base.shader.dynamic_shader import DynamicShader
+from sphere_base.shader.Edge_shader import EdgeShader
 # -----------------------------------------------------------------------
 
 from sphere_base.sphere_universe_base.suv_graphic_item import GraphicItem
@@ -77,7 +77,7 @@ class Model(GraphicItem):
         self.config = models.config
         self.uv = models.uv
         self.models = models
-        self.model_id = model_id
+        self.model_id = model_id if model_id else self.id
         self.name = model_name
 
         self.meshes = []  # list holding instances of mesh class
@@ -90,7 +90,10 @@ class Model(GraphicItem):
             self.loader = ObjectFileLoader(self, config=self.config)
             self.meshes = self.loader.get_meshes(obj_file)
         else:
-            print("not a .obj file")
+            pass
+            # No object file passed, meshes need to be loaded later.
+            self.loader = ObjectFileLoader(self, config=self.config)
+            self.meshes = self.loader.create_empty_mesh()
 
     def get_number_of_meshes_in_model(self) -> int:
         """
@@ -113,8 +116,11 @@ class Model(GraphicItem):
         :type scale:   ``list``
 
         """
-        # if self.model_id in [12, 13, 14, 15]:
-        #     print(self.meshes)
+        # if self.model_id in [12]:
+        #     # print("model_id", self.model_id, self.meshes[0].vertices)
+        #     print("model_id", self.model_id, parent.orientation, parent.xyz)
+        #     for mesh in self.meshes:
+        #         print(mesh.vertices)
 
         # draws all meshes
         color = color if color else [1.0, 1.0, 1.0, 1.0]

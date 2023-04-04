@@ -82,14 +82,15 @@ class Mesh:
         """
 
         if DEBUG:
-            if model_id in [12, 13, 14, 15]:
+            if self.model.type == "edge1":
+                print("-------------- DRAW MESH -----------")
                 print("model", model_id, self.model.type)
                 print("mesh_id", self.mesh_id)
                 print("indices_len", self.indices_len)
                 print("position", position)
                 print("orientation", orientation)
                 print("scale", scale)
-                print("texture_id", texture_id)
+                print("texture_id", texture_id, "\n")
 
         try:
             shader.draw(

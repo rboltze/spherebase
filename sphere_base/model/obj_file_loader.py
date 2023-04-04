@@ -36,12 +36,13 @@ class ObjectFileLoader:
         EBO = glGenBuffers(size)
 
         if size == 1:
-            self.config.VAO.append(VAO)  # I know, I know, I could also use the value here
+            # if size is 1, glGenVertexArrays does not allow to iterate :-(
+            self.config.VAO.append(VAO)
             self.config.VBO.append(VBO)
             self.config.EBO.append(EBO)
         else:
             for counter, value in enumerate(VAO):
-                self.config.VAO.append(VAO[counter])  # I know, I know, I could also use the value here
+                self.config.VAO.append(VAO[counter])
                 self.config.VBO.append(VBO[counter])
                 self.config.EBO.append(EBO[counter])
 
@@ -99,6 +100,14 @@ class ObjectFileLoader:
                 self.show_buffer_data(buffer)
                 print("\n")
 
+        return meshes
+
+    def create_empty_mesh(self):
+        meshes = []
+        mesh_id = self.create_buffers(1)
+        mesh = self.__class__.Mesh_class(self.model, mesh_id, vertices=[], indices=[],
+                                         buffer=[])
+        meshes.append(mesh)
         return meshes
 
     @staticmethod
