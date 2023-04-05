@@ -32,7 +32,7 @@ class Model(GraphicItem):
     Class representing a ``Model``. 
     """
 
-    def __init__(self, models, model_id, model_name, obj_file=None, shader=None, vertex_shader=None,
+    def __init__(self, models, model_id=None, model_name=None, obj_file=None, shader=None, vertex_shader=None,
                  fragment_shader=None, geometry_shader=None):
         """
 
@@ -116,15 +116,16 @@ class Model(GraphicItem):
         :type scale:   ``list``
 
         """
-        # if self.model_id in [12]:
-        #     # print("model_id", self.model_id, self.meshes[0].vertices)
-        #     print("model_id", self.model_id, parent.orientation, parent.xyz)
-        #     for mesh in self.meshes:
-        #         print(mesh.vertices)
 
         # draws all meshes
         color = color if color else [1.0, 1.0, 1.0, 1.0]
         for mesh in self.meshes:
+            # print(self.name, self.model_id)
+            # if 'edge' in self.name:
+            #     print("----------------- Edge update position --------------------")
+            #     print("orientation", parent.orientation)
+            #     print("xyz", parent.xyz, "\n")
+
             mesh.draw(self.shader,
                       model_id=self.model_id,
                       position=parent.xyz,

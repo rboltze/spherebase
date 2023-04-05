@@ -16,7 +16,6 @@ from sphere_base.edge.graphic_edge import GraphicEdge
 from sphere_base.serializable import Serializable
 from sphere_base.model.model import Model
 from sphere_base.model.mesh import Mesh
-from sphere_base.model.obj_file_loader import ObjectFileLoader
 from collections import OrderedDict
 from sphere_base.utils import dump_exception
 import numpy as np
@@ -92,10 +91,11 @@ class SurfaceEdge(Serializable):
         self.serialized_detail_scene = None
         self._edge_moved = False
 
-        self.mesh_id = None
+        self.orientation = self.sphere.orientation
         self.model = self.set_up_model('edge1')
 
         self.mesh_id = self.model.meshes[0].mesh_id
+        self.model.name = 'edge_' + str(self.mesh_id)
         self.gr_edge = self.__class__.GraphicsEdge_class(self)
 
         self.scale = [1.0, 1.0, 1.0]
@@ -105,12 +105,11 @@ class SurfaceEdge(Serializable):
         # position_orientation (angle) of the node on the sphere_base relative to the zero rotation of the
         # sphere_base is the same as the starting socket
         self.pos_orientation_offset = None
-        self.radius = self.sphere.radius - 0.01
+        self.radius = self.sphere.radius - 0.1
 
         # register the edge to the sphere_base for rendering
         self.sphere.add_item(self)
 
-        # self.update_position()
         self.create_edge()
 
     def set_up_model(self, model_name):
@@ -127,8 +126,8 @@ class SurfaceEdge(Serializable):
 
         model = Model(
                       models=self.uv.models,
-                      model_id=self.mesh_id,
-                      model_name=model_name + str(self.mesh_id),
+                      model_id=0,
+                      model_name=model_name,
                       obj_file="",
                       shader=shader,
                       vertex_shader=vertex_shader,
@@ -190,45 +189,27 @@ class SurfaceEdge(Serializable):
             self.end_socket.add_edge(self)
 
     def update_position(self):
-        """
-        Updates the position of the edge.
+        """º
+        It recreates the edge when the sockets change or when the glob rotates.
+
+            .. note::
+
+            This may not be ideal as it would be better to rotate the line object with the sphere
+            instead of recreating it this need to be postponed to a later iteration. (04/05/2023)
 
         """
-        # self.pos_orientation_offset = self.start_socket.pos_orientation_offset
-        # cumulative_orientation = self.get_cumulative_rotation()
-        # self.xyz = self.calc.move_to_position(cumulative_orientation, self.sphere, self.radius)
-        #
-        # self.orientation = self.start_socket.orientation  # same orientation as the start socket
-        #
-        # # self.node.sphere.uv.mouse_ray.reset_position_collision_object(self)
-        #
+        self.create_edge()
 
-        # get number of vertices on the edge
-        if self.start_socket and self.end_socket:
-            number_of_vertices = self.gr_edge.get_number_of_vertices(self.start_socket.xyz, self.end_socket.xyz,
-                                                                     self.radius, self.gr_edge.unit_length)
-            step = 1 / number_of_vertices if number_of_vertices > 1 else 1
-
-            if number_of_vertices > 0:
-                self.update_line_points_position(number_of_vertices, step)
 
     def create_edge(self):
         # create an edge for the first time or recreate it during dragging
         if self.start_socket and self.end_socket:
-            number_of_vertices = self.gr_edge.get_number_of_vertices(self.start_socket.xyz, self.end_socket.xyz,
-                                                                     self.radius, self.gr_edge.unit_length)
-            step = 1 / number_of_vertices if number_of_vertices > 1 else 1
+            count = self.gr_edge.count_vertices(self.start_socket.xyz, self.end_socket.xyz,
+                                                             self.radius, self.gr_edge.unit_length)
+            step = 1 / count if count > 1 else 1
 
-            if number_of_vertices > 0:
-                self.update_line_points_position(number_of_vertices, step)
-
-    def get_cumulative_rotation(self):
-        """
-        Helper function returns a quaternion with a cumulative rotation of both the rotation
-        offset of the edge with the rotation of the sphere_base.
-        """
-
-        return quaternion.cross(self.pos_orientation_offset, quaternion.inverse(self.sphere.orientation))
+            if count > 0:
+                self.update_line_points_position(count, step)
 
     def update_line_points_position(self, number_of_vertices: int, step: float):
         """
@@ -243,39 +224,43 @@ class SurfaceEdge(Serializable):
 
         start, end = self.get_edge_start_end()
         vert = []  # vertex coordinates
-        vertex = []  # vertex coordinates
+        vertices = []  # vertex coordinates
         buffer = []
         indices = []
 
+        # print(number_of_vertices, step)
+        tex = [1.0, 1.0]  # made up surface edge, that needs to be added to the buffer
         for i in range(number_of_vertices):
-            pos_orientation_offset = quaternion.slerp(start, end, step * i)
-            p = self.gr_edge.get_position(pos_orientation_offset)  # finding the vertex xyz
+            pos = quaternion.slerp(start, end, step * i)
+            p = self.gr_edge.get_position(pos)  # finding the vertex xyz
             n = vector.normalize(Vector3(p) - Vector3(self.sphere.xyz))  # finding the normal of the vertex
 
             vert.append([p[0], p[1], p[2]])  # we need this for pybullet
-            vertex.extend(p)  # extending the vertices list with the vertex
+            vertices.extend(p)  # extending the vertices list with the vertex
             buffer.extend(p)  # extending the buffer with the vertex
+            buffer.extend(tex) # extending the buffer with the invented texture
             buffer.extend(n)  # extending the buffer with the normal
             indices.append(i)
 
         # creating a collision object for mouse ray collisions
         self.collision_object_id = self.sphere.uv.mouse_ray.create_collision_object(self, vert)
 
-        self.model.meshes[0].vertices = np.array(vertex, dtype=np.float32)
+        self.model.meshes[0].vertices = np.array(vertices, dtype=np.float32)
         self.model.meshes[0].indices = np.array(indices, dtype='uint32')
         self.model.meshes[0].buffer = np.array(buffer, dtype=np.float32)
 
-        self.orientation = self.sphere.orientation
+        # self.orientation = self.sphere.orientation
         self.model.meshes[0].indices_len = len(indices)
 
-        #     position=self.sphere.xyz,
-        #     orientation=self.sphere.orientation,
+        self.xyz = self.sphere.xyz
+
+        # print(self.model.meshes[0].indices)
 
         self.model.loader.load_mesh_into_opengl(self.mesh_id, self.model.meshes[0].buffer, self.model.meshes[0].indices, self.model.shader)
 
     def get_edge_start_end(self):
         # get clearance from start socket
-        r = self.start_socket.node.gr_node.node_disc_radius * .9
+        r = self.start_socket.node.gr_node.node_disc_radius
         ln = self.calc.get_distance_on_sphere(self.end_socket, self.start_socket, self.radius)
         t = r / ln
 
@@ -283,7 +268,9 @@ class SurfaceEdge(Serializable):
         end = self.end_socket.pos_orientation_offset
 
         start = quaternion.slerp(s_angle, end, t)
+        # start = s_angle
 
+        # start and end in angles
         return start, end
 
     def update_content(self, value, item_id):
@@ -342,9 +329,6 @@ class SurfaceEdge(Serializable):
         """
         Renders the edge.
         """
-        # in some cases color turns to none. The reason is not known. The following line patches this problem
-        self.color = [0.0, 0.0, 0.0, 0.5] if not self.color else self.color
-
         try:
             self.model.draw(self)
         except Exception as e:

@@ -69,6 +69,7 @@ class Socket(Serializable):
 
         self.radius = self.node.radius + 0.001
         self.orientation = self.node.orientation
+        self.cumulative_rotation = self.node.cumulative_rotation
         self.xyz = self.node.xyz
         self.pos_orientation_offset = self.node.pos_orientation_offset
 

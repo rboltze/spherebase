@@ -20,6 +20,7 @@ class SplitSphere(Sphere):
         self._close_event_listeners = []
         self.billboard_id = random.randint(30, 31)
 
+
     def get_model(self):
         # self.cube = self.uv.models.get_model('cube') #model in the middle of the globe
         self.model_h = self.uv.models.get_model('holo_sphere')

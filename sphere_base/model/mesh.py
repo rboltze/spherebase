@@ -84,7 +84,7 @@ class Mesh:
         if DEBUG:
             if self.model.type == "edge1":
                 print("-------------- DRAW MESH -----------")
-                print("model", model_id, self.model.type)
+                print("model, model_type", model_id, self.model.type)
                 print("mesh_id", self.mesh_id)
                 print("indices_len", self.indices_len)
                 print("position", position)

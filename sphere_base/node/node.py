@@ -65,43 +65,43 @@ class Node(Serializable):
         """
 
         super().__init__(node_type)
+
         self.node_type_name = "node"
         self.sphere = target_sphere
         self.config = self.sphere.config
         self.calc = self.sphere.calc
         self.node_disc = self.sphere.uv.models.get_model('node')
         self.circle = self.sphere.uv.models.get_model('circle')
+        self.ray = self.sphere.uv.mouse_ray
 
-        self.Socket = self.__class__.Socket_class  # initiate later
+        # (angle) of the node on the sphere_base relative to the zero rotation of the sphere_base
+        self.pos_orientation_offset = np.array(
+            [0.1, 0.1, 0.1, 1.0]) if orientation_offset is None else orientation_offset
 
-        self._init_inner_classes()
-        self.scale = self.gr_node.scale
-        self.texture_id = self.gr_node.default_img_id
         self.orientation = None
         self.offset_with_collision_point = None  # difference center node with collision point
         self.mouse_ray_collision_point = None
         self.grNode = None
         self.serialized_detail_scene = None
         self._node_moved = False
-
+        self.xyz = None
         self.collision_object_radius = NODE_DISC_RADIUS
 
-        # radius of the node to the center of the sphere_base. node can hover above surface of sphere_base
+        self.Socket = self.__class__.Socket_class  # initiate later
+
+        self._init_inner_classes()
+        self.scale = self.gr_node.scale
+        self.texture_id = self.gr_node.default_img_id
         self.radius = target_sphere.radius - 0.01
 
-        # position_orientation (angle) of the node on the sphere_base relative to the zero rotation of the sphere_base
-        self.pos_orientation_offset = np.array(
-            [0.1, 0.1, 0.1, 1.0]) if orientation_offset is None else orientation_offset
-
-        # cumulative sphere_base rotation with position offset of node
-        cumulative_orientation = self.get_cumulative_rotation()
-        self.xyz = self.calc.move_to_position(cumulative_orientation, self.sphere, self.radius)
+        self.xyz = self.get_position()
 
         # get the orientation of the disc pointing away from the center of the sphere_base
-        self.orientation = self.calc.get_item_direction_pointing_outwards(self, self.sphere)
+        self.orientation = self.get_orientation()
+        self.cumulative_rotation = self.get_cumulative_rotation()
 
         # create a collision object (cylinder) pointing out
-        self.collision_object_id = self.sphere.uv.mouse_ray.create_collision_object(self)
+        self.collision_object_id = self.ray.create_collision_object(self)
         self.socket = self.Socket(self)
 
         self.sphere.add_item(self)
@@ -196,23 +196,33 @@ class Node(Serializable):
 
         return self.pos_orientation_offset
 
+    def get_position(self):
+        # cumulative sphere_base rotation with position offset of node
+        cumulative_orientation = self.get_cumulative_rotation()
+
+        # get the position of the node on the sphere_base
+        xyz = self.calc.move_to_position(cumulative_orientation, self.sphere, self.radius)
+        return xyz
+
+    def get_orientation(self):
+        # get the orientation of the disc pointing away from the center of the sphere_base
+        orientation = self.calc.get_item_direction_pointing_outwards(self, self.sphere)
+        return orientation
+
     def update_position(self):
         """
         update the position of the node_disc on the sphere_base. Calculate the position and the direction.
         """
-        # update the position of the node_disc on the sphere_base
-        cumulative_orientation = self.get_cumulative_rotation()
 
-        # get the position of the node on the sphere_base
-        self.xyz = self.calc.move_to_position(cumulative_orientation, self.sphere, self.radius)
-
-        # get the orientation of the disc pointing away from the center of the sphere_base
-        self.orientation = self.calc.get_item_direction_pointing_outwards(self, self.sphere)
+        self.xyz = self.get_position()
+        self.orientation = self.get_orientation()
 
         # set the collision object for mouse pointer ray collision
-        self.sphere.uv.mouse_ray.reset_position_collision_object(self)
+        self.ray.reset_position_collision_object(self)
 
         self.socket.update_position()
+
+        return self.xyz
 
     def update_content(self, texture_id: int, sphere_id: int):
         """

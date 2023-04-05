@@ -7,6 +7,7 @@ Module Graphic Edge. The graphics edge is used with edges.
 
 from pyrr import quaternion
 from sphere_base.calc import Calc
+import math
 
 
 class GraphicEdge:
@@ -46,7 +47,7 @@ class GraphicEdge:
         self._selected = False
         self._current_color = None
 
-        self.unit_length = 0.01
+        self.unit_length = 0.02
         self.color = [0, 0, 0, .5]
 
     def _init_assets(self):
@@ -55,7 +56,7 @@ class GraphicEdge:
         self.selected_color = [255, 0, 0, 1]
         self.hover_color = [191, 255, 0, 1]
 
-    def get_number_of_vertices(self, start_xyz: 'Vector3', end_xyz: 'Vector3', radius: float, unit_length: float):
+    def count_vertices(self, start_xyz: 'Vector3', end_xyz: 'Vector3', radius: float, unit_length: float):
         """
         Returns the number of vertices on the edge.
 
@@ -72,9 +73,13 @@ class GraphicEdge:
         """
         # shortest distance over the surface of the globe between start socket and edge-end
         length = self.calc.get_distance_on_sphere(end_xyz, start_xyz, radius)
+        # print("length", length)
+        # print("unit_length", unit_length)
+        # print("steps", length / unit_length)
+        # print("steps", int(math.ceil(length / unit_length)))
 
         # calculate how many edge_elements fit on the edge length.
-        return int(length / unit_length)
+        return int(math.ceil(length / unit_length))
 
     def get_position(self, pos_orientation_offset: 'Quaternion') -> 'Vector3':
         """

@@ -10,7 +10,7 @@ class SphereEdge(SurfaceEdge):
 
     def __init__(self, parent, socket_start=None, socket_end=None):
         super().__init__(parent, socket_start, socket_end)
-        self.node_type_name = "sphere_edge"
+        # self.node_type_name = "sphere_edge"
 
 
 
