@@ -81,7 +81,7 @@ class GraphicEdge:
         # calculate how many edge_elements fit on the edge length.
         return int(math.ceil(length / unit_length))
 
-    def get_position(self, pos_orientation_offset: 'Quaternion') -> 'Vector3':
+    def get_position(self, pos_orientation_offset: 'Quaternion', radius=None) -> 'Vector3':
         """
         Returns xyz vector based on degree offset (position orientation offset)
 
@@ -93,7 +93,7 @@ class GraphicEdge:
         cumulative_orientation = self.get_cumulative_rotation(pos_orientation_offset)
 
         # get the position of the edge vertex on the sphere_base, calculated from the cumulative rotation
-        xyz = self.calc.move_to_position(cumulative_orientation, self.sphere, self.sphere.radius)
+        xyz = self.calc.move_to_position(cumulative_orientation, self.sphere, radius)
         return xyz
 
     def get_cumulative_rotation(self, pos_orientation_offset: 'Quaternion') -> 'Quaternion':

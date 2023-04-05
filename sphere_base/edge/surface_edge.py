@@ -6,11 +6,6 @@ Edges are drawn between sockets over the surface of a sphere_base.
 
 """
 
-# Do not remove these!!!
-# -------------- these will be dynamically read! -----------------------
-
-# -----------------------------------------------------------------------
-
 from pyrr import quaternion, vector, Vector3
 from sphere_base.edge.graphic_edge import GraphicEdge
 from sphere_base.serializable import Serializable
@@ -105,7 +100,7 @@ class SurfaceEdge(Serializable):
         # position_orientation (angle) of the node on the sphere_base relative to the zero rotation of the
         # sphere_base is the same as the starting socket
         self.pos_orientation_offset = None
-        self.radius = self.sphere.radius - 0.1
+        self.radius = self.sphere.radius - 0.01
 
         # register the edge to the sphere_base for rendering
         self.sphere.add_item(self)
@@ -190,16 +185,17 @@ class SurfaceEdge(Serializable):
 
     def update_position(self):
         """º
-        It recreates the edge when the sockets change or when the glob rotates.
-
-            .. note::
-
-            This may not be ideal as it would be better to rotate the line object with the sphere
-            instead of recreating it this need to be postponed to a later iteration. (04/05/2023)
+        It recreates the edge when the sockets change
 
         """
-        self.create_edge()
-
+        a = set(self.orientation)
+        b = set(self.sphere.orientation)
+        if a == b:
+            # socket has changed
+            self.create_edge()
+        else:
+            # sphere rotates
+            self.orientation = self.sphere.orientation
 
     def create_edge(self):
         # create an edge for the first time or recreate it during dragging
@@ -232,13 +228,14 @@ class SurfaceEdge(Serializable):
         tex = [1.0, 1.0]  # made up surface edge, that needs to be added to the buffer
         for i in range(number_of_vertices):
             pos = quaternion.slerp(start, end, step * i)
-            p = self.gr_edge.get_position(pos)  # finding the vertex xyz
+            p = self.gr_edge.get_position(pos, self.radius)  # finding the vertex xyz
+            p = self.calc.move_to_position(pos, self.sphere, self.radius)
             n = vector.normalize(Vector3(p) - Vector3(self.sphere.xyz))  # finding the normal of the vertex
 
             vert.append([p[0], p[1], p[2]])  # we need this for pybullet
             vertices.extend(p)  # extending the vertices list with the vertex
             buffer.extend(p)  # extending the buffer with the vertex
-            buffer.extend(tex) # extending the buffer with the invented texture
+            buffer.extend(tex)  # extending the buffer with the invented texture
             buffer.extend(n)  # extending the buffer with the normal
             indices.append(i)
 
@@ -256,7 +253,8 @@ class SurfaceEdge(Serializable):
 
         # print(self.model.meshes[0].indices)
 
-        self.model.loader.load_mesh_into_opengl(self.mesh_id, self.model.meshes[0].buffer, self.model.meshes[0].indices, self.model.shader)
+        self.model.loader.load_mesh_into_opengl(self.mesh_id, self.model.meshes[0].buffer,
+                                                self.model.meshes[0].indices, self.model.shader)
 
     def get_edge_start_end(self):
         # get clearance from start socket

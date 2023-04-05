@@ -166,7 +166,7 @@ class EdgeDrag:
                 self.pos_orientation_offset, self.start_socket.pos_orientation_offset, step * i)
 
             # get the position of each point and add to array
-            pos = self.gr_edge.get_position(pos_orientation_offset)
+            pos = self.gr_edge.get_position(pos_orientation_offset, self.sphere.radius)
             self.pos_array.append([pos[0], pos[1], pos[2]])
 
     def drag_to(self, mouse_abs_pos):
@@ -177,7 +177,7 @@ class EdgeDrag:
         :returns: xyz 'Vector3'
         """
         self.pos_orientation_offset = self.calc.find_angle_from_world_pos(mouse_abs_pos, self.sphere.orientation)
-        return self.gr_edge.get_position(self.pos_orientation_offset)
+        return self.gr_edge.get_position(self.pos_orientation_offset, self.sphere.radius)
 
     def draw(self):
         """
