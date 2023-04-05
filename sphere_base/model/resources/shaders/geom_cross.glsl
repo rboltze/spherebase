@@ -21,6 +21,7 @@ void main()
     vec4 new_position = gl_in[0].gl_Position + vec4(-0.025, 0.0, 0.0, 0.0) + offset;
     gl_Position = projection * view * model * transform * new_position;
     EmitVertex();
+
     offset = vec4(cos(ang) * 0.15, -sin(ang) * 0.14, 0.0, 0.0);
     new_position = gl_in[0].gl_Position + vec4( 0.025, 0.0, 0.0, 0.0) + offset;
     gl_Position = projection * view * model * transform * new_position;
@@ -32,6 +33,7 @@ void main()
     new_position = gl_in[0].gl_Position + vec4( -0.025, 0.0, 0.0, 0.0) + offset;
     gl_Position = projection * view * model * transform * new_position;
     EmitVertex();
+
     offset = vec4(cos(ang) * 0.15, -sin(ang) * 0.14, 0.0, 0.0);
     new_position = gl_in[0].gl_Position + vec4( 0.025, 0.0, 0.0, 0.0) + offset;
     gl_Position = projection * view * model * transform * new_position;
@@ -43,6 +45,7 @@ void main()
     new_position = gl_in[0].gl_Position + vec4( 0.0, -0.025, 0.0, 0.0) + offset;
     gl_Position = projection * view * model * transform * new_position;
     EmitVertex();
+
     offset = vec4(cos(ang) * 0.15, -sin(ang) * 0.14, 0.0, 0.0);
     new_position = gl_in[0].gl_Position + vec4( 0.0, 0.025, 0.0, 0.0) + offset;
     gl_Position = projection * view * model * transform * new_position;
@@ -54,6 +57,7 @@ void main()
     new_position = gl_in[0].gl_Position + vec4( 0.0, -0.025, 0.0, 0.0) + offset;
     gl_Position = projection * view * model * transform * new_position;
     EmitVertex();
+
     offset = vec4(cos(ang) * 0.15, -sin(ang) * 0.14, 0.0, 0.0);
     new_position = gl_in[0].gl_Position + vec4( 0.0, 0.025, 0.0, 0.0) + offset;
     gl_Position = projection * view * model * transform * new_position;

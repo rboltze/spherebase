@@ -44,6 +44,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/rboltze/sphere_base',
-    version='0.0.4 alfa',
+    version='0.0.5 alfa',
     zip_safe=False,
 )

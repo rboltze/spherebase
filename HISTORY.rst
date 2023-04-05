@@ -2,6 +2,11 @@
 History
 =======
 
+0.0.5 (2023-03-29) Alfa
+------------------
+
+* Edges are now optimised. They are dynamically created and stored in Opengl VBO's
+
 0.0.4 (2023-03-29) Alfa
 ------------------
 

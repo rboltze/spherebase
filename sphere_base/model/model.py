@@ -14,7 +14,7 @@ from sphere_base.shader.sphere_edge_shader import SphereEdgeShader
 from sphere_base.shader.cross_shader import CrossShader
 from sphere_base.shader.holo_sphere_shader import HoloSphereShader
 from sphere_base.shader.sphere_small_shader import SphereSmallShader
-from sphere_base.shader.Edge_shader import EdgeShader
+from sphere_base.shader.edge_shader import EdgeShader
 # -----------------------------------------------------------------------
 
 from sphere_base.sphere_universe_base.suv_graphic_item import GraphicItem
@@ -118,14 +118,8 @@ class Model(GraphicItem):
         """
 
         # draws all meshes
-        color = color if color else [1.0, 1.0, 1.0, 1.0]
+        color = color if color else [0.0, 0.0, 0.0, 0.5]
         for mesh in self.meshes:
-            # print(self.name, self.model_id)
-            # if 'edge' in self.name:
-            #     print("----------------- Edge update position --------------------")
-            #     print("orientation", parent.orientation)
-            #     print("xyz", parent.xyz, "\n")
-
             mesh.draw(self.shader,
                       model_id=self.model_id,
                       position=parent.xyz,

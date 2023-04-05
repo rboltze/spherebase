@@ -78,39 +78,32 @@ class SurfaceEdge(Serializable):
         self.config = self.sphere.config
         self.uv = self.sphere.uv
 
+        self.gr_edge = self.__class__.GraphicsEdge_class(self)
+
         self._start_socket, self._end_socket = None, None
         self.start_socket = socket_start if socket_start else None
         self.end_socket = socket_end if socket_end else None
-        self.xyz, self.orientation = None, None
+        self.xyz, self.pos_orientation_offset = None, None
         self.collision_object_id = None
         self.serialized_detail_scene = None
         self._edge_moved = False
-
+        self.scale = [1.0, 1.0, 1.0]
+        self.color = self.gr_edge.color
+        self.edge_type = 0
         self.orientation = self.sphere.orientation
         self.model = self.set_up_model('edge1')
 
         self.mesh_id = self.model.meshes[0].mesh_id
         self.model.name = 'edge_' + str(self.mesh_id)
-        self.gr_edge = self.__class__.GraphicsEdge_class(self)
 
-        self.scale = [1.0, 1.0, 1.0]
-        self.color = self.gr_edge.color
-        self.edge_type = 0
-
-        # position_orientation (angle) of the node on the sphere_base relative to the zero rotation of the
-        # sphere_base is the same as the starting socket
-        self.pos_orientation_offset = None
         self.radius = self.sphere.radius - 0.01
-
-        # register the edge to the sphere_base for rendering
-        self.sphere.add_item(self)
-
+        self.sphere.add_item(self)  # register the edge to the base for rendering
         self.create_edge()
 
     def set_up_model(self, model_name):
         shader, vertex_shader, fragment_shader, geometry_shader = None, None, None, None
 
-        # get the shaders for the edgel
+        # get the shaders for the edge
         for _name in MODELS.keys():
             if _name == model_name:
                 shader = MODELS[_name]["shader"]
@@ -119,6 +112,7 @@ class SurfaceEdge(Serializable):
                 geometry_shader = MODELS[_name]["geometry_shader"]
                 geometry_shader = None if geometry_shader == "none" else geometry_shader
 
+        # create a model for this edge
         model = Model(
                       models=self.uv.models,
                       model_id=0,
@@ -191,7 +185,7 @@ class SurfaceEdge(Serializable):
         a = set(self.orientation)
         b = set(self.sphere.orientation)
         if a == b:
-            # socket has changed
+            # socket(s) have changed
             self.create_edge()
         else:
             # sphere rotates
@@ -245,18 +239,17 @@ class SurfaceEdge(Serializable):
         self.model.meshes[0].vertices = np.array(vertices, dtype=np.float32)
         self.model.meshes[0].indices = np.array(indices, dtype='uint32')
         self.model.meshes[0].buffer = np.array(buffer, dtype=np.float32)
-
-        # self.orientation = self.sphere.orientation
         self.model.meshes[0].indices_len = len(indices)
 
         self.xyz = self.sphere.xyz
-
-        # print(self.model.meshes[0].indices)
-
         self.model.loader.load_mesh_into_opengl(self.mesh_id, self.model.meshes[0].buffer,
                                                 self.model.meshes[0].indices, self.model.shader)
 
     def get_edge_start_end(self):
+        """
+        returns start and end angles in quaternions.
+
+        """
         # get clearance from start socket
         r = self.start_socket.node.gr_node.node_disc_radius
         ln = self.calc.get_distance_on_sphere(self.end_socket, self.start_socket, self.radius)
@@ -328,7 +321,7 @@ class SurfaceEdge(Serializable):
         Renders the edge.
         """
         try:
-            self.model.draw(self)
+            self.model.draw(self, color=self.color)
         except Exception as e:
             dump_exception(e)
 

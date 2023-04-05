@@ -27,7 +27,7 @@ class EdgeShader(BaseShader):
 
         # One way to draw with indexes
         glEnable(GL_CULL_FACE)
-        glDrawElements(GL_POINTS, indices_len * 3, GL_UNSIGNED_INT, ctypes.c_void_p(0))
+        glDrawElements(GL_LINE_STRIP, indices_len * 3, GL_UNSIGNED_INT, ctypes.c_void_p(0))
 
         # alternative possibility drawing arrays.....
         # glDrawArrays(GL_TRIANGLES, 0, len(vertices))

@@ -73,12 +73,6 @@ class GraphicEdge:
         """
         # shortest distance over the surface of the globe between start socket and edge-end
         length = self.calc.get_distance_on_sphere(end_xyz, start_xyz, radius)
-        # print("length", length)
-        # print("unit_length", unit_length)
-        # print("steps", length / unit_length)
-        # print("steps", int(math.ceil(length / unit_length)))
-
-        # calculate how many edge_elements fit on the edge length.
         return int(math.ceil(length / unit_length))
 
     def get_position(self, pos_orientation_offset: 'Quaternion', radius=None) -> 'Vector3':
