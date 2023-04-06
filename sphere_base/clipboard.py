@@ -11,8 +11,8 @@ from sphere_base.edge.surface_edge import SurfaceEdge
 from sphere_base.utils import dump_exception
 from sphere_base.calc import Calc
 
-DEBUG = False
-
+DEBUG_COPY = False
+DEBUG_PASTE = False
 
 class Clipboard:
     """
@@ -41,7 +41,7 @@ class Clipboard:
 
         """
 
-        if DEBUG:
+        if DEBUG_COPY:
             print("-- COPY TO CLIPBOARD ---")
 
         selected_nodes, selected_sockets_ids, selected_edges = [], [], []
@@ -50,12 +50,16 @@ class Clipboard:
         for item in self.uv.target_sphere.items_selected:
             if item.type == 'node':
                 selected_nodes.append(item.serialize())
+                selected_edges.extend(item.socket.edges)  # find any edges that are connecting selected sockets
                 selected_sockets_ids.append(item.socket.id)
             elif item.type == 'edge':
                 selected_edges.append(item)
 
+        # remove duplicates
+        selected_edges = [*set(selected_edges)]
+
         # debug
-        if DEBUG:
+        if DEBUG_COPY:
             print("   NODES\n      ", selected_nodes)
             print("   EDGES\n      ", selected_edges)
 
@@ -63,11 +67,11 @@ class Clipboard:
         edges_to_remove = []
         for edge in selected_edges:
             if edge.start_socket.id in selected_sockets_ids and edge.end_socket.id in selected_sockets_ids:
-                if DEBUG:
+                if DEBUG_COPY:
                     print(" edge is ok, connected at both sides with _selected nodes")
                 pass
             else:
-                if DEBUG:
+                if DEBUG_COPY:
                     print("edge", edge, "is not connected on both sides with _selected nodes")
                 edges_to_remove.append(edge)
 
@@ -79,7 +83,7 @@ class Clipboard:
         for edge in selected_edges:
             edges_final.append(edge.serialize())
 
-        if DEBUG:
+        if DEBUG_COPY:
             print("our final list of edges:", edges_final)
 
         data = OrderedDict([
@@ -108,7 +112,7 @@ class Clipboard:
         The edges need to be connected to the new sockets. We need to first map the old sockets with the new ones.
 
         """
-        if DEBUG:
+        if DEBUG_PASTE:
             print("-- PASTE FROM CLIPBOARD ---")
 
         try:
@@ -119,19 +123,19 @@ class Clipboard:
             sphere_id, cp, mouse_x, mouse_y = self.uv.get_mouse_pos()
             orientation = Calc.find_angle_from_world_pos(cp, self.uv.target_sphere.orientation)
 
-            if DEBUG:
+            if DEBUG_PASTE:
                 print("     mouse_ray_collision point - xyz:\n     ", cp)
                 print("     pos_orientation_offset - quaternion:\n        ", orientation)
 
             # Find the middle between the nodes
-            middle, first_node = None, None
+            old_centre, first_node = None, None
             for i, node_data in enumerate(data['nodes']):
                 q = Quaternion(node_data['orientation_offset'])
                 if i == 0:
                     first_node = q
-                    middle = q
+                    old_centre = q
                 else:
-                    middle = quaternion.slerp(first_node, q, .5)
+                    old_centre = quaternion.slerp(old_centre, q, 0.5)
 
             sockets_map = {}
             for i, node_data in enumerate(data['nodes']):
@@ -145,16 +149,17 @@ class Clipboard:
 
                 self.uv.target_sphere.select_item(new_node, False if i == 0 else True)
 
-                # find the distance between the original node position and the mouse_ray_collision point
-                diff = quaternion.cross(middle, new_node.pos_orientation_offset)
+                # For each node we need to find the offset between the old center and its old position
+                offset = quaternion.cross(new_node.pos_orientation_offset, quaternion.inverse(old_centre))
 
                 if length == 1:
                     new_node.pos_orientation_offset = orientation
                     new_node.update_position()
                 else:
                     new_center = orientation
-                    # apply the offset with the mouse_ray_collision point
-                    new_node.pos_orientation_offset = quaternion.cross(new_center, diff)
+
+                    # apply the offset with the old center to the mouse_ray_collision point
+                    new_node.pos_orientation_offset = quaternion.cross(offset, new_center)
                     new_node.update_position()
 
             # create each edge

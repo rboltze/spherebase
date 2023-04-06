@@ -179,23 +179,27 @@ class SurfaceEdge(Serializable):
 
     def update_position(self):
         """º
-        It recreates the edge when the sockets change
+        Recreate the edge when any of the sockets positions change
 
         """
+
         a = set(self.orientation)
         b = set(self.sphere.orientation)
+
         if a == b:
             # socket(s) have changed
             self.create_edge()
         else:
-            # sphere rotates
+            # sphere rotates - just update the rotation
             self.orientation = self.sphere.orientation
 
     def create_edge(self):
         # create an edge for the first time or recreate it during dragging
+
         if self.start_socket and self.end_socket:
             count = self.gr_edge.count_vertices(self.start_socket.xyz, self.end_socket.xyz,
-                                                             self.radius, self.gr_edge.unit_length)
+                                                self.radius, self.gr_edge.unit_length)
+
             step = 1 / count if count > 1 else 1
 
             if count > 0:
@@ -222,7 +226,7 @@ class SurfaceEdge(Serializable):
         tex = [1.0, 1.0]  # made up surface edge, that needs to be added to the buffer
         for i in range(number_of_vertices):
             pos = quaternion.slerp(start, end, step * i)
-            p = self.gr_edge.get_position(pos, self.radius)  # finding the vertex xyz
+
             p = self.calc.move_to_position(pos, self.sphere, self.radius)
             n = vector.normalize(Vector3(p) - Vector3(self.sphere.xyz))  # finding the normal of the vertex
 
@@ -234,7 +238,7 @@ class SurfaceEdge(Serializable):
             indices.append(i)
 
         # creating a collision object for mouse ray collisions
-        self.collision_object_id = self.sphere.uv.mouse_ray.create_collision_object(self, vert)
+        # self.collision_object_id = self.sphere.uv.mouse_ray.create_collision_object(self, vert)
 
         self.model.meshes[0].vertices = np.array(vertices, dtype=np.float32)
         self.model.meshes[0].indices = np.array(indices, dtype='uint32')
@@ -251,15 +255,19 @@ class SurfaceEdge(Serializable):
 
         """
         # get clearance from start socket
-        r = self.start_socket.node.gr_node.node_disc_radius
+        r0 = self.start_socket.node.gr_node.node_disc_radius
+        r1 = self.end_socket.node.gr_node.node_disc_radius
+
+        start_angle = self.start_socket.pos_orientation_offset
+        end_angle = self.end_socket.pos_orientation_offset
+
+        # the length between start and end
         ln = self.calc.get_distance_on_sphere(self.end_socket, self.start_socket, self.radius)
-        t = r / ln
 
-        s_angle = self.start_socket.pos_orientation_offset
-        end = self.end_socket.pos_orientation_offset
-
-        start = quaternion.slerp(s_angle, end, t)
-        # start = s_angle
+        step = (r0 * .9) / ln
+        start = quaternion.slerp(start_angle, end_angle, step)
+        step = (r1 * .5) / ln
+        end = quaternion.slerp(end_angle, start_angle,  step)
 
         # start and end in angles
         return start, end

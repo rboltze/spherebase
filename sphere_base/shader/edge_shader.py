@@ -22,14 +22,14 @@ class EdgeShader(BaseShader):
                      position=position, orientation=orientation, scale=scale, texture_id=texture_id,
                      color=color, switch=switch)
 
-        # glUniform1i(self.switcher_loc, switch)
         glUniform4f(self.a_color, *color)
-
-        # One way to draw with indexes
+        glLineWidth(2)
         glEnable(GL_CULL_FACE)
+        glEnable(GL_POLYGON_SMOOTH)
+        glEnable(GL_LINE_SMOOTH)
+
         glDrawElements(GL_LINE_STRIP, indices_len * 3, GL_UNSIGNED_INT, ctypes.c_void_p(0))
 
-        # alternative possibility drawing arrays.....
-        # glDrawArrays(GL_TRIANGLES, 0, len(vertices))
+        glDisable(GL_LINE_SMOOTH)
+        glDisable(GL_POLYGON_SMOOTH)
         glDisable(GL_CULL_FACE)
-        glStencilFunc(GL_ALWAYS, object_index, -1)

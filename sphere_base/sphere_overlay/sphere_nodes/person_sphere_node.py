@@ -9,6 +9,7 @@ from sphere_base.sphere_overlay.sov_conf import *
 class PersonGraphicNode(GraphicNode):
     def __init__(self, node):
         super().__init__(node)
+        self.node_disc_radius = 0.08
 
     def init_assets(self):
         super().init_assets()
