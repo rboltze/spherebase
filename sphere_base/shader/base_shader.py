@@ -142,6 +142,9 @@ class BaseShader:
         Set OpenGL buffer bits
 
         """
+        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
+        glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST)
+
         if self.switcher_loc:
 
             glUniform1i(self.switcher_loc, 1)

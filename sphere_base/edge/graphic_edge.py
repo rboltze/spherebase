@@ -47,7 +47,7 @@ class GraphicEdge:
         self._selected = False
         self._current_color = None
 
-        self.unit_length = 0.02
+        self.unit_length = 0.05
         self.color = [0, 0, 0, .5]
 
     def _init_assets(self):

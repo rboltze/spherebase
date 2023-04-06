@@ -185,4 +185,4 @@ class EdgeDrag:
 
         """
         if self._dragging:
-            self.shader.draw_edge(self.pos_array, width=4, color=[0, 0, 0, 1], dotted=True)
+            self.shader.draw_edge(self.pos_array, width=2, color=[0, 0, 0, 1], dotted=True)
