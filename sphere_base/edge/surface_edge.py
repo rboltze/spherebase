@@ -85,18 +85,22 @@ class SurfaceEdge(Serializable):
         self.end_socket = socket_end if socket_end else None
         self.xyz, self.pos_orientation_offset = None, None
         self.collision_object_id = None
+        self.vert = []  # vertices needed for pybullet mouse ray
         self.serialized_detail_scene = None
         self._edge_moved = False
         self.scale = [1.0, 1.0, 1.0]
         self.color = self.gr_edge.color
         self.edge_type = 0
         self.orientation = self.sphere.orientation
+        self._new_edge = True
         self.model = self.set_up_model('edge1')
 
-        self.mesh_id = self.model.meshes[0].mesh_id
+        self.mesh = self.model.meshes[0]
+        self.mesh_id = self.mesh.mesh_id
+
         self.model.name = 'edge_' + str(self.mesh_id)
 
-        self.radius = self.sphere.radius - 0.01
+        self.radius = self.sphere.radius  # - 0.01
         self.sphere.add_item(self)  # register the edge to the base for rendering
         self.create_edge()
 
@@ -193,6 +197,9 @@ class SurfaceEdge(Serializable):
             # sphere rotates - just update the rotation
             self.orientation = self.sphere.orientation
 
+        # set the collision object for mouse pointer ray collision
+        self.sphere.uv.mouse_ray.reset_position_collision_object(self, self.vert)
+
     def create_edge(self):
         # create an edge for the first time or recreate it during dragging
 
@@ -217,7 +224,7 @@ class SurfaceEdge(Serializable):
         """
 
         start, end = self.get_edge_start_end()
-        vert = []  # vertex coordinates
+        self.vert = []
         vertices = []  # vertex coordinates
         buffer = []
         indices = []
@@ -230,20 +237,22 @@ class SurfaceEdge(Serializable):
             p = self.calc.move_to_position(pos, self.sphere, self.radius)
             n = vector.normalize(Vector3(p) - Vector3(self.sphere.xyz))  # finding the normal of the vertex
 
-            vert.append([p[0], p[1], p[2]])  # we need this for pybullet
+            self.vert.append([p[0], p[1], p[2]])  # we need this for pybullet
             vertices.extend(p)  # extending the vertices list with the vertex
             buffer.extend(p)  # extending the buffer with the vertex
             buffer.extend(tex)  # extending the buffer with the invented texture
             buffer.extend(n)  # extending the buffer with the normal
             indices.append(i)
 
-        # creating a collision object for mouse ray collisions
-        # self.collision_object_id = self.sphere.uv.mouse_ray.create_collision_object(self, vert)
+        if self._new_edge:
+            # creating a collision object for mouse ray collisions
+            self.collision_object_id = self.sphere.uv.mouse_ray.create_collision_object(self, self.vert)
+            self._new_edge = False
 
-        self.model.meshes[0].vertices = np.array(vertices, dtype=np.float32)
-        self.model.meshes[0].indices = np.array(indices, dtype='uint32')
-        self.model.meshes[0].buffer = np.array(buffer, dtype=np.float32)
-        self.model.meshes[0].indices_len = len(indices)
+        self.mesh.vertices = np.array(vertices, dtype=np.float32)
+        self.mesh.indices = np.array(indices, dtype='uint32')
+        self.mesh.buffer = np.array(buffer, dtype=np.float32)
+        self.mesh.indices_len = len(indices)
 
         self.xyz = self.sphere.xyz
         self.model.loader.load_mesh_into_opengl(self.mesh_id, self.model.meshes[0].buffer,
@@ -287,7 +296,7 @@ class SurfaceEdge(Serializable):
         elif self._edge_moved and not value:
             # end dragging
             self._edge_moved = False
-            self.sphere.history.store_history("edge moved", True)
+            self.sphere.history.store_history("edge moved", set_modified=True)
         elif not self._edge_moved and value:
             # start dragging
             self._edge_moved = True

@@ -43,7 +43,7 @@ class MouseRay:
 
     """
 
-    def __init__(self, universe: 'Universe', pybullet_key=None):
+    def __init__(self, universe, pybullet_key=None):
 
         """
         Constructor of the ``MouseRay`` class.
@@ -72,17 +72,19 @@ class MouseRay:
         self._create_collision_shapes()
 
     def _open_bullet_client(self, pybullet_key):
-        if DEBUG_SHOW_GUI:
-            p.connect(p.GUI)
-        elif pybullet_key:
-            try:
+        try:
+            if DEBUG_SHOW_GUI:
+
+                self.bullet = bc.BulletClient(connection_mode=p.GUI)
+                self.client_id = self.bullet._client
+
+            else:
 
                 self.bullet = bc.BulletClient(connection_mode=p.DIRECT)
                 self.client_id = self.bullet._client
 
-            except Exception as e:
-                dump_exception(e)
-
+        except Exception as e:
+            dump_exception(e)
         else:
             p.connect(p.DIRECT)
 
@@ -100,7 +102,7 @@ class MouseRay:
 
         }
 
-    def create_collision_object(self, obj: ('Sphere', 'Node', 'Socket', 'Edge'), vertices: list = None):
+    def create_collision_object(self, obj, vertices: list = None):
         """
         Allocates the correct collision object.
 
@@ -116,14 +118,15 @@ class MouseRay:
             if key == obj.type:
 
                 if key == "edge":
-                    pass
-                    collision_shape = self.bullet.createCollisionShape(p.GEOM_MESH, vertices=vertices)
+                    collision_shape_id = self.bullet.createCollisionShape(p.GEOM_MESH, vertices=vertices)
                     object_id = self.bullet.createMultiBody(baseMass=cs[key]["base_mass"],
-                                                            baseCollisionShapeIndex=collision_shape,
+                                                            baseCollisionShapeIndex=collision_shape_id,
                                                             baseVisualShapeIndex=cs[key]["baseVisualShapeIndex"],
+                                                            flags=p.GEOM_FORCE_CONCAVE_TRIMESH,
+                                                            baseOrientation=obj.orientation,
                                                             physicsClientId=self.client_id)
                 else:
-
+                    # print(cs[key]["baseVisualShapeIndex"])
                     object_id = self.bullet.createMultiBody(baseMass=cs[key]["base_mass"],
                                                             baseCollisionShapeIndex=self._collision_shapes[key],
                                                             baseVisualShapeIndex=cs[key]["baseVisualShapeIndex"],
@@ -134,7 +137,7 @@ class MouseRay:
                 self._collision_objects[object_id] = obj.id
                 return object_id
 
-    def delete_collision_object(self, item: ('Sphere', 'Node', 'Socket', 'Edge')):
+    def delete_collision_object(self, item):
         """
         Delete the collision object of the item
 
@@ -144,10 +147,11 @@ class MouseRay:
         """
         self.bullet.removeBody(item.collision_object_id, physicsClientId=self.client_id)
 
-    def reset_position_collision_object(self, item: ('Sphere', 'Node', 'Socket', 'Edge')):
+    def reset_position_collision_object(self, item, vertices=None):
         """
         Reset the collision object of the item
 
+        :param vertices: The vertices of the model.
         :param item: The model the collision object belongs to.
         :param item: :class:`~sphere_iot.uv_sphere.Sphere`, :class:`~sphere_iot.uv_node.Node`,
         :class:`~sphere_iot.uv_socket.Socket`, :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
@@ -175,7 +179,7 @@ class MouseRay:
         # object we are destroying and then recreating it.
 
         self.bullet.removeBody(item.collision_object_id, physicsClientId=self.client_id)
-        self.create_collision_object(item)
+        self.create_collision_object(item, vertices)
 
         if DEBUG and item.collision_object_id == 1:
             self.debug_collision_object(item.collision_object_id, item)
@@ -211,7 +215,7 @@ class MouseRay:
             dump_exception(e)
             return None, None
 
-    def check_mouse_ray_batch(self, sphere: 'Sphere', ray_array_start: 'Vector3', ray_array_end: 'Vector3') -> list:
+    def check_mouse_ray_batch(self, sphere, ray_array_start: 'Vector3', ray_array_end: 'Vector3') -> list:
         """
         Returns a ``list`` of object id`s of the collision objects in the path of the mouse ray.
 
@@ -291,7 +295,7 @@ class MouseRay:
         self.bullet.resetSimulation(physicsClientId=self.client_id)
         self._create_collision_shapes()
 
-    def debug_collision_object(self, collision_object_id: int, item: ('Sphere', 'Node', 'Socket', 'Edge')):
+    def debug_collision_object(self, collision_object_id: int, item):
         """
         Method used for debugging.
 

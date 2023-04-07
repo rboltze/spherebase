@@ -7,7 +7,7 @@ for drawing a square selection box. Selecting all the items within the box.
 
 from sphere_base.sphere_universe_base.suv_graphic_item import GraphicItem
 
-RAY_SEED = 20  # 10 creates 10 x 10 = 100 rays, x creates x**2 rays
+RAY_SEED = 10  # 10 creates 10 x 10 = 100 rays, x creates x**2 rays
 
 
 class RubberBand(GraphicItem):

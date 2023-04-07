@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-A module containing all code for working with history on a single sphere_base (Undo/Redo)
+A module containing all the code for working with history on a single sphere (Undo/Redo)
 """
 
 from sphere_base.utils import dump_exception
@@ -37,10 +37,9 @@ class History:
 
         self.sphere = sphere
 
-        self.clear()
-
         # history limit pere Sphere
         self.history_limit = 32
+        self.current_selection = {}
 
         self.undo_selection_has_changed = False
 
@@ -48,11 +47,12 @@ class History:
         self._history_modified_listeners = []
         self._history_stored_listeners = []
         self._history_restored_listeners = []
+        self.history_stack = []
+        self.history_current_step = -1
 
     def clear(self):
         """
         Reset the history stack
-
         """
         self.history_stack = []
         self.history_current_step = -1
@@ -60,59 +60,47 @@ class History:
     def store_initial_history_stamp(self):
         """
         Helper function usually used when new or open file requested
-
         """
         self.store_history("Initial history stamp")
 
     def add_history_modified_listener(self, callback: 'function'):
         """
         Register callback for 'history modified' event.
-
         :param callback: callback function
-
         """
         self._history_modified_listeners.append(callback)
 
     def add_history_stored_listener(self, callback):
         """
         Register callback for 'history stored' event.
-
         :param callback: callback function
-
         """
         self._history_stored_listeners.append(callback)
 
     def add_history_restored_listener(self, callback: 'function'):
         """
         Register callback for 'history restored' event.
-
         :param callback: callback function
-
         """
         self._history_restored_listeners.append(callback)
 
     def can_undo(self) -> bool:
         """
         True if possible to un-do history.
-
         :returns: ``bool``
-
         """
         return self.history_current_step > 0
 
     def can_redo(self) -> bool:
         """
         True if possible to un-do history.
-
         :returns: ``bool``
-
         """
         return self.history_current_step + 1 < len(self.history_stack)
 
     def undo(self):
         """
         Undo operation
-
         """
         if DEBUG:
             print("UNDO")
@@ -145,8 +133,10 @@ class History:
                   "(%d)" % len(self.history_stack))
 
         self.restore_history_stamp(self.history_stack[self.history_current_step])
-        for callback in self._history_modified_listeners: callback()
-        for callback in self._history_restored_listeners: callback()
+        for callback in self._history_modified_listeners:
+            callback()
+        for callback in self._history_restored_listeners:
+            callback()
 
     def store_history(self, description: str, set_modified: bool = False):
         """
@@ -162,9 +152,10 @@ class History:
         if set_modified:
             self.sphere.has_been_modified = True
 
-        if DEBUG: print("Storing history", '"%s"' % description,
-                        ".... current_step: @%d" % self.history_current_step,
-                        "(%d)" % len(self.history_stack))
+        if DEBUG:
+            print("Storing history", '"%s"' % description,
+                  ".... current_step: @%d" % self.history_current_step,
+                  "(%d)" % len(self.history_stack))
 
         # if the pointer (history_current_step) is not at the end of history_stack
         if self.history_current_step + 1 < len(self.history_stack):
@@ -175,15 +166,32 @@ class History:
             self.history_stack = self.history_stack[1:]
             self.history_current_step -= 1
 
-        hs = self.create_history_stamp(description)
+        current_selection = self.capture_current_selection()
+        # print("current selection", current_selection)
+
+        # if current_selection['nodes'] == [] :
+        #     print("the selection is empty", current_selection)
+        # elif current_selection == self.current_selection:
+        #     print("the selection is the same, should we still store history?", current_selection)
+        # else:
+        #     print("the selection is new", current_selection)
+        self.current_selection = current_selection
+
+        hs = self.create_history_stamp(description, current_selection)
+
+
+        # self.current_selection = cs
 
         self.history_stack.append(hs)
         self.history_current_step += 1
-        if DEBUG: print("  -- setting step to:", self.history_current_step)
+        if DEBUG:
+            print("  -- setting step to:", self.history_current_step)
 
         # always trigger history modified (for i.e. update_edit_menu)
-        for callback in self._history_modified_listeners: callback()
-        for callback in self._history_stored_listeners: callback()
+        for callback in self._history_modified_listeners:
+            callback()
+        for callback in self._history_stored_listeners:
+            callback()
 
     def capture_current_selection(self) -> dict:
         """
@@ -191,26 +199,40 @@ class History:
 
         """
 
+        if DEBUG:
+            print("  -- capturing current selection ")
+
         sel_obj = {
             'nodes': [],
             'edges': [],
         }
+        tmp = []
         for item in self.sphere.items_selected:
             if item.type == 'node':
                 sel_obj['nodes'].append(item.id)
-            elif item.type == 'node':
+                tmp.extend(item.socket.edges)  # find any edges that are connecting with selected sockets
+                for edge in tmp:
+                    sel_obj['edges'].append(edge.id)
+            elif item.type == 'edges':
                 sel_obj['edges'].append(item.id)
+
+        # remove duplicates
+        sel_obj['edges'] = [*set(sel_obj['edges'])]
+        if DEBUG:
+            print("  -- current selection: ", sel_obj)
         return sel_obj
 
-    def create_history_stamp(self, description: str) -> dict:
+    def create_history_stamp(self, description: str, selection_obj) -> dict:
         """
         Create History Stamp. Internally serialize whole scene and current selection.
 
         """
+        if DEBUG:
+            print("Creating history time_stamp")
         history_stamp = {
             'description': description,
             'snapshot': self.sphere.serialize(),
-            'selection': self.capture_current_selection(),
+            'selection': selection_obj,
         }
 
         return history_stamp
@@ -220,12 +242,14 @@ class History:
         Restore History Stamp to current `Scene` with selection of items included
 
         """
-        if DEBUG: print("restore_history_stamp: ", history_stamp['description'])
+        if DEBUG:
+            print("restore_history_stamp: ", history_stamp['description'])
 
         try:
             self.undo_selection_has_changed = False
             previous_selection = self.capture_current_selection()
-            if DEBUG_SELECTION: print("_selected nodes before restore:", previous_selection['nodes'])
+            if DEBUG_SELECTION:
+                print("_selected nodes before restore:", previous_selection['nodes'])
 
             self.sphere.deserialize(history_stamp['snapshot'])
 
@@ -250,7 +274,8 @@ class History:
                         break
 
             current_selection = self.capture_current_selection()
-            if DEBUG_SELECTION: print("_selected nodes after restore:", current_selection['nodes'])
+            if DEBUG_SELECTION:
+                print("_selected nodes after restore:", current_selection['nodes'])
 
             # reset the last_selected_items - since we're comparing change to the last_selected state
             # self.sphere_base._last_selected_items = self.sphere_base.items_selected
@@ -258,7 +283,8 @@ class History:
             # if the selection of nodes differ before and after restoration, set flag
             if current_selection['nodes'] != previous_selection['nodes'] or current_selection['edges'] != \
                     previous_selection['edges']:
-                if DEBUG_SELECTION: print("\nSCENE: Selection has changed")
+                if DEBUG_SELECTION:
+                    print("\nSCENE: Selection has changed")
                 self.undo_selection_has_changed = True
 
         except Exception as e:

@@ -184,19 +184,19 @@ class ObjectFileLoader:
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.nbytes, indices, GL_STATIC_DRAW)
 
         # vertex positions
-        # Enable the Vertex Attribute so that OpenGL knows to use it
+        # Enable first the Vertex Attribute so that OpenGL can use it
         glEnableVertexAttribArray(0)
         # Configure the Vertex Attribute so that OpenGL knows how to read the VBO
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, buffer.itemsize * 8, ctypes.c_void_p(0))
 
         # textures
-        # Enable the Vertex Attribute so that OpenGL knows to use it
+        # Enable the Vertex Attribute so that OpenGL can use it
         glEnableVertexAttribArray(1)
         # Configure the Vertex Attribute so that OpenGL knows how to read the VBO
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, buffer.itemsize * 8, ctypes.c_void_p(12))
 
         # normals
-        # Enable the Vertex Attribute so that OpenGL knows to use it
+        # Enable the Vertex Attribute so that OpenGL can use it
         glEnableVertexAttribArray(2)
         # Configure the Vertex Attribute so that OpenGL knows how to read the VBO
         glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, buffer.itemsize * 8, ctypes.c_void_p(20))
@@ -217,7 +217,6 @@ class ObjectFileLoader:
         loads them into OpenGl
 
         """
-
         self.config.textures = glGenTextures(len(self.config.all_textures))
         for index, item in enumerate(self.config.all_textures.values()):
             self.load_texture_into_opengl(item['file_dir_name'], item['img_id'] + 1)

@@ -28,7 +28,7 @@ class EdgeShader(BaseShader):
         glEnable(GL_POLYGON_SMOOTH)
         glEnable(GL_LINE_SMOOTH)
 
-        glDrawElements(GL_LINE_STRIP, indices_len * 3, GL_UNSIGNED_INT, ctypes.c_void_p(0))
+        glDrawElements(GL_LINE_STRIP, indices_len, GL_UNSIGNED_INT, ctypes.c_void_p(0))
 
         glDisable(GL_LINE_SMOOTH)
         glDisable(GL_POLYGON_SMOOTH)
