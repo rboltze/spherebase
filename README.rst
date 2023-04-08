@@ -1,3 +1,7 @@
+.. image:: https://img.shields.io/pypi/v/template.svg
+        :target: https://pypi.python.org/pypi/template
+
+
 ============
 Sphere Base
 ============
@@ -6,6 +10,7 @@ Sphere Base
 This package was created in python to display a sphere within a pyqt5 window and can be used in different projects.
 The library uses PyOpenGL and PyQT5
 
+* Development Status :: 3 - Alpha
 * Free software: BSD license
 
 

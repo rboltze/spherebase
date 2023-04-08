@@ -151,7 +151,6 @@ class UVWidget(QGLWidget):
         if event.button() == Qt.LeftButton:
             self._first_mouse = True
             self._left_mouse_button_down = True
-            # self._clicked_on_item, self.mouse_ray_collision_point = self.uv.mouse_ray.check_mouse_ray(x, y)
 
             if not self._clicked_on_item:
                 return
@@ -172,7 +171,6 @@ class UVWidget(QGLWidget):
         if event.button() == Qt.RightButton:
             self._first_mouse = True
             self._right_mouse_button_down = True
-            # self._clicked_on_item, self.mouse_ray_collision_point = self.uv.mouse_ray.check_mouse_ray(x, y)
 
             if not self._clicked_on_item:
                 return
@@ -180,7 +178,6 @@ class UVWidget(QGLWidget):
         if event.button() == Qt.MiddleButton:
             self._first_mouse = True
             self._middle_mouse_button_down = True
-            # self._clicked_on_item, self.mouse_ray_collision_point = self.uv.mouse_ray.check_mouse_ray(x, y)
 
     def _reset_mouse(self):
         """
@@ -206,6 +203,8 @@ class UVWidget(QGLWidget):
         # if self.uv.target_sphere.dragging:
         if self.is_dragging:
             self.is_dragging = False
+            for item in self.uv.target_sphere.items:
+                item.is_dragging(False)
             self.uv.target_sphere.history.store_history("node moved", set_modified=True)
 
         if selection:
@@ -251,7 +250,9 @@ class UVWidget(QGLWidget):
             if self._clicked_on_item and self.uv.target_sphere.selected_item:
                 # dragging _selected items
                 self.is_dragging = True
-                if self.uv.target_sphere.selected_item.type == "node":
+                # we are only looking at the first object in the selected objects.
+                # If it is node or edge then try to drag the whole selected group of items.
+                if self.uv.target_sphere.selected_item.type in ("node", "edge"):
                     self.uv.target_sphere.drag_items(self.mouse_ray_collision_point)
                 elif self.uv.target_sphere.selected_item.type == "socket":
                     # drag edge from socket to the mouse_ray collision point

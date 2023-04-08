@@ -435,7 +435,6 @@ class Sphere(Serializable):
 
         """
         for item in self.items_selected:
-
             if item.type == "node":
                 # only drag any nodes in the _selected item list
                 item.drag_to(mouse_ray_collision_point)
