@@ -167,19 +167,26 @@ class MouseRay:
             an update that only takes place when dragging stops or when a button is released.
 
         """
-        # TODO: resetting does not work correctly and we are using a work round of destroying
-        #  the current collision object and re-creating it
+        # TODO: resetting does not work correctly and we are using a workaround: destroying
+        #       the current collision object and re-creating it
         #
-        # This does not work correctly:
-        # self.bullet.resetBasePositionAndOrientation(bodyUniqueId=item.collision_object_id,
-        #                                   posObj=[item.xyz[0], item.xyz[1], item.xyz[2]],
-        #                                   ornObj=item.orientation)
 
-        # the below works for now.... But it seems to have too much overhead. Instead of moving an
-        # object we are destroying and then recreating it.
+        try:
+            # This does not work:
+            # self.bullet.resetBasePositionAndOrientation(bodyUniqueId=item.collision_object_id,
+            #                                   posObj=[item.xyz[0], item.xyz[1], item.xyz[2]],
+            #                                   ornObj=item.orientation,
+            #                                   physicsClientId=self.client_id)
 
-        self.bullet.removeBody(item.collision_object_id, physicsClientId=self.client_id)
-        self.create_collision_object(item, vertices)
+            # the below works for now.... But I imagine it will to have too much overhead. Instead of moving an
+            # object we are destroying and then recreating it.
+
+            self.bullet.removeBody(item.collision_object_id, physicsClientId=self.client_id)
+            self.create_collision_object(item, vertices)
+
+        except Exception as e:
+            dump_exception(e)
+            self.create_collision_object(item, vertices)
 
         if DEBUG and item.collision_object_id == 1:
             self.debug_collision_object(item.collision_object_id, item)

@@ -151,7 +151,6 @@ class Node(Serializable):
             self._node_moved = False
             self.offset_with_collision_point = None
             self.mouse_ray_collision_point = None
-            self.sphere.history.store_history("node moved", set_modified=True)
         elif not self._node_moved and value:
             # start dragging
             self._node_moved = True

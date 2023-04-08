@@ -296,7 +296,7 @@ class SurfaceEdge(Serializable):
         elif self._edge_moved and not value:
             # end dragging
             self._edge_moved = False
-            self.sphere.history.store_history("edge moved", set_modified=True)
+            # self.sphere.history.store_history("edge moved", set_modified=True)
         elif not self._edge_moved and value:
             # start dragging
             self._edge_moved = True

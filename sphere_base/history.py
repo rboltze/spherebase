@@ -6,8 +6,8 @@ A module containing all the code for working with history on a single sphere (Un
 
 from sphere_base.utils import dump_exception
 
-DEBUG = False
-DEBUG_SELECTION = False
+DEBUG_STORE = False
+DEBUG_RESTORE = False
 
 
 class History:
@@ -39,7 +39,6 @@ class History:
 
         # history limit pere Sphere
         self.history_limit = 32
-        self.current_selection = {}
 
         self.undo_selection_has_changed = False
 
@@ -48,6 +47,7 @@ class History:
         self._history_stored_listeners = []
         self._history_restored_listeners = []
         self.history_stack = []
+
         self.history_current_step = -1
 
     def clear(self):
@@ -61,6 +61,7 @@ class History:
         """
         Helper function usually used when new or open file requested
         """
+        self.clear()
         self.store_history("Initial history stamp")
 
     def add_history_modified_listener(self, callback: 'function'):
@@ -102,7 +103,7 @@ class History:
         """
         Undo operation
         """
-        if DEBUG:
+        if DEBUG_RESTORE:
             print("UNDO")
 
         if self.can_undo():
@@ -115,28 +116,12 @@ class History:
         Redo operation
 
         """
-        if DEBUG:
+        if DEBUG_STORE:
             print("REDO")
         if self.can_redo():
             self.history_current_step += 1
             self.restore_history()
             self.sphere.has_been_modified = True
-
-    def restore_history(self):
-        """
-        Restore `History Stamp` from `History stack`
-
-        """
-        if DEBUG:
-            print("Restoring history",
-                  ".... current_step: @%d" % self.history_current_step,
-                  "(%d)" % len(self.history_stack))
-
-        self.restore_history_stamp(self.history_stack[self.history_current_step])
-        for callback in self._history_modified_listeners:
-            callback()
-        for callback in self._history_restored_listeners:
-            callback()
 
     def store_history(self, description: str, set_modified: bool = False):
         """
@@ -152,7 +137,8 @@ class History:
         if set_modified:
             self.sphere.has_been_modified = True
 
-        if DEBUG:
+        if DEBUG_STORE:
+            print("\n .....................Storing history....................")
             print("Storing history", '"%s"' % description,
                   ".... current_step: @%d" % self.history_current_step,
                   "(%d)" % len(self.history_stack))
@@ -166,25 +152,12 @@ class History:
             self.history_stack = self.history_stack[1:]
             self.history_current_step -= 1
 
-        current_selection = self.capture_current_selection()
-        # print("current selection", current_selection)
+        history_stamp = self.create_history_stamp(description)
 
-        # if current_selection['nodes'] == [] :
-        #     print("the selection is empty", current_selection)
-        # elif current_selection == self.current_selection:
-        #     print("the selection is the same, should we still store history?", current_selection)
-        # else:
-        #     print("the selection is new", current_selection)
-        self.current_selection = current_selection
-
-        hs = self.create_history_stamp(description, current_selection)
-
-
-        # self.current_selection = cs
-
-        self.history_stack.append(hs)
+        self.history_stack.append(history_stamp)
         self.history_current_step += 1
-        if DEBUG:
+
+        if DEBUG_STORE:
             print("  -- setting step to:", self.history_current_step)
 
         # always trigger history modified (for i.e. update_edit_menu)
@@ -199,57 +172,74 @@ class History:
 
         """
 
-        if DEBUG:
+        if DEBUG_STORE:
             print("  -- capturing current selection ")
 
         sel_obj = {
             'nodes': [],
             'edges': [],
         }
-        tmp = []
+
         for item in self.sphere.items_selected:
             if item.type == 'node':
                 sel_obj['nodes'].append(item.id)
-                tmp.extend(item.socket.edges)  # find any edges that are connecting with selected sockets
-                for edge in tmp:
-                    sel_obj['edges'].append(edge.id)
-            elif item.type == 'edges':
+            elif item.type == 'edge':
                 sel_obj['edges'].append(item.id)
 
-        # remove duplicates
-        sel_obj['edges'] = [*set(sel_obj['edges'])]
-        if DEBUG:
+        if DEBUG_STORE:
             print("  -- current selection: ", sel_obj)
         return sel_obj
 
-    def create_history_stamp(self, description: str, selection_obj) -> dict:
+    def create_history_stamp(self, description: str) -> dict:
         """
-        Create History Stamp. Internally serialize whole scene and current selection.
-
+        Create History Stamp. Internally serialize whole sphere and current selection.
+        :param description: Descriptive label for the History Stamp
+        :return: History stamp serializing state of `Sphere` and current selection
+        :rtype: ``dict``
         """
-        if DEBUG:
-            print("Creating history time_stamp")
+        if DEBUG_STORE:
+            print("  -- create history time stamp")
         history_stamp = {
             'description': description,
             'snapshot': self.sphere.serialize(),
-            'selection': selection_obj,
+            'selection': self.capture_current_selection(),
         }
 
         return history_stamp
+
+    def restore_history(self):
+        """
+        Restore `History Stamp` from `History stack`
+
+        """
+        if DEBUG_RESTORE:
+            print("Restoring history",
+                  ".... current_step: @%d" % self.history_current_step,
+                  "(%d)" % len(self.history_stack))
+
+        self.restore_history_stamp(self.history_stack[self.history_current_step])
+        for callback in self._history_modified_listeners:
+            callback()
+        for callback in self._history_restored_listeners:
+            callback()
 
     def restore_history_stamp(self, history_stamp: dict):
         """
         Restore History Stamp to current `Scene` with selection of items included
 
+        :param history_stamp: History Stamp to restore
+        :type history_stamp: ``dict``
+
         """
-        if DEBUG:
+        if DEBUG_RESTORE:
             print("restore_history_stamp: ", history_stamp['description'])
 
         try:
             self.undo_selection_has_changed = False
             previous_selection = self.capture_current_selection()
-            if DEBUG_SELECTION:
+            if DEBUG_RESTORE:
                 print("_selected nodes before restore:", previous_selection['nodes'])
+                print("_selected edges before restore:", previous_selection['edges'])
 
             self.sphere.deserialize(history_stamp['snapshot'])
 
@@ -274,16 +264,17 @@ class History:
                         break
 
             current_selection = self.capture_current_selection()
-            if DEBUG_SELECTION:
+            if DEBUG_RESTORE:
                 print("_selected nodes after restore:", current_selection['nodes'])
+                print("_selected edges after restore:", current_selection['edges'])
 
             # reset the last_selected_items - since we're comparing change to the last_selected state
-            # self.sphere_base._last_selected_items = self.sphere_base.items_selected
+            self.sphere._last_selected_items = self.sphere.items_selected
 
             # if the selection of nodes differ before and after restoration, set flag
             if current_selection['nodes'] != previous_selection['nodes'] or current_selection['edges'] != \
                     previous_selection['edges']:
-                if DEBUG_SELECTION:
+                if DEBUG_RESTORE:
                     print("\nSCENE: Selection has changed")
                 self.undo_selection_has_changed = True
 

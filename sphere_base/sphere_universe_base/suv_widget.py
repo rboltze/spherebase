@@ -201,19 +201,19 @@ class UVWidget(QGLWidget):
 
         """
         self._reset_mouse()
-
-        if self.uv.target_sphere.dragging:
-            for item in self.uv.target_sphere.items_selected:
-                self.is_dragging = item.is_dragging(False)
-
         selection = self.uv.rubber_band_box.get_selection()
+
+        # if self.uv.target_sphere.dragging:
+        if self.is_dragging:
+            self.is_dragging = False
+            self.uv.target_sphere.history.store_history("node moved", set_modified=True)
 
         if selection:
             self.uv.target_sphere.batch_selected_items(selection)
+
         if self.uv.target_sphere.edge_drag.dragging:
             try:
                 self.get_mouse_pos()
-                # self.target_sphere.edge_dragging.dragging = False
                 self.uv.target_sphere.edge_drag.drag(None, False, None)
 
                 is_sphere = self.uv.set_target_sphere(self._clicked_on_item)
@@ -250,6 +250,7 @@ class UVWidget(QGLWidget):
 
             if self._clicked_on_item and self.uv.target_sphere.selected_item:
                 # dragging _selected items
+                self.is_dragging = True
                 if self.uv.target_sphere.selected_item.type == "node":
                     self.uv.target_sphere.drag_items(self.mouse_ray_collision_point)
                 elif self.uv.target_sphere.selected_item.type == "socket":
@@ -440,6 +441,7 @@ class UVWidget(QGLWidget):
             raw_data = file.read()
             data = json.loads(raw_data, encoding='utf-8')
             self.uv.deserialize(data)
+            self.uv.target_sphere.history.store_initial_history_stamp()
 
     def uv_new(self):
         """

@@ -2,15 +2,21 @@
 History
 =======
 
+0.0.6 (2023-04-8) Alfa
+------------------
+
+* Undo, redo implemented
+
+
 0.0.5 (2023-03-29) Alfa
 ------------------
 
-* Edges are now optimised. They are dynamically created and stored in Opengl VBO's
+* Edges are now dynamically created and stored in Opengl VBO's
 
 0.0.4 (2023-03-29) Alfa
 ------------------
 
-* Added copying and pasting using the clipboard serialisation
+* Added copying and pasting using clipboard serialisation
 
 0.0.3 (2023-03-28) Alfa
 ------------------

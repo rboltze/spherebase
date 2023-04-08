@@ -94,6 +94,7 @@ class Sphere(Serializable):
         self.node_class_selector = None
 
         self.selected_item = None
+        self._last_selected_items = None
         self.items = []
         self.items_selected = []
         self.items_deselected = []
@@ -131,7 +132,6 @@ class Sphere(Serializable):
     @property
     def dragging(self) -> bool:
         """
-        Something on the sphere_base has been modified. Sets modified value and calls all registered listeners.
 
         :getter: Returns current state
         :setter: Sets _dragging value
@@ -209,13 +209,17 @@ class Sphere(Serializable):
 
         return NotImplemented
 
-    def on_item_selected(self, items_selected):
+    def on_item_selected(self, current_selected_items):
         """
         Handles item selection and triggers event `Item _selected`.
         """
-        if items_selected:
+
+        if current_selected_items != self._last_selected_items:
+            self._last_selected_items = current_selected_items
+
             for callback in self._selection_changed_listeners:
-                callback(self, items_selected)
+                callback(self, current_selected_items)
+
                 self.history.store_history("Selection Changed")
 
     def on_item_deselected(self, item: 'Node or Edge'):
@@ -225,9 +229,16 @@ class Sphere(Serializable):
         :param item: Node or Edge
         :type item: :class:`~sphere_iot.uv_node.Node` or :class:`~sphere_iot.uv_surface_edge.SphereSurfaceEdge`
         """
-        for callback in self._items_deselected_listeners:
-            callback(self, item)
-            self.history.store_history("Deselected Everything")
+        current_selected_items = self.items_selected
+        if current_selected_items == self._last_selected_items:
+            return
+
+        if not current_selected_items:
+            self._last_selected_items = []
+
+            for callback in self._items_deselected_listeners:
+                callback(self, item)
+                self.history.store_history("Deselected Everything")
 
     def get_item_by_id(self, item_id: int) -> 'item':
         """
@@ -327,7 +338,7 @@ class Sphere(Serializable):
 
         if not self.has_edge(self.start_socket, end_socket):
             edge = self.Edge(self, self.start_socket, end_socket)
-            self.history.store_history("edge created", True)
+            # self.history.store_history("edge created", True)
             return edge
 
         return None
@@ -424,9 +435,9 @@ class Sphere(Serializable):
 
         """
         for item in self.items_selected:
+
             if item.type == "node":
                 # only drag any nodes in the _selected item list
-
                 item.drag_to(mouse_ray_collision_point)
                 item.mouse_ray_collision_point = mouse_ray_collision_point
                 self.dragging = item.is_dragging(True)
