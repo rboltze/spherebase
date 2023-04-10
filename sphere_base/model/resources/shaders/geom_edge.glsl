@@ -16,12 +16,12 @@ layout(lines_adjacency) in;
 layout(triangle_strip, max_vertices = 7) out;
 
 in VertexData{
-    vec4 mColor;
+    vec4 v_Color;
 } VertexIn[4];
 
 out VertexData{
     vec2 mTexCoord;
-    vec4 mColor;
+    vec4 v_Color;
 } VertexOut;
 
 vec2 toScreenSpace(vec4 vertex)
@@ -78,17 +78,17 @@ void drawSegment(vec2 points[4], vec4 colors[4], float zValues[4])
         /* close the gap */
         if( dot( v0, n1 ) > 0 ) {
             VertexOut.mTexCoord = vec2( 0, 0 );
-            VertexOut.mColor = colors[1];
+            VertexOut.v_Color = colors[1];
             gl_Position = vec4( ( p1 + Thickness * n0 ) / Viewport, zValues[1], 1.0 );
             EmitVertex();
 
             VertexOut.mTexCoord = vec2( 0, 0 );
-            VertexOut.mColor = colors[1];
+            VertexOut.v_Color = colors[1];
             gl_Position = vec4( ( p1 + Thickness * n1 ) / Viewport, zValues[1], 1.0 );
             EmitVertex();
 
             VertexOut.mTexCoord = vec2( 0, 0.5 );
-            VertexOut.mColor = colors[1];
+            VertexOut.v_Color = colors[1];
             gl_Position = vec4( p1 / Viewport, zValues[1], 1.0 );
             EmitVertex();
 
@@ -96,17 +96,17 @@ void drawSegment(vec2 points[4], vec4 colors[4], float zValues[4])
         }
         else {
             VertexOut.mTexCoord = vec2( 0, 1 );
-            VertexOut.mColor = colors[1];
+            VertexOut.v_Color = colors[1];
             gl_Position = vec4( ( p1 - Thickness * n1 ) / Viewport, zValues[1], 1.0 );
             EmitVertex();
 
             VertexOut.mTexCoord = vec2( 0, 1 );
-            VertexOut.mColor = colors[1];
+            VertexOut.v_Color = colors[1];
             gl_Position = vec4( ( p1 - Thickness * n0 ) / Viewport, zValues[1], 1.0 );
             EmitVertex();
 
             VertexOut.mTexCoord = vec2( 0, 0.5 );
-            VertexOut.mColor = colors[1];
+            VertexOut.v_Color = colors[1];
             gl_Position = vec4( p1 / Viewport, zValues[1], 1.0 );
             EmitVertex();
 
@@ -119,22 +119,22 @@ void drawSegment(vec2 points[4], vec4 colors[4], float zValues[4])
     }
     // generate the triangle strip
     VertexOut.mTexCoord = vec2( 0, 0 );
-    VertexOut.mColor = colors[1];
+    VertexOut.v_Color = colors[1];
     gl_Position = vec4( ( p1 + length_a * miter_a ) / Viewport, zValues[1], 1.0 );
     EmitVertex();
 
     VertexOut.mTexCoord = vec2( 0, 1 );
-    VertexOut.mColor = colors[1];
+    VertexOut.v_Color = colors[1];
     gl_Position = vec4( ( p1 - length_a * miter_a ) / Viewport, zValues[1], 1.0 );
     EmitVertex();
 
     VertexOut.mTexCoord = vec2( 0, 0 );
-    VertexOut.mColor = colors[2];
+    VertexOut.v_Color = colors[2];
     gl_Position = vec4( ( p2 + length_b * miter_b ) / Viewport, zValues[2], 1.0 );
     EmitVertex();
 
     VertexOut.mTexCoord = vec2( 0, 1 );
-    VertexOut.mColor = colors[2];
+    VertexOut.v_Color = colors[2];
     gl_Position = vec4( ( p2 - length_b * miter_b ) / Viewport, zValues[2], 1.0 );
     EmitVertex();
 
@@ -152,10 +152,10 @@ void main(void)
 
     // 4 attached colors
     vec4 colors[4];
-    colors[0] = VertexIn[0].mColor;
-    colors[1] = VertexIn[1].mColor;
-    colors[2] = VertexIn[2].mColor;
-    colors[3] = VertexIn[3].mColor;
+    colors[0] = VertexIn[0].v_Color;
+    colors[1] = VertexIn[1].v_Color;
+    colors[2] = VertexIn[2].v_Color;
+    colors[3] = VertexIn[3].v_Color;
 
     // screen coords
     vec2 points[4];

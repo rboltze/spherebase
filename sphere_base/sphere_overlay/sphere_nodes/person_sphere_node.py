@@ -22,8 +22,9 @@ class PersonSphereNode(SphereNodeBase):
     op_code = OP_SPHERE_NODE_PERSON
     op_title = "PersonNode"
 
-    def __init__(self, target_sphere, orientation_offset=None):
-        super().__init__(target_sphere, orientation_offset)
+    def __init__(self, target_sphere, orientation_offset=None, yaw_degrees=0, pitch_degrees=0):
+
+        super().__init__(target_sphere, orientation_offset, yaw_degrees, pitch_degrees)
         self.node_type_name = "person_sphere_node"
         self.gender = None
 

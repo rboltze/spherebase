@@ -16,8 +16,8 @@ class SphereNodeBase(Node):
     GraphicNode_class = GraphicSphereNode
     op_code = OP_SPHERE_NODE_BASE
 
-    def __init__(self, target_sphere, orientation_offset=None):
-        super().__init__(target_sphere, orientation_offset, "node")
+    def __init__(self, target_sphere, orientation_offset=None, yaw_degrees=0, pitch_degrees=0,):
+        super().__init__(target_sphere, orientation_offset, yaw_degrees, pitch_degrees, "node")
         self.node_type_name = "sphere_node_base"
 
     def serialize(self):

@@ -181,6 +181,10 @@ class SurfaceEdge(Serializable):
         if self.end_socket is not None:
             self.end_socket.add_edge(self)
 
+    def update_collision_object(self):
+        # set the collision object for mouse pointer ray collision
+        self.sphere.uv.mouse_ray.reset_position_collision_object(self, self.vert)
+
     def update_position(self):
         """º
         Recreate the edge when any of the sockets positions change
@@ -196,9 +200,6 @@ class SurfaceEdge(Serializable):
         else:
             # sphere rotates - just update the rotation
             self.orientation = self.sphere.orientation
-
-        # set the collision object for mouse pointer ray collision
-        self.sphere.uv.mouse_ray.reset_position_collision_object(self, self.vert)
 
     def create_edge(self):
         # create an edge for the first time or recreate it during dragging
@@ -229,7 +230,6 @@ class SurfaceEdge(Serializable):
         buffer = []
         indices = []
 
-        # print(number_of_vertices, step)
         tex = [1.0, 1.0]  # made up surface edge, that needs to be added to the buffer
         for i in range(number_of_vertices):
             pos = quaternion.slerp(start, end, step * i)
@@ -255,8 +255,8 @@ class SurfaceEdge(Serializable):
         self.mesh.indices_len = len(indices)
 
         self.xyz = self.sphere.xyz
-        self.model.loader.load_mesh_into_opengl(self.mesh_id, self.model.meshes[0].buffer,
-                                                self.model.meshes[0].indices, self.model.shader)
+        self.model.loader.load_mesh_into_opengl(self.mesh_id, self.mesh.buffer,
+                                                self.mesh.indices, self.model.shader)
 
     def get_edge_start_end(self):
         """

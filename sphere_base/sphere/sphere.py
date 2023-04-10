@@ -15,7 +15,7 @@ from sphere_base.node.node import Node
 from sphere_base.edge.edge_drag import EdgeDrag
 from sphere_base.edge.surface_edge import SurfaceEdge
 from sphere_base.history import History
-from pyrr import quaternion
+from pyrr import quaternion, Quaternion
 from math import pi
 from sphere_base.calc import Calc
 import numpy as np
@@ -82,6 +82,7 @@ class Sphere(Serializable):
         self._has_been_modified = False
         self._dragging = False
         self.selected = False
+        self.offset_degrees = 0
 
         self.scale = None
         self.index = 0
@@ -115,7 +116,6 @@ class Sphere(Serializable):
         self.xyz = position if position else ([randint(-25, 25), randint(-25, 25), randint(-25, 25)])
         self.texture_id = texture_id if texture_id or texture_id == 0 else randint(1, 5)
 
-        # self.collision_object_id = self.create_collision_object(self)
         self.collision_object_id = self.uv.mouse_ray.create_collision_object(self)
 
         # for testing purposes a number of random nodes can be created
@@ -338,7 +338,7 @@ class Sphere(Serializable):
 
         if not self.has_edge(self.start_socket, end_socket):
             edge = self.Edge(self, self.start_socket, end_socket)
-            # self.history.store_history("edge created", True)
+            self.history.store_history("edge created", True)
             return edge
 
         return None
@@ -394,6 +394,7 @@ class Sphere(Serializable):
             This method only explicitly instructs nodes to update themselves.
             updating nodes will trickle down, causing the connected node socket and connected edges to update as well.
         """
+
         # update orientation of all nodes on sphere_base
         for item in self.items:
             if item.type == "node":
@@ -409,9 +410,15 @@ class Sphere(Serializable):
         """
 
         # rotating the sphere_base over the y-axis
-        pitch = (pi / 180 * offset_degrees)
-        rotation = quaternion.create_from_eulers([0.0, pitch, 0.0])
-        self.orientation = quaternion.cross(self.orientation, rotation)
+        self.offset_degrees += offset_degrees
+
+        if self.offset_degrees > 180:
+            self.offset_degrees -= 360
+        elif self.offset_degrees < -180:
+            self.offset_degrees = self.offset_degrees + 360
+
+        pitch = (pi / 180 * self.offset_degrees)
+        self.orientation = quaternion.create_from_eulers([0.0, pitch, 0.0])
         self.update_item_positions()
 
     def drag_items(self, mouse_ray_collision_point=None):

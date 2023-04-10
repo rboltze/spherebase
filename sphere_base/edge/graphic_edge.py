@@ -53,7 +53,7 @@ class GraphicEdge:
     def _init_assets(self):
         """Initialize ``QObjects`` like ``QColor``, ``QPen`` and ``QBrush``"""
         self.default_color = [0, 0, 0, .5]  # black
-        self.selected_color = [255, 0, 0, 1]
+        self.selected_color = [0.9, 0.0, 0.0, 0.4]
         self.hover_color = [191, 255, 0, 1]
 
     def count_vertices(self, start_xyz: 'Vector3', end_xyz: 'Vector3', radius: float, unit_length: float):

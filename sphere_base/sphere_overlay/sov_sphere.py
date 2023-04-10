@@ -8,9 +8,10 @@ from sphere_base.sphere.sphere import Sphere
 from sphere_base.sphere_overlay.sov_conf import *
 from sphere_base.sphere_overlay.sphere_nodes.edge_sphere_item import SphereEdge
 import random
+from sphere_base.utils import dump_exception
 
 
-class SplitSphere(Sphere):
+class OverlaySphere(Sphere):
     Edge_class = SphereEdge
 
     def __init__(self, universe, position=None, texture_id=None):
@@ -36,14 +37,22 @@ class SplitSphere(Sphere):
         # create new node at the mouse pointer
 
         # calculate the cumulative angle based on the mouse position
-        orientation = self.calc.find_angle_from_world_pos(mouse_ray_collision_point, self.orientation)
+        orientation, yaw_degrees, pitch_degrees = self.calc.find_angle_from_world_pos(mouse_ray_collision_point, self.orientation)
 
         # create new node at the cumulative angle
-        if node_type:
 
-            node = get_class_from_type(node_type, SPHERE_NODE_EDITOR)(self, orientation)
-        else:
-            node = self.Node(self, orientation)
+        try:
+
+            if node_type:
+
+                node = get_class_from_type(node_type, SPHERE_NODE_EDITOR)(self, orientation_offset=orientation,
+                                                                          yaw_degrees=yaw_degrees,
+                                                                          pitch_degrees=pitch_degrees)
+            else:
+                node = self.Node(self, orientation, yaw_degrees=yaw_degrees, pitch_degrees=pitch_degrees)
+
+        except Exception as e:
+            dump_exception(e)
 
         self.history.store_history("node created", True)
         return node

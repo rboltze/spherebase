@@ -8,14 +8,14 @@ Using the universe for the detail sphere_base. This universe will only contain a
 
 from sphere_base.sphere_universe_base.suv_widget import UVWidget
 from sphere_base.sphere_universe_base.suv_universe import Universe
-from sphere_base.sphere_overlay.sov_sphere import SplitSphere
+from sphere_base.sphere_overlay.sov_sphere import OverlaySphere
 
 # PYBULLET_KEY_ID
 KEY = 2
 
 
 class SphereUniverse(Universe):
-    Sphere_class = SplitSphere
+    Sphere_class = OverlaySphere
 
     def __init__(self, parent, pybullet_key):
         skybox_img_dir = "..//examples/resources/textures/skybox/"

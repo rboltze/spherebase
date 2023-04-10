@@ -197,13 +197,16 @@ class UVWidget(QGLWidget):
         :type event: 'event'
 
         """
-        self._reset_mouse()
+
         selection = self.uv.rubber_band_box.get_selection()
 
         # if self.uv.target_sphere.dragging:
         if self.is_dragging:
+
             self.is_dragging = False
             for item in self.uv.target_sphere.items:
+                # This were we should instruct to update all the collision points
+                item.update_collision_object()
                 item.is_dragging(False)
             self.uv.target_sphere.history.store_history("node moved", set_modified=True)
 
@@ -228,6 +231,12 @@ class UVWidget(QGLWidget):
                         self.uv.target_sphere.create_edge(item.socket)
             except Exception as e:
                 dump_exception(e)
+
+        if self._middle_mouse_button_down:
+            for item in self.uv.target_sphere.items:
+                item.update_collision_object()
+
+        self._reset_mouse()
 
     def mouseMoveEvent(self, event: 'event'):
         """
@@ -404,18 +413,33 @@ class UVWidget(QGLWidget):
         :type event: 'event
 
         """
+
+        menuStyle = (
+            "QMenu::item{"
+            "background-color: lightGrey;"
+            "color: black;"
+            "}"
+            "QMenu::item:selected{"
+            "background-color: darkGrey;"
+            "color: rgb(255, 255, 255, 255);"
+            "}"
+        )
+
         context_menu = QMenu(self)
+        context_menu.setStyleSheet(menuStyle)
+        context_menu.setGraphicsEffect(QGraphicsOpacityEffect(opacity=.8))
         create_person_node = context_menu.addAction("Person node")  # 1
         create_item_node = context_menu.addAction("Item node")  # 2
-        create_entity_node = context_menu.addAction("Entity node")  # 3
+
+        # create_entity_node = context_menu.addAction("Entity node")  # 3
         action = context_menu.exec_(self.mapToGlobal(event.pos()))
 
         if action == create_person_node:
             self.uv.target_sphere.create_new_node(1, self.mouse_ray_collision_point)
         elif action == create_item_node:
             self.uv.target_sphere.create_new_node(2, self.mouse_ray_collision_point)
-        elif action == create_entity_node:
-            self.uv.target_sphere.create_new_node(1, self.mouse_ray_collision_point)
+        # elif action == create_entity_node:
+        #     self.uv.target_sphere.create_new_node(1, self.mouse_ray_collision_point)
 
     def save_to_file(self, file_name: str):
         """

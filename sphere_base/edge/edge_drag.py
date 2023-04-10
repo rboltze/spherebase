@@ -176,7 +176,7 @@ class EdgeDrag:
         :param mouse_abs_pos: mouse_ray collision point
         :returns: xyz 'Vector3'
         """
-        self.pos_orientation_offset = self.calc.find_angle_from_world_pos(mouse_abs_pos, self.sphere.orientation)
+        self.pos_orientation_offset, yaw_degrees, pitch_degrees = self.calc.find_angle_from_world_pos(mouse_abs_pos, self.sphere.orientation)
         return self.gr_edge.get_position(self.pos_orientation_offset, self.sphere.radius)
 
     def draw(self):

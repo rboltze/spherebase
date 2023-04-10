@@ -118,11 +118,11 @@ class MouseRay:
             if key == obj.type:
 
                 if key == "edge":
-                    collision_shape_id = self.bullet.createCollisionShape(p.GEOM_MESH, vertices=vertices)
+                    collision_shape_id = self.bullet.createCollisionShape(p.GEOM_MESH, vertices=vertices,
+                                                                          flags=p.GEOM_FORCE_CONCAVE_TRIMESH)
                     object_id = self.bullet.createMultiBody(baseMass=cs[key]["base_mass"],
                                                             baseCollisionShapeIndex=collision_shape_id,
                                                             baseVisualShapeIndex=cs[key]["baseVisualShapeIndex"],
-                                                            flags=p.GEOM_FORCE_CONCAVE_TRIMESH,
                                                             baseOrientation=obj.orientation,
                                                             physicsClientId=self.client_id)
                 else:
@@ -181,12 +181,12 @@ class MouseRay:
             # the below works for now.... But I imagine it will to have too much overhead. Instead of moving an
             # object we are destroying and then recreating it.
 
-            self.bullet.removeBody(item.collision_object_id, physicsClientId=self.client_id)
+            if item.collision_object_id:
+                self.bullet.removeBody(item.collision_object_id, physicsClientId=self.client_id)
             self.create_collision_object(item, vertices)
 
         except Exception as e:
             dump_exception(e)
-            self.create_collision_object(item, vertices)
 
         if DEBUG and item.collision_object_id == 1:
             self.debug_collision_object(item.collision_object_id, item)

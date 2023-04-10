@@ -96,17 +96,20 @@ class Socket(Serializable):
         """
         self.node.sphere.uv.mouse_ray.delete_collision_object(self)
 
+    def update_collision_object(self):
+        # set the collision object for mouse pointer ray collision
+        self.node.sphere.uv.mouse_ray.reset_position_collision_object(self)
+
     def update_position(self):
         """
         Updating the position of the ``Socket``. The socket is always located in the center of the
         Node Disc. The collision object and the connected edges are also updated.
         """
-        cumulative_orientation = self.node.get_cumulative_rotation()
-        self.xyz = self.calc.move_to_position(cumulative_orientation, self.node.sphere, self.radius)
 
+        self.xyz = self.node.xyz
         self.orientation = self.node.orientation  # same orientation as the node disc
         self.pos_orientation_offset = self.node.pos_orientation_offset
-        self.node.sphere.uv.mouse_ray.reset_position_collision_object(self)
+
         self.update_connected_edges()
 
     def update_connected_edges(self):

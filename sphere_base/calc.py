@@ -108,14 +108,14 @@ class Calc:
                 z1, z2 = p1[2], p2[2]
 
                 # The vector [0, 1, 0] is rotated over the z-axis (pitch)
-                ay = math.asin(x2) - math.acos(z1)
+                pitch = math.asin(x2) - math.acos(z1)
 
                 # and then over the x axis (yaw)
-                ax = math.atan2(z2, y2)
+                yaw = math.atan2(z2, y2)
 
                 # Correct the rotation with the default sphere position with the default camera direction
-                pitch_rad = -ay + ((math.pi / 180) * 90)
-                yaw_rad = ax
+                pitch_rad = -pitch + ((math.pi / 180) * 90)
+                yaw_rad = yaw
 
                 # rotation quaternions
                 yaw_q = quaternion.create_from_eulers([yaw_rad, 0.0, 0.0])
@@ -127,10 +127,26 @@ class Calc:
                 # then apply the pitch movement over the equator
                 pos_orientation_offset = quaternion.cross(orientation_with_yaw, pitch_q)
 
-                return pos_orientation_offset
+                yaw_degrees = yaw / (math.pi / 180)
+                pitch_degrees = pitch / (math.pi / 180)
+
+                # if yaw_degrees > 180:
+                #     yaw_degrees -= 360
+                # elif yaw_degrees < -180:
+                #     yaw_degrees = yaw_degrees + 360
+                #
+                # if pitch_degrees > 180:
+                #     pitch_degrees -= 360
+                # elif pitch_degrees < -180:
+                #     pitch_degrees = pitch_degrees + 360
+
+                return pos_orientation_offset, yaw_degrees, pitch_degrees
 
             except Exception as e:
+                if ValueError=="math domain error":
+                    print("hallo")
                 dump_exception(e)
+
 
     @staticmethod
     def get_distance_on_sphere(point1: Vector3, point2: Vector3, radius: float) -> float:

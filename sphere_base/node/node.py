@@ -24,7 +24,8 @@ class Node(Serializable):
     NodeContent_class = None
     Socket_class = Socket
 
-    def __init__(self, target_sphere: 'sphere', orientation_offset: 'quaternion' = None, node_type: str = "node"):
+    def __init__(self, target_sphere: 'sphere', orientation_offset: 'quaternion' = None,
+                 yaw_degrees=0, pitch_degrees=0, node_type: str = "node"):
         """
         Constructor of the ``Node`` class. Creates a node and calculates where to place it on the sphere_base.
         Needs to be overridden in the implementation to allow for other type of nodes.
@@ -77,6 +78,8 @@ class Node(Serializable):
         # (angle) of the node on the sphere_base relative to the zero rotation of the sphere_base
         self.pos_orientation_offset = np.array(
             [0.1, 0.1, 0.1, 1.0]) if orientation_offset is None else orientation_offset
+        self.yaw_degrees = yaw_degrees
+        self.pitch_degrees = pitch_degrees
 
         self.orientation = None
         self.offset_with_collision_point = None  # difference center node with collision point
@@ -172,18 +175,23 @@ class Node(Serializable):
 
         try:
             q = quaternion
-            cp = self.calc.find_angle_from_world_pos(mouse_ray_collision_point, self.sphere.orientation)
+            cp, yaw_degrees, pitch_degrees = self.calc.find_angle_from_world_pos(mouse_ray_collision_point, self.sphere.orientation)
 
             if self.offset_with_collision_point is None:
                 # store offset between mouse_ray collision point and the center of the node at the start of dragging
                 self.offset_with_collision_point = q.cross(self.pos_orientation_offset, q.inverse(cp))
 
             # The position of the mouse_ray collision point in angles (Quaternion)
-            self.pos_orientation_offset = self.calc.find_angle_from_world_pos(mouse_ray_collision_point,
-                                                                              self.sphere.orientation)
+            self.pos_orientation_offset, yaw_degrees, pitch_degrees = \
+                self.calc.find_angle_from_world_pos(mouse_ray_collision_point, self.sphere.orientation)
 
             # correct the position of the node with the difference stored
             self.pos_orientation_offset = q.cross(self.offset_with_collision_point, self.pos_orientation_offset)
+
+            # Getting the angles of the node on the sphere
+            point = (self.xyz[0], self.xyz[1], self.xyz[2])
+            cp, self.yaw_degrees, self.pitch_degrees = self.calc.find_angle_from_world_pos(point, self.sphere.orientation)
+            # print(self.yaw_degrees, self.pitch_degrees)
 
         except Exception as e:
             print('collision_point', cp)
@@ -208,6 +216,10 @@ class Node(Serializable):
         orientation = self.calc.get_item_direction_pointing_outwards(self, self.sphere)
         return orientation
 
+    def update_collision_object(self):
+        # set the collision object for mouse pointer ray collision
+        self.ray.reset_position_collision_object(self)
+
     def update_position(self):
         """
         update the position of the node_disc on the sphere_base. Calculate the position and the direction.
@@ -215,9 +227,6 @@ class Node(Serializable):
 
         self.xyz = self.get_position()
         self.orientation = self.get_orientation()
-
-        # set the collision object for mouse pointer ray collision
-        self.ray.reset_position_collision_object(self)
 
         self.socket.update_position()
 
@@ -310,5 +319,6 @@ class Node(Serializable):
         self.serialized_detail_scene = data['scene']
         self.texture_id = data['texture_id']
         self.update_position()
+        self.update_collision_object()
 
         return True
