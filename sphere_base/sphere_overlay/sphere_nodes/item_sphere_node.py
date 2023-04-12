@@ -20,8 +20,6 @@ class ItemGraphicNode(GraphicNode):
         self.scale = [2.0, 2.0, 2.0]
         self.circle_scale = [0.27, 0.30, 0.27]
 
-
-
 @register_node(OP_SPHERE_NODE_ITEM, SPHERE_NODE_EDITOR)
 class ItemSphereNode(SphereNodeBase):
     GraphicNode_class = ItemGraphicNode

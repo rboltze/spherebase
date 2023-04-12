@@ -97,11 +97,10 @@ class Node(Serializable):
         self.texture_id = self.gr_node.default_img_id
         self.radius = target_sphere.radius - 0.01
 
-        self.xyz = self.get_position()
-
+        self.xyz = self.get_position()  # the xyz position of the node on the surface of the sphere
         # get the orientation of the disc pointing away from the center of the sphere_base
-        self.orientation = self.get_orientation()
-        self.cumulative_rotation = self.get_cumulative_rotation()
+        self.orientation = self.get_orientation()  # the normal for the node
+        self.cumulative_rotation = self.get_cumulative_rotation(self.pos_orientation_offset, self.sphere.orientation)
 
         # create a collision object (cylinder) pointing out
         self.collision_object_id = self.ray.create_collision_object(self)
@@ -133,13 +132,14 @@ class Node(Serializable):
         """
         return self.__class__.GraphicNode_class
 
-    def get_cumulative_rotation(self):
+    @staticmethod
+    def get_cumulative_rotation(angle1, angle2):
         """
-        Helper function returns a quaternion with a cumulative rotation of both the rotation
-        offset of the node with the rotation of the sphere_base.
+        Helper function returns a quaternion with a cumulative rotation of two rotations
+
         """
 
-        return quaternion.cross(self.pos_orientation_offset, quaternion.inverse(self.sphere.orientation))
+        return quaternion.cross(angle1, quaternion.inverse(angle2))
 
     def is_dragging(self, value: bool = False):
         """
@@ -176,6 +176,7 @@ class Node(Serializable):
         try:
             q = quaternion
             cp, yaw_degrees, pitch_degrees = self.calc.find_angle_from_world_pos(mouse_ray_collision_point, self.sphere.orientation)
+            cp = self.calc.get_angle_from_point0(self.sphere, mouse_ray_collision_point)
 
             if self.offset_with_collision_point is None:
                 # store offset between mouse_ray collision point and the center of the node at the start of dragging
@@ -184,13 +185,17 @@ class Node(Serializable):
             # The position of the mouse_ray collision point in angles (Quaternion)
             self.pos_orientation_offset, yaw_degrees, pitch_degrees = \
                 self.calc.find_angle_from_world_pos(mouse_ray_collision_point, self.sphere.orientation)
+            self.pos_orientation_offset = self.calc.get_angle_from_point0(self.sphere, mouse_ray_collision_point)
 
-            # correct the position of the node with the difference stored
+            # correct the position of the node with the difference with the stored mouse pointer diff
             self.pos_orientation_offset = q.cross(self.offset_with_collision_point, self.pos_orientation_offset)
 
-            # Getting the angles of the node on the sphere
-            point = (self.xyz[0], self.xyz[1], self.xyz[2])
-            cp, self.yaw_degrees, self.pitch_degrees = self.calc.find_angle_from_world_pos(point, self.sphere.orientation)
+            # # Getting the angles of the node on the sphere
+            # point = (self.xyz[0], self.xyz[1], self.xyz[2])
+            #
+            # cp, self.yaw_degrees, self.pitch_degrees = self.calc.find_angle_from_world_pos(point, self.sphere.orientation)
+            # cp = self.calc.get_angle_from_point0(self.sphere, point)
+
             # print(self.yaw_degrees, self.pitch_degrees)
 
         except Exception as e:
@@ -205,16 +210,17 @@ class Node(Serializable):
 
     def get_position(self):
         # cumulative sphere_base rotation with position offset of node
-        cumulative_orientation = self.get_cumulative_rotation()
+        cumulative_orientation = self.get_cumulative_rotation(self.pos_orientation_offset, self.sphere.orientation)
 
-        # get the position of the node on the sphere_base
-        xyz = self.calc.move_to_position(cumulative_orientation, self.sphere, self.radius)
+        # get the position of the node on the sphere
+        xyz = self.calc.move_to_position(cumulative_orientation, self.sphere)
+
         return xyz
 
     def get_orientation(self):
         # get the orientation of the disc pointing away from the center of the sphere_base
-        orientation = self.calc.get_item_direction_pointing_outwards(self, self.sphere)
-        return orientation
+        normal = self.calc.get_item_direction_pointing_outwards(self, self.sphere)
+        return normal
 
     def update_collision_object(self):
         # set the collision object for mouse pointer ray collision

@@ -117,32 +117,22 @@ class SphereMenu(QMenu):
         self.main_win.statusBar().showMessage("Ready")
 
     def _update_edit_menu(self):
-        if not self.get_win():
-            self.action_paste.setEnabled(False)
-            self.action_cut.setEnabled(False)
-            self.action_copy.setEnabled(False)
-            self.action_delete.setEnabled(False)
-            self.action_undo.setEnabled(False)
-            self.action_redo.setEnabled(False)
-        elif self.get_win() == "detail":
-            active = self.main_win.right_detail.editors_stack.currentWidget()
-            hasMdiChild = (active is not None)
+        self.action_paste.setEnabled(False)
+        self.action_cut.setEnabled(False)
+        self.action_copy.setEnabled(False)
+        self.action_delete.setEnabled(False)
+        self.action_undo.setEnabled(False)
+        self.action_redo.setEnabled(False)
 
-            self.action_paste.setEnabled(hasMdiChild)
-            self.action_cut.setEnabled(hasMdiChild and active.hasSelectedItems())
-            self.action_copy.setEnabled(hasMdiChild and active.hasSelectedItems())
-            self.action_delete.setEnabled(hasMdiChild and active.hasSelectedItems())
-            self.action_undo.setEnabled(hasMdiChild and active.canUndo())
-            self.action_redo.setEnabled(hasMdiChild and active.canRedo())
-        elif self.get_win() == "sphere_iot":
-            active_sphere = True if self.main_win.sphere_widget.selected_sphere else False
-            active = True if len(self.main_win.sphere_widget.selected_sphere_items) > 0 else False
+        if self.main_win.sphere_widget.uv_widget.uv:
+            active_sphere = True if self.get_sphere() else False
+            active = True if len(self.get_sphere().items_selected) > 0 else False
             self.action_paste.setEnabled(active_sphere)
             self.action_cut.setEnabled(active)
             self.action_copy.setEnabled(active)
             self.action_delete.setEnabled(active)
-            self.action_undo.setEnabled(active_sphere)
-            self.action_redo.setEnabled(active_sphere)
+            self.action_undo.setEnabled(self.get_sphere().history.can_undo())
+            self.action_redo.setEnabled(self.get_sphere().history.can_redo())
 
     def reset_modified(self):
         # resetting the modified flag
@@ -152,7 +142,7 @@ class SphereMenu(QMenu):
     def get_win(self):
         # helper function to get the active split window
         pass
-        #return self.main_win.split.get_active_split_window()
+        # return self.main_win.split.get_active_split_window()
 
     def get_sphere(self):
         # helper function to get the active target sphere_base from the sphere_iot
@@ -164,40 +154,22 @@ class SphereMenu(QMenu):
         # return self.main_win.split.right_detail
 
     def on_edit_undo(self):
-        if self.get_win() == "detail":
-            self.get_detail().onEditUndo()
-        elif self.get_win() == "sphere_iot":
-            self.get_sphere().history.undo()
+        self.get_sphere().history.undo()
 
     def on_edit_redo(self):
-        if self.get_win() == "detail":
-            self.get_detail().onEditRedo()
-        elif self.get_win() == "sphere_iot":
-            self.get_sphere().history.redo()
+        self.get_sphere().history.redo()
 
     def on_edit_delete(self):
-        if self.get_win() == "detail":
-            self.get_detail().onEditDelete()
-        elif self.get_win() == "sphere_iot":
-            self.get_sphere().delete_selected_items()
+        self.get_sphere().delete_selected_items()
 
     def on_edit_cut(self):
-        if self.get_win() == "detail":
-            self.get_detail().onEditCut()
-        elif self.get_win() == "sphere_iot":
-            self.get_sphere().edit_cut()
+        self.get_sphere().edit_cut()
 
     def on_edit_copy(self):
-        if self.get_win() == "detail":
-            self.get_detail().onEditCopy()
-        elif self.get_win() == "sphere_iot":
-            self.get_sphere().edit_copy()
+        self.get_sphere().edit_copy()
 
     def on_edit_paste(self):
-        if self.get_win() == "detail":
-            self.get_detail().onEditPaste()
-        elif self.get_win() == "sphere_iot":
-            self.get_sphere().edit_paste()
+        self.get_sphere().edit_paste()
 
     def on_file_new(self):
         self.main_win.filename = ""

@@ -9,6 +9,7 @@ current implementation there is only need for a single camera object.
 from pyrr import Vector3, Vector4, vector, matrix44
 from sphere_base.sphere_universe_base.suv_cam_movement import CameraMovement
 from sphere_base.constants import *
+from sphere_base.utils import dump_exception
 
 MOUSE_SENSITIVITY = .1
 TARGET = Vector3([0.0, 0.0, 0.0])
@@ -61,6 +62,7 @@ class Camera:
         self.movement_stack = []
         self.target_stack = []
 
+        self.uv = parent
         self.shader = parent.shader
         self.config = parent.config
 
@@ -96,7 +98,6 @@ class Camera:
         :type target_sphere:  :class:`~sphere_iot.uv_sphere.Sphere`
 
         """
-
         # used when de-serializing
         self.target = target_sphere.xyz
         self.xyz = self.target + default_pos
@@ -116,7 +117,7 @@ class Camera:
         self.config.set_view_loc(m)
         return m
 
-    def process_mouse_movement(self, target_sphere: 'sphere_base', x_offset: int, y_offset: int):
+    def process_mouse_movement(self, target_sphere, x_offset: int, y_offset: int):
         """
         :param target_sphere: The :class:`~sphere_iot.uv_sphere.Sphere` the camera is looking at
         :type target_sphere: :class:`~sphere_iot.uv_sphere.Sphere`
@@ -131,7 +132,7 @@ class Camera:
 
         self.process_movement(target_sphere, rotation=x_offset, angle_up=y_offset)
 
-    def process_movement(self, target_sphere: 'sphere_base' = None, rotation: float = 0, angle_up: float = 0,
+    def process_movement(self, target_sphere=None, rotation: float = 0, angle_up: float = 0,
                          radius: float = 0):
 
         """
@@ -152,7 +153,7 @@ class Camera:
         view = self.get_view_matrix()
         self.config.set_view_loc(view)
 
-    def move_to_new_target_sphere(self, target_sphere: 'Sphere'):
+    def move_to_new_target_sphere(self, target_sphere):
         """
         Moves the camera from its current location to the new target sphere_base.
 
@@ -175,12 +176,12 @@ class Camera:
 
     def draw(self):
         """
-        Sets the camera view for use with all shaders. If a new sphere_base target is _selected move the camera
+        Sets the camera view for use with all shaders. If a new sphere target is _selected move the camera
         to the new position.
 
         """
 
-        # if a sphere_base has been on_current_row_changed (_selected) then move the camera to the new sphere_base
+        # if a sphere has been on_current_row_changed (_selected) then move the camera to the new sphere
         if len(self.movement_stack) > 0:
             self.xyz = Vector3(self.movement_stack[0])
             self.target = Vector3(self.target_stack[0])
@@ -190,3 +191,14 @@ class Camera:
         # The view needs to be updated before drawing. This is because OpenGL is a state machine that listens to
         # changes program wide spanning instances!
         self.get_view_matrix()
+
+    def get_cam_collision_point(self):
+        #  the collision point on the surface of the sphere with the camera
+        try:
+            p1 = (self.xyz[0], self.xyz[1], self.xyz[2])
+            angle = self.uv.target_sphere.calc.find_angle_from_world_pos(p1, self.uv.target_sphere.orientation)
+            # angle, print yaw degrees, pitch degrees
+            print(angle)
+        except Exception as e:
+            dump_exception(e)
+

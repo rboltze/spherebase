@@ -342,6 +342,8 @@ class UVWidget(QGLWidget):
             self.up = True
         elif event.key() == Qt.Key_Down:
             self.down = True
+        elif event.key() == Qt.Key_T:
+            self.uv.cam.get_cam_collision_point()
         elif event.key() == Qt.Key_P:
             self.uv.skybox.get_next_set()
         elif event.key() == Qt.Key_O:

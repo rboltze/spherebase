@@ -20,7 +20,7 @@ class Calc:
         pass
 
     @staticmethod
-    def get_item_direction_pointing_outwards(item: ('Node', 'Edge', 'Socket'), sphere: 'Sphere') -> 'Quaternion':
+    def get_item_direction_pointing_outwards(item, sphere):
         """
         Calculates the quaternion pointing outwards from the center of the sphere_base through the center of the item
 
@@ -42,7 +42,7 @@ class Calc:
         return quaternion.create_from_matrix(m)
 
     @staticmethod
-    def move_to_position(cumulative_orientation: 'Quaternion', sphere: 'Sphere', radius: float) -> 'Vector4':
+    def move_to_position(cumulative_orientation, sphere) -> 'Vector4':
         """
 
         :param cumulative_orientation:
@@ -68,7 +68,7 @@ class Calc:
         rm = matrix44.create_from_quaternion(cumulative_orientation)
 
         # rotating the node vector
-        node_origin = Vector4([0.0, radius, 0.0, 1.0])
+        node_origin = Vector4([0.0, sphere.radius, 0.0, 1.0])
         xyzw = matrix44.apply_to_vector(rm, node_origin)
 
         # translation matrix to move the node to world space
@@ -79,6 +79,63 @@ class Calc:
         xyzw = matrix44.apply_to_vector(tm, xyzw)
 
         return Vector4(xyzw).xyz
+
+    def get_angle_from_point0(self, target_sphere, point):
+        """
+        calculate the angle between the sphere starting point and a point on the sphere
+
+        :return:
+        """
+        zero_point = Vector3([0.0, 1.0, 0.0])
+        q_angle = self.get_angle_between_two_vectors(target_sphere, point, zero_point)
+
+        return q_angle
+
+    @staticmethod
+    def get_angle_between_two_vectors(target_sphere, point1, point2):
+        """
+        Nodes moving over the surface of a sphere need to be located or fixed in place
+        by angles and/or their absolute position.
+
+        two points on the surface of a sphere
+
+        :param target_sphere:
+        :param point1:
+        :param point2:
+        :return:
+        """
+
+        try:
+
+            p0 = Vector3(target_sphere.xyz)
+            # point2 = Vector3([1.0, 0.0, 0.0])
+            # p2 = Vector3([collision_point])  # The position of the point in world space
+
+            x0, y0, z0 = target_sphere.xyz  # center of the target sphere
+            x1, y1, z1 = point1
+            x2, y2, z2 = point2
+
+            ux, uy, uz = u = [x1 - x0, y1 - y0, z1 - z0]  # first vector
+            vx, vy, vz = v = [x2 - x0, y2 - y0, z2 - z0]  # sec vector
+
+            u_cross_v = [uy * vz - uz * vy, uz * vx - ux * vz, ux * vy - uy * vx]  # cross product
+
+            point = Vector3(point1)
+            normal = Vector3(u_cross_v)
+
+            d = -point.dot(normal)
+
+            distance = math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 + (z1 - z2) ** 2)
+            angle = 2 * math.asin((0.5 * distance) / target_sphere.radius)
+
+            angle = quaternion.create_from_axis_rotation(normal, angle)
+
+            # return the angle as a quaternion
+            return angle
+
+        except Exception as e:
+            dump_exception(e)
+
 
     @staticmethod
     def find_angle_from_world_pos(collision_point, sphere_orientation_offset) -> 'quaternion':
@@ -100,16 +157,20 @@ class Calc:
 
         if collision_point:
             try:
-                p1 = [1, 0, 0]
-                p2 = collision_point  # The position of the point in world space
+                p1 = Vector3([1.0, 0.0, 0.0])
+                p2 = Vector3([collision_point])  # The position of the point in world space
 
                 x1, x2 = p1[0], p2[0]
                 y1, y2 = p1[1], p2[1]
                 z1, z2 = p1[2], p2[2]
 
-                # The vector [0, 1, 0] is rotated over the z-axis (pitch)
-                pitch = math.asin(x2) - math.acos(z1)
+                # avoiding math domain errors as values need to be between -1 and 1
+                x2 = -1 if x2 < -1 else x2
+                x2 = 1 if x2 > 1 else x2
+                z2 = -1 if z2 < -1 else z2
+                z2 = 1 if z2 > 1 else z2
 
+                pitch = math.asin(x2) - math.acos(z1)
                 # and then over the x axis (yaw)
                 yaw = math.atan2(z2, y2)
 
@@ -130,23 +191,10 @@ class Calc:
                 yaw_degrees = yaw / (math.pi / 180)
                 pitch_degrees = pitch / (math.pi / 180)
 
-                # if yaw_degrees > 180:
-                #     yaw_degrees -= 360
-                # elif yaw_degrees < -180:
-                #     yaw_degrees = yaw_degrees + 360
-                #
-                # if pitch_degrees > 180:
-                #     pitch_degrees -= 360
-                # elif pitch_degrees < -180:
-                #     pitch_degrees = pitch_degrees + 360
-
                 return pos_orientation_offset, yaw_degrees, pitch_degrees
 
             except Exception as e:
-                if ValueError=="math domain error":
-                    print("hallo")
                 dump_exception(e)
-
 
     @staticmethod
     def get_distance_on_sphere(point1: Vector3, point2: Vector3, radius: float) -> float:

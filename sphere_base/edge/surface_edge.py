@@ -234,7 +234,7 @@ class SurfaceEdge(Serializable):
         for i in range(number_of_vertices):
             pos = quaternion.slerp(start, end, step * i)
 
-            p = self.calc.move_to_position(pos, self.sphere, self.radius)
+            p = self.calc.move_to_position(pos, self.sphere)
             n = vector.normalize(Vector3(p) - Vector3(self.sphere.xyz))  # finding the normal of the vertex
 
             self.vert.append([p[0], p[1], p[2]])  # we need this for pybullet

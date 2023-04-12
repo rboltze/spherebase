@@ -18,6 +18,7 @@ from sphere_base.history import History
 from pyrr import quaternion, Quaternion
 from math import pi
 from sphere_base.calc import Calc
+from sphere_base.constants import *
 import numpy as np
 import pyperclip
 import json
@@ -84,9 +85,9 @@ class Sphere(Serializable):
         self.selected = False
         self.offset_degrees = 0
 
-        self.scale = None
         self.index = 0
-        self.radius = 1.0
+        self.radius = SPHERE_RADIUS
+        self.scale = [SPHERE_RADIUS, SPHERE_RADIUS, SPHERE_RADIUS]
         self.color = [1, 1, 1, 1]
         self.orientation = quaternion.create_from_eulers([0.0, 0.0, 0.0])
         self.start_socket = None
