@@ -204,7 +204,7 @@ class UVWidget(QGLWidget):
         if self.is_dragging:
 
             self.is_dragging = False
-            for item in self.uv.target_sphere.items:
+            for item in self.uv.target_sphere.items_selected:
                 # This were we should instruct to update all the collision points
                 item.update_collision_object()
                 item.is_dragging(False)

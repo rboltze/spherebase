@@ -86,7 +86,7 @@ class UvConfig:
             _set += s
         return _set
 
-    def set_view_loc(self, view: 'matrix'):
+    def set_view_loc(self, view):
         """
         Setting the view matrix to be used in OpenGL
 
@@ -97,7 +97,7 @@ class UvConfig:
         self.view_loc = view
         self.on_view_changed()
 
-    def add_win_size_changed_listener(self, callback: 'function'):
+    def add_win_size_changed_listener(self, callback):
         """
         Register callback for 'win size changed' event.
 
@@ -106,7 +106,7 @@ class UvConfig:
         """
         self._win_size_changed_listeners.append(callback)
 
-    def add_view_changed_listener(self, callback: 'function'):
+    def add_view_changed_listener(self, callback):
         """
         Register callback for 'view changed' event.
 

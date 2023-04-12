@@ -25,9 +25,9 @@ DEBUG_MOUSE_RAY = False
 COLLISION_SHAPES = {
     "sphere_base": {"type": p.GEOM_SPHERE, "radius": SPHERE_RADIUS, "height": 0, "base_mass": 0,
                     "baseVisualShapeIndex": -1},
-    "node": {"type": p.GEOM_SPHERE, "radius": NODE_DISC_RADIUS, "height": 0, "base_mass": 0,
+    "node": {"type": p.GEOM_SPHERE, "radius": NODE_DISC_RADIUS, "height": 0.025, "base_mass": 0,
              "baseVisualShapeIndex": -1},
-    "socket": {"type": p.GEOM_CYLINDER, "radius": SOCKET_RADIUS, "height": 0, "base_mass": 0,
+    "socket": {"type": p.GEOM_CYLINDER, "radius": SOCKET_RADIUS, "height": 0.027, "base_mass": 0,
                "baseVisualShapeIndex": -1},
     "edge": {"type": p.GEOM_MESH, "height": .025, "base_mass": 0, "baseVisualShapeIndex": -1},
     "sphere_small": {"type": p.GEOM_CYLINDER, "radius": SPHERE_SMALL_RADIUS, "height": .026, "base_mass": 0,
@@ -98,9 +98,19 @@ class MouseRay:
             'sphere_small': self.bullet.createCollisionShape(p.GEOM_SPHERE, radius=SPHERE_SMALL_RADIUS, height=0),
             'sphere_base': self.bullet.createCollisionShape(p.GEOM_SPHERE, radius=SPHERE_RADIUS, height=0),
             'node': self.bullet.createCollisionShape(p.GEOM_CYLINDER, radius=NODE_DISC_RADIUS, height=0.025),
-            'socket': self.bullet.createCollisionShape(p.GEOM_CYLINDER, radius=SOCKET_RADIUS, height=0.026),
+            'socket': self.bullet.createCollisionShape(p.GEOM_CYLINDER, radius=SOCKET_RADIUS, height=0.027),
 
         }
+
+    def get_collision_shape(self, obj):
+        shape_id = None
+        # if obj.type.startswith('sphere'):
+        #     shape_id = self.bullet.createCollisionShape(p.GEOM_SPHERE, radius=obj.radius, height=0)
+        # elif obj.type == 'node':
+        #     shape_id = self.bullet.createCollisionShape(p.GEOM_CYLINDER, radius=obj.radius, height=0.025)
+        # elif obj.type == 'socket':
+        #     shape_id = self.bullet.createCollisionShape(p.GEOM_CYLINDER, radius=obj.radius, height=0.026)
+        return shape_id
 
     def create_collision_object(self, obj, vertices: list = None):
         """
@@ -120,15 +130,17 @@ class MouseRay:
                 if key == "edge":
                     collision_shape_id = self.bullet.createCollisionShape(p.GEOM_MESH, vertices=vertices,
                                                                           flags=p.GEOM_FORCE_CONCAVE_TRIMESH)
+                    # print(obj.type, collision_shape_id)
                     object_id = self.bullet.createMultiBody(baseMass=cs[key]["base_mass"],
                                                             baseCollisionShapeIndex=collision_shape_id,
                                                             baseVisualShapeIndex=cs[key]["baseVisualShapeIndex"],
                                                             baseOrientation=obj.orientation,
                                                             physicsClientId=self.client_id)
                 else:
-                    # print(cs[key]["baseVisualShapeIndex"])
+                    # print(obj.type, obj.collision_shape_id)
                     object_id = self.bullet.createMultiBody(baseMass=cs[key]["base_mass"],
                                                             baseCollisionShapeIndex=self._collision_shapes[key],
+                                                            # baseCollisionShapeIndex=obj.collision_shape_id,
                                                             baseVisualShapeIndex=cs[key]["baseVisualShapeIndex"],
                                                             basePosition=[obj.xyz[0], obj.xyz[1], obj.xyz[2]],
                                                             baseOrientation=obj.orientation,

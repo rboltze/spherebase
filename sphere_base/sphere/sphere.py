@@ -8,6 +8,7 @@ One sphere_base at the time can become the 'target sphere_base'.
 """
 
 from random import *
+from pyrr import Vector3
 from sphere_base.serializable import Serializable
 from sphere_base.utils import dump_exception
 from collections import OrderedDict
@@ -83,13 +84,15 @@ class Sphere(Serializable):
         self._has_been_modified = False
         self._dragging = False
         self.selected = False
-        self.offset_degrees = 0
+
+        # The sphere rotates
+        self.rotation_degrees = 0
 
         self.index = 0
         self.radius = SPHERE_RADIUS
         self.scale = [SPHERE_RADIUS, SPHERE_RADIUS, SPHERE_RADIUS]
         self.color = [1, 1, 1, 1]
-        self.orientation = quaternion.create_from_eulers([0.0, 0.0, 0.0])
+        self.orientation = quaternion.create_from_eulers([0.0, self.radius, 0.0])
         self.start_socket = None
         self._hovered_item = None
         self.animation = 0  # rotation speed
@@ -117,6 +120,7 @@ class Sphere(Serializable):
         self.xyz = position if position else ([randint(-25, 25), randint(-25, 25), randint(-25, 25)])
         self.texture_id = texture_id if texture_id or texture_id == 0 else randint(1, 5)
 
+        self.collision_shape_id = self.uv.mouse_ray.get_collision_shape(self)
         self.collision_object_id = self.uv.mouse_ray.create_collision_object(self)
 
         # for testing purposes a number of random nodes can be created
@@ -411,14 +415,14 @@ class Sphere(Serializable):
         """
 
         # rotating the sphere_base over the y-axis
-        self.offset_degrees += offset_degrees
+        self.rotation_degrees += offset_degrees
 
-        if self.offset_degrees > 180:
-            self.offset_degrees -= 360
-        elif self.offset_degrees < -180:
-            self.offset_degrees = self.offset_degrees + 360
+        if self.rotation_degrees > 180:
+            self.rotation_degrees -= 360
+        elif self.rotation_degrees < -180:
+            self.rotation_degrees = self.rotation_degrees + 360
 
-        pitch = (pi / 180 * self.offset_degrees)
+        pitch = (pi / 180 * self.rotation_degrees)
         self.orientation = quaternion.create_from_eulers([0.0, pitch, 0.0])
         self.update_item_positions()
 
@@ -593,6 +597,18 @@ class Sphere(Serializable):
         self.uv.mouse_ray.delete_collision_object(self)
         self.uv.remove_sphere(self)
 
+    def set_radius(self, radius):
+        """
+        setting the radius of the sphere
+
+        :param value:
+        :return:
+        """
+        self.radius = radius
+        self.scale = [radius, radius, radius]
+        self.orientation = quaternion.create_from_eulers([0.0, radius, 0.0])
+        self.uv.cam.reset_to_default_view(self)
+
     def set_node_class_selector(self, class_selecting_function: 'function'):
         """
         Helper method that sets the function which decides what `Node` class to instantiate when deserializing
@@ -640,6 +656,7 @@ class Sphere(Serializable):
             ('id', self.id),
             ('type', self.type),
             ('pos', self.xyz),
+            ('radius', self.radius),
             ('orientation', self.orientation.tolist()),
             ('texture_id', self.texture_id),
             ('color', self.color),
@@ -655,6 +672,9 @@ class Sphere(Serializable):
         hashmap[data['id']] = self
 
         self.xyz = data['pos']
+        if 'radius' in data:
+            self.radius = data['radius']
+            self.set_radius(self.radius)
         self.orientation = np.array(data['orientation'])
         self.texture_id = data['texture_id']
         if 'color' in data:

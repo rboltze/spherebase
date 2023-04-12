@@ -4,7 +4,7 @@
 Module Node. A node is the basis for all nodes. Further nodes are derived from Node
 """
 
-from pyrr import quaternion
+from pyrr import quaternion, Vector3, Quaternion
 from sphere_base.serializable import Serializable
 from collections import OrderedDict
 from sphere_base.node.graphic_node import GraphicNode
@@ -12,6 +12,7 @@ from sphere_base.node.socket import Socket
 from sphere_base.constants import *
 from sphere_base.utils import dump_exception
 import numpy as np
+import math
 
 
 class Node(Serializable):
@@ -103,6 +104,7 @@ class Node(Serializable):
         self.cumulative_rotation = self.get_cumulative_rotation(self.pos_orientation_offset, self.sphere.orientation)
 
         # create a collision object (cylinder) pointing out
+        self.collision_shape_id = self.ray.get_collision_shape(self)
         self.collision_object_id = self.ray.create_collision_object(self)
         self.socket = self.Socket(self)
 
@@ -175,8 +177,11 @@ class Node(Serializable):
 
         try:
             q = quaternion
+            # self.sphere.sphere_vector = Quaternion(self.sphere.orientation) * Vector3([0.0, 1.0, 0.0])
+            # print(self.sphere.sphere_vector)
+
             cp, yaw_degrees, pitch_degrees = self.calc.find_angle_from_world_pos(mouse_ray_collision_point, self.sphere.orientation)
-            cp = self.calc.get_angle_from_point0(self.sphere, mouse_ray_collision_point)
+            # cp = self.calc.get_angle_from_point0(self.sphere, mouse_ray_collision_point)
 
             if self.offset_with_collision_point is None:
                 # store offset between mouse_ray collision point and the center of the node at the start of dragging
@@ -185,7 +190,7 @@ class Node(Serializable):
             # The position of the mouse_ray collision point in angles (Quaternion)
             self.pos_orientation_offset, yaw_degrees, pitch_degrees = \
                 self.calc.find_angle_from_world_pos(mouse_ray_collision_point, self.sphere.orientation)
-            self.pos_orientation_offset = self.calc.get_angle_from_point0(self.sphere, mouse_ray_collision_point)
+            # self.pos_orientation_offset = self.calc.get_angle_from_point0(self.sphere, mouse_ray_collision_point)
 
             # correct the position of the node with the difference with the stored mouse pointer diff
             self.pos_orientation_offset = q.cross(self.offset_with_collision_point, self.pos_orientation_offset)
@@ -197,6 +202,10 @@ class Node(Serializable):
             # cp = self.calc.get_angle_from_point0(self.sphere, point)
 
             # print(self.yaw_degrees, self.pitch_degrees)
+
+            # apply sphere rotation
+            # self.pos_orientation_offset = q.cross(q.inverse(self.sphere.orientation), self.pos_orientation_offset)
+
 
         except Exception as e:
             print('collision_point', cp)
@@ -222,9 +231,30 @@ class Node(Serializable):
         normal = self.calc.get_item_direction_pointing_outwards(self, self.sphere)
         return normal
 
-    def update_collision_object(self):
-        # set the collision object for mouse pointer ray collision
-        self.ray.reset_position_collision_object(self)
+    def update_position2(self):
+        """
+        update the position of the node_disc on the sphere_base. Calculate the position and the direction.
+        """
+
+        # self.xyz = self.get_position()
+        # cumulative_orientation = self.get_cumulative_rotation(self.sphere.orientation, self.pos_orientation_offset)
+        # get the rotation of the sphere in a quaternion
+
+        rotation_rad = self.sphere.rotation_degrees * (math.pi / 180)
+        q_sphere_rotation = quaternion.create_from_eulers([0.0, 0.0, -rotation_rad])
+        v_sphere_rotation = [0.0, -rotation_rad, 0.0]
+
+        # adding to vectors
+
+        cumulative_orientation = quaternion.cross(self.pos_orientation_offset, q_sphere_rotation)
+        # cumulative_orientation = self.pos_orientation_offset
+        # get the position of the node on the sphere
+        self.xyz = self.calc.move_to_position(cumulative_orientation, self.sphere)
+
+        self.orientation = self.get_orientation()
+        self.socket.update_position()
+
+        return self.xyz
 
     def update_position(self):
         """
@@ -233,10 +263,13 @@ class Node(Serializable):
 
         self.xyz = self.get_position()
         self.orientation = self.get_orientation()
-
         self.socket.update_position()
 
         return self.xyz
+
+    def update_collision_object(self):
+        # set the collision object for mouse pointer ray collision
+        self.ray.reset_position_collision_object(self)
 
     def update_content(self, texture_id: int, sphere_id: int):
         """

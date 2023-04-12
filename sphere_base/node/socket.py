@@ -79,6 +79,7 @@ class Socket(Serializable):
         self.collision_object_radius = SOCKET_RADIUS
 
         # create a collision object (cylinder) pointing out from the center of the sphere_base
+        self.collision_shape_id = self.node.sphere.uv.mouse_ray.get_collision_shape(self)
         self.collision_object_id = self.create_collision_object()
 
         self.update_position()

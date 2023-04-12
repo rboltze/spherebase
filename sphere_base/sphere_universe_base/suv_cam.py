@@ -90,18 +90,19 @@ class Camera:
     def set_movement_values(self, min_radius=MIN_RADIUS, cam_movement_steps=CAM_MOVEMENT_STEPS):
         self.cm.set_minimum_values(min_radius, cam_movement_steps)
 
-    def reset_to_default_view(self, target_sphere, default_pos=DEFAULT_POS):
+    def reset_to_default_view(self, target_sphere, offset=None):
         """
         Resetting the camera view to the default view on the sphere_base, without any rotation.
-        :param default_pos: Default position
+        :param offset: Default position
         :param target_sphere: The target :class:`~sphere_iot.uv_sphere.Sphere` the camera is looking at
         :type target_sphere:  :class:`~sphere_iot.uv_sphere.Sphere`
 
         """
+        offset = Vector3([0.0, 0.0, target_sphere.radius * 2]) if not offset else offset
+        offset = Vector3([0.0, 0.0, target_sphere.radius * 3]) if target_sphere.radius == 1 else offset
         # used when de-serializing
         self.target = target_sphere.xyz
-        self.xyz = self.target + default_pos
-
+        self.xyz = self.target + offset
         self.move_to_new_target_sphere(target_sphere)
         self.cm.reset()
         self._set_view()

@@ -4,7 +4,7 @@
 Calculation module. Contains calculations used in several modules.
 """
 
-from pyrr import Vector3, Vector4, vector, matrix44, quaternion
+from pyrr import Vector3, Vector4, vector, matrix44, quaternion, Quaternion
 from sphere_base.utils import dump_exception
 import math
 
@@ -72,8 +72,8 @@ class Calc:
         xyzw = matrix44.apply_to_vector(rm, node_origin)
 
         # translation matrix to move the node to world space
-        sphere = Vector4([*sphere.xyz, 1])
-        tm = matrix44.create_from_translation(sphere)
+        s = Vector4([*sphere.xyz, 1])
+        tm = matrix44.create_from_translation(s)
 
         # moving the node vector
         xyzw = matrix44.apply_to_vector(tm, xyzw)
@@ -86,10 +86,15 @@ class Calc:
 
         :return:
         """
-        zero_point = Vector3([0.0, 1.0, 0.0])
-        q_angle = self.get_angle_between_two_vectors(target_sphere, point, zero_point)
+        try:
+            zero_point = Vector3([0.0, 1.0, 0.0])
+            # zero_point = target_sphere.sphere_vector
+            q_angle = self.get_angle_between_two_vectors(target_sphere, point, zero_point)
+            print(point)
 
-        return q_angle
+            return q_angle
+        except Exception as e:
+            dump_exception(e)
 
     @staticmethod
     def get_angle_between_two_vectors(target_sphere, point1, point2):
@@ -108,8 +113,6 @@ class Calc:
         try:
 
             p0 = Vector3(target_sphere.xyz)
-            # point2 = Vector3([1.0, 0.0, 0.0])
-            # p2 = Vector3([collision_point])  # The position of the point in world space
 
             x0, y0, z0 = target_sphere.xyz  # center of the target sphere
             x1, y1, z1 = point1
@@ -120,10 +123,10 @@ class Calc:
 
             u_cross_v = [uy * vz - uz * vy, uz * vx - ux * vz, ux * vy - uy * vx]  # cross product
 
-            point = Vector3(point1)
+            # point = Vector3(point1)
             normal = Vector3(u_cross_v)
 
-            d = -point.dot(normal)
+            # d = -point.dot(normal)
 
             distance = math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 + (z1 - z2) ** 2)
             angle = 2 * math.asin((0.5 * distance) / target_sphere.radius)
@@ -157,8 +160,9 @@ class Calc:
 
         if collision_point:
             try:
-                p1 = Vector3([1.0, 0.0, 0.0])
-                p2 = Vector3([collision_point])  # The position of the point in world space
+                p1 = Vector3([0.0, 1.0, 0.0])
+                p1 = Quaternion(sphere_orientation_offset) * Vector3(p1)
+                p2 = vector.normalize(Vector3([collision_point]))  # The position of the point in world space
 
                 x1, x2 = p1[0], p2[0]
                 y1, y2 = p1[1], p2[1]
