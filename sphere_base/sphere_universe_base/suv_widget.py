@@ -205,7 +205,7 @@ class UVWidget(QGLWidget):
 
             self.is_dragging = False
             for item in self.uv.target_sphere.items_selected:
-                # This were we should instruct to update all the collision points
+                # Update the affected collision objects
                 item.update_collision_object()
                 item.is_dragging(False)
             self.uv.target_sphere.history.store_history("node moved", set_modified=True)

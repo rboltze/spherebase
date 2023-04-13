@@ -98,9 +98,12 @@ class Camera:
         :type target_sphere:  :class:`~sphere_iot.uv_sphere.Sphere`
 
         """
+        pass
+
         offset = Vector3([0.0, 0.0, target_sphere.radius * 2]) if not offset else offset
-        offset = Vector3([0.0, 0.0, target_sphere.radius * 3]) if target_sphere.radius == 1 else offset
-        # used when de-serializing
+        offset = Vector3([0.0, 0.0, target_sphere.radius * 3]) if target_sphere.radius in (1, 2) else offset
+        offset = Vector3([0.0, 0.0, target_sphere.radius * 2.7]) if target_sphere.radius == 2 else offset
+        # # used when de-serializing
         self.target = target_sphere.xyz
         self.xyz = self.target + offset
         self.move_to_new_target_sphere(target_sphere)
@@ -128,6 +131,7 @@ class Camera:
         :type y_offset: ``int``
 
         """
+
         x_offset *= self.mouse_sensitivity
         y_offset *= self.mouse_sensitivity
 
@@ -149,6 +153,7 @@ class Camera:
         :type radius: ``float``
 
         """
+
         xyzw = self.cm.orbit_around_target(target_sphere, rotation, angle_up, radius)
         self.xyz = Vector3(Vector4(xyzw).xyz)
         view = self.get_view_matrix()
@@ -197,7 +202,7 @@ class Camera:
         #  the collision point on the surface of the sphere with the camera
         try:
             p1 = (self.xyz[0], self.xyz[1], self.xyz[2])
-            angle = self.uv.target_sphere.calc.find_angle_from_world_pos(p1, self.uv.target_sphere.orientation)
+            angle = self.uv.target_sphere.calc.find_angle(p1, self.uv.target_sphere.orientation)
             # angle, print yaw degrees, pitch degrees
             print(angle)
         except Exception as e:

@@ -59,9 +59,9 @@ class WidgetSphereColorButtonSettings(QWidget):
         elif color == 'red':
             self.color = [0.8, 0.08, 0.08, 0.7]
         elif color == 'green':
-            self.color = [0.37, 0.56, 0.32, 0.6]
+            self.color = [0.37, 0.92, 0.63, 0.52]
         elif color == 'blue':
-            self.color = [0.30, 0.65, 1.00, 0.6]
+            self.color = [0.20, 0.57, 0.65, 0.75]
         elif color == 'yellow':
             self.color = [0.88, 0.7, 0.32, 0.8]
         self.uv.target_sphere.color = self.color

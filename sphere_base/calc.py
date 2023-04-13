@@ -141,7 +141,7 @@ class Calc:
 
 
     @staticmethod
-    def find_angle_from_world_pos(collision_point, sphere_orientation_offset) -> 'quaternion':
+    def find_angle(collision_point, sphere_orientation_offset) -> 'quaternion':
         """
         given the xyz collision point of the mouse_ray with the surface of target sphere,
         calculate the angle from a starting point on the surface of the sphere.

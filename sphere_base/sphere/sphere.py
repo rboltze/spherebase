@@ -8,7 +8,6 @@ One sphere_base at the time can become the 'target sphere_base'.
 """
 
 from random import *
-from pyrr import Vector3
 from sphere_base.serializable import Serializable
 from sphere_base.utils import dump_exception
 from collections import OrderedDict
@@ -16,7 +15,7 @@ from sphere_base.node.node import Node
 from sphere_base.edge.edge_drag import EdgeDrag
 from sphere_base.edge.surface_edge import SurfaceEdge
 from sphere_base.history import History
-from pyrr import quaternion, Quaternion
+from pyrr import quaternion
 from math import pi
 from sphere_base.calc import Calc
 from sphere_base.constants import *
@@ -90,7 +89,7 @@ class Sphere(Serializable):
 
         self.index = 0
         self.radius = SPHERE_RADIUS
-        self.scale = [SPHERE_RADIUS, SPHERE_RADIUS, SPHERE_RADIUS]
+        self.scale = [self.radius, self.radius, self.radius]
         self.color = [1, 1, 1, 1]
         self.orientation = quaternion.create_from_eulers([0.0, self.radius, 0.0])
         self.start_socket = None
@@ -608,6 +607,7 @@ class Sphere(Serializable):
         self.scale = [radius, radius, radius]
         self.orientation = quaternion.create_from_eulers([0.0, radius, 0.0])
         self.uv.cam.reset_to_default_view(self)
+        self.collision_shape_id = self.uv.mouse_ray.get_collision_shape(self)
 
     def set_node_class_selector(self, class_selecting_function: 'function'):
         """
@@ -672,14 +672,12 @@ class Sphere(Serializable):
         hashmap[data['id']] = self
 
         self.xyz = data['pos']
-        if 'radius' in data:
-            self.radius = data['radius']
-            self.set_radius(self.radius)
         self.orientation = np.array(data['orientation'])
         self.texture_id = data['texture_id']
         if 'color' in data:
             self.color = data['color']
-
+        if 'radius' in data:
+            self.set_radius(data['radius'])
         self.uv.mouse_ray.reset_position_collision_object(self)
 
         # -- deserialize nodes on sphere_base

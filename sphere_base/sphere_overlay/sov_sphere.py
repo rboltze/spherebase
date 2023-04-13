@@ -37,7 +37,7 @@ class OverlaySphere(Sphere):
         # create new node at the mouse pointer
 
         # calculate the cumulative angle based on the mouse position
-        orientation, yaw_degrees, pitch_degrees = self.calc.find_angle_from_world_pos(mouse_ray_collision_point, self.orientation)
+        orientation, yaw_degrees, pitch_degrees = self.calc.find_angle(mouse_ray_collision_point, self.orientation)
 
         # create new node at the cumulative angle
 

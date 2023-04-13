@@ -100,6 +100,10 @@ class Socket(Serializable):
     def update_collision_object(self):
         # set the collision object for mouse pointer ray collision
         self.node.sphere.uv.mouse_ray.reset_position_collision_object(self)
+        # find connected edges
+        edges = self.node.sphere.get_edges(self)
+        for edge in edges:
+            edge.update_collision_object()
 
     def update_position(self):
         """

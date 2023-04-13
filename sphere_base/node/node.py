@@ -104,7 +104,6 @@ class Node(Serializable):
         self.cumulative_rotation = self.get_cumulative_rotation(self.pos_orientation_offset, self.sphere.orientation)
 
         # create a collision object (cylinder) pointing out
-        self.collision_shape_id = self.ray.get_collision_shape(self)
         self.collision_object_id = self.ray.create_collision_object(self)
         self.socket = self.Socket(self)
 
@@ -174,48 +173,29 @@ class Node(Serializable):
         :type mouse_ray_collision_point: ``float``
 
         """
-
+        q = quaternion
         try:
-            q = quaternion
-            # self.sphere.sphere_vector = Quaternion(self.sphere.orientation) * Vector3([0.0, 1.0, 0.0])
-            # print(self.sphere.sphere_vector)
 
-            cp, yaw_degrees, pitch_degrees = self.calc.find_angle_from_world_pos(mouse_ray_collision_point, self.sphere.orientation)
-            # cp = self.calc.get_angle_from_point0(self.sphere, mouse_ray_collision_point)
+            cp, yaw_deg, pitch_deg = self.calc.find_angle(mouse_ray_collision_point, self.sphere.orientation)
 
             if self.offset_with_collision_point is None:
-                # store offset between mouse_ray collision point and the center of the node at the start of dragging
-                self.offset_with_collision_point = q.cross(self.pos_orientation_offset, q.inverse(cp))
+                 self.offset_with_collision_point = q.cross(self.pos_orientation_offset, q.inverse(cp))
 
             # The position of the mouse_ray collision point in angles (Quaternion)
-            self.pos_orientation_offset, yaw_degrees, pitch_degrees = \
-                self.calc.find_angle_from_world_pos(mouse_ray_collision_point, self.sphere.orientation)
-            # self.pos_orientation_offset = self.calc.get_angle_from_point0(self.sphere, mouse_ray_collision_point)
+            self.pos_orientation_offset, yaw_deg, pitch_deg = \
+                self.calc.find_angle(mouse_ray_collision_point, self.sphere.orientation)
 
             # correct the position of the node with the difference with the stored mouse pointer diff
             self.pos_orientation_offset = q.cross(self.offset_with_collision_point, self.pos_orientation_offset)
 
-            # # Getting the angles of the node on the sphere
-            # point = (self.xyz[0], self.xyz[1], self.xyz[2])
-            #
-            # cp, self.yaw_degrees, self.pitch_degrees = self.calc.find_angle_from_world_pos(point, self.sphere.orientation)
-            # cp = self.calc.get_angle_from_point0(self.sphere, point)
-
-            # print(self.yaw_degrees, self.pitch_degrees)
-
-            # apply sphere rotation
-            # self.pos_orientation_offset = q.cross(q.inverse(self.sphere.orientation), self.pos_orientation_offset)
-
+            self.update_position()
+            return self.pos_orientation_offset
 
         except Exception as e:
             print('collision_point', cp)
             print('pos_orientation_offset', self.pos_orientation_offset)
             print('offset_with_collision_point', self.offset_with_collision_point)
             dump_exception(e)
-
-        self.update_position()
-
-        return self.pos_orientation_offset
 
     def get_position(self):
         # cumulative sphere_base rotation with position offset of node
@@ -231,31 +211,6 @@ class Node(Serializable):
         normal = self.calc.get_item_direction_pointing_outwards(self, self.sphere)
         return normal
 
-    def update_position2(self):
-        """
-        update the position of the node_disc on the sphere_base. Calculate the position and the direction.
-        """
-
-        # self.xyz = self.get_position()
-        # cumulative_orientation = self.get_cumulative_rotation(self.sphere.orientation, self.pos_orientation_offset)
-        # get the rotation of the sphere in a quaternion
-
-        rotation_rad = self.sphere.rotation_degrees * (math.pi / 180)
-        q_sphere_rotation = quaternion.create_from_eulers([0.0, 0.0, -rotation_rad])
-        v_sphere_rotation = [0.0, -rotation_rad, 0.0]
-
-        # adding to vectors
-
-        cumulative_orientation = quaternion.cross(self.pos_orientation_offset, q_sphere_rotation)
-        # cumulative_orientation = self.pos_orientation_offset
-        # get the position of the node on the sphere
-        self.xyz = self.calc.move_to_position(cumulative_orientation, self.sphere)
-
-        self.orientation = self.get_orientation()
-        self.socket.update_position()
-
-        return self.xyz
-
     def update_position(self):
         """
         update the position of the node_disc on the sphere_base. Calculate the position and the direction.
@@ -270,6 +225,7 @@ class Node(Serializable):
     def update_collision_object(self):
         # set the collision object for mouse pointer ray collision
         self.ray.reset_position_collision_object(self)
+        self.socket.update_collision_object()
 
     def update_content(self, texture_id: int, sphere_id: int):
         """
