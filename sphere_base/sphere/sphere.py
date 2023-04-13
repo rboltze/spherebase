@@ -413,7 +413,6 @@ class Sphere(Serializable):
         :type offset_degrees: ``int``
         """
 
-        # rotating the sphere_base over the y-axis
         self.rotation_degrees += offset_degrees
 
         if self.rotation_degrees > 180:
@@ -421,8 +420,9 @@ class Sphere(Serializable):
         elif self.rotation_degrees < -180:
             self.rotation_degrees = self.rotation_degrees + 360
 
-        pitch = (pi / 180 * self.rotation_degrees)
-        self.orientation = quaternion.create_from_eulers([0.0, pitch, 0.0])
+        pitch = (pi / 180 * offset_degrees)
+        rotation = quaternion.create_from_eulers([0.0, pitch, 0.0])
+        self.orientation = quaternion.cross(self.orientation, rotation)
         self.update_item_positions()
 
     def drag_items(self, mouse_ray_collision_point=None):
