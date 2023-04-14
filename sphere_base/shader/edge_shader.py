@@ -14,8 +14,8 @@ from sphere_base.shader.base_shader import BaseShader
 class EdgeShader(BaseShader):
 
     def draw(self, object_index: int = 0, object_type: str = "", mesh_index: int = 0, indices_len=0,
-             position: 'Vector3' = None, orientation: 'Quaternion' = None,
-             scale: 'Vector3' = None, texture_id: int = 0, color: 'Vector4' = None,
+             position=None, orientation=None,
+             scale=None, texture_id: int = 0, color=None,
              switch: int = 0, ):
 
         super().draw(object_index=object_index, object_type=object_type, mesh_index=mesh_index, indices_len=indices_len,

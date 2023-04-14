@@ -2,7 +2,7 @@
 History
 =======
 
-0.0.7 (2023-04-12) Alfa
+0.0.8 (2023-04-14) Alfa
 ------------------
 
 * Updated dragging the sphere rotating around the y-axis

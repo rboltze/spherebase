@@ -96,7 +96,7 @@ class Node(Serializable):
         self._init_inner_classes()
         self.scale = self.gr_node.scale
         self.texture_id = self.gr_node.default_img_id
-        self.radius = target_sphere.radius - 0.01
+        self.radius = target_sphere.radius
 
         self.xyz = self.get_position()  # the xyz position of the node on the surface of the sphere
         # get the orientation of the disc pointing away from the center of the sphere_base
@@ -178,8 +178,10 @@ class Node(Serializable):
 
             # first find the angle of the collision point
             cp = self.calc.find_angle(mouse_ray_collision_point, self.sphere.orientation)
+
             # print(mouse_ray_collision_point, self.sphere.orientation)
             if self.offset_with_collision_point is None:
+
                 # store the difference between the node center and the collision point
                 self.offset_with_collision_point = q.cross(self.pos_orientation_offset, q.inverse(cp))
 

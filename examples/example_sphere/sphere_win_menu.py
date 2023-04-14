@@ -8,6 +8,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from sphere_base.utils import dump_exception
 from examples.example_sphere.widget.widget_settings import Settings
+import pyperclip
+import json
 
 
 class SphereMenu(QMenu):
@@ -15,37 +17,29 @@ class SphereMenu(QMenu):
         super().__init__()
 
         self.main_win = main_win
-        self._init_variables()
+        self.action_new, self.action_open, self.action_save, self.action_copy = None, None, None, None
+        self.action_save_as, self.action_exit, self.action_undo, self.action_paste = None, None, None, None
+        self.action_redo, self.action_cut, self.action_copy, self.action_delete = None, None, None, None
+        self.action_delete, self.action_separator, self.action_about, self.window_settings = None, None, None, None
+        self.window_menu, self.file_menu, self.edit_menu, self.help_menu = None, None, None, None
+        self.action_settings, self.status_mouse_pos = None, None
         self._init_menus()
 
-    def _init_variables(self):
-        self._active_split_window = None
-
     def _init_menus(self):
-        self._create_actions()
-        self._create_menus()
-        self._create_status_bar()
-        self._update_edit_menu()
+        self.create_actions()
+        self.create_menus()
+        self.create_status_bar()
+        self.update_edit_menu()
 
-    def _create_menus(self):
+    def create_menus(self):
         """Create Menus for `File` and `Edit`"""
-        self._create_file_menu()
-        self._create_edit_menu()
+        self.create_file_menu()
+        self.create_edit_menu()
+        self.create_window_menu()
+        self.create_help_menu()
+        self.edit_menu.aboutToShow.connect(self.update_edit_menu)
 
-
-        # self.windowMenu = self.main_win.menuBar().addMenu("&Window")
-        # self.update_window_menu()
-        # self.windowMenu.aboutToShow.connect(self.update_window_menu)
-
-        self.main_win.menuBar().addSeparator()
-
-        self.helpMenu = self.main_win.menuBar().addMenu("&Help")
-        self.helpMenu.addAction(self.action_about)
-        self.helpMenu.addAction(self.action_settings)
-
-        self.edit_menu.aboutToShow.connect(self._update_edit_menu)
-
-    def _create_actions(self):
+    def create_actions(self):
         """Create basic `File` and `Edit` actions"""
         self.action_new = QAction('&New', self, shortcut='Ctrl+N', statusTip="Create new graph",
                                   triggered=self.on_file_new)
@@ -73,16 +67,16 @@ class SphereMenu(QMenu):
         self.action_about = QAction("&About", self, statusTip="Show the application's About box",
                                     triggered=self.main_win.on_about)
         self.action_settings = QAction("&Settings", self, statusTip="Show the application's About box",
-                                    triggered=self.open_settings_window)
-        self._update_edit_menu()
+                                       triggered=self.open_settings_window)
+        self.update_edit_menu()
 
     def open_settings_window(self):
-        self.w = Settings(self.main_win)
-        self.w.setGeometry(QRect(400, 400, 500, 575))
-        self.w.setWindowFlags(self.windowFlags() | Qt.Dialog)
-        self.w.show()
+        self.window_settings = Settings(self.main_win)
+        self.window_settings.setGeometry(QRect(400, 400, 500, 575))
+        self.window_settings.setWindowFlags(self.windowFlags() | Qt.Dialog)
+        self.window_settings.show()
 
-    def _create_file_menu(self):
+    def create_file_menu(self):
         menu_bar = self.main_win.menuBar()
         self.file_menu = menu_bar.addMenu('&File')
         self.file_menu.addAction(self.action_new)
@@ -93,7 +87,7 @@ class SphereMenu(QMenu):
         self.file_menu.addSeparator()
         self.file_menu.addAction(self.action_exit)
 
-    def _create_edit_menu(self):
+    def create_edit_menu(self):
         menu_bar = self.main_win.menuBar()
         self.edit_menu = menu_bar.addMenu('&Edit')
         self.edit_menu.addAction(self.action_undo)
@@ -105,18 +99,21 @@ class SphereMenu(QMenu):
         self.edit_menu.addSeparator()
         self.edit_menu.addAction(self.action_delete)
 
-    def _create_settings_menu(self):
-        menu_bar = self.main_win.menuBar()
-        self.file_menu = menu_bar.addMenu('&Settings')
+    def create_window_menu(self):
+        self.main_win.menuBar().addSeparator()
+        self.window_menu = self.main_win.menuBar().addMenu("&Window")
+        self.window_menu.addAction(self.action_settings)
 
-    def _create_status_bar(self):
+    def create_help_menu(self):
+        self.main_win.menuBar().addSeparator()
+        self.help_menu = self.main_win.menuBar().addMenu("&Help")
+        self.help_menu.addAction(self.action_about)
+
+    def create_status_bar(self):
         """Create Status bar """
-        self.main_win.statusBar().showMessage("")
-        self.status_mouse_pos = QLabel("")
-        self.main_win.statusBar().addPermanentWidget(self.status_mouse_pos)
         self.main_win.statusBar().showMessage("Ready")
 
-    def _update_edit_menu(self):
+    def update_edit_menu(self):
         self.action_paste.setEnabled(False)
         self.action_cut.setEnabled(False)
         self.action_copy.setEnabled(False)
@@ -130,6 +127,15 @@ class SphereMenu(QMenu):
             self.action_paste.setEnabled(active_sphere)
             self.action_cut.setEnabled(active)
             self.action_copy.setEnabled(active)
+            try:
+                # checking for valid json code before enabling menu
+                raw_data = pyperclip.paste()
+                data = json.loads(raw_data)
+            except ValueError as e:
+                self.action_paste.setEnabled(False)
+            else:
+                self.action_paste.setEnabled(active)
+
             self.action_delete.setEnabled(active)
             self.action_undo.setEnabled(self.get_sphere().history.can_undo())
             self.action_redo.setEnabled(self.get_sphere().history.can_redo())
@@ -139,19 +145,9 @@ class SphereMenu(QMenu):
         self.main_win.sphere_widget.uv_widget.uv.reset_has_been_modified()
         self.main_win.sphere_widget.on_selection_changed(None, None)
 
-    def get_win(self):
-        # helper function to get the active split window
-        pass
-        # return self.main_win.split.get_active_split_window()
-
     def get_sphere(self):
         # helper function to get the active target sphere_base from the sphere_iot
         return self.main_win.sphere_widget.uv_widget.uv.target_sphere
-
-    def get_detail(self):
-        # helper function to get to the stack with detail editors
-        pass
-        # return self.main_win.split.right_detail
 
     def on_edit_undo(self):
         self.get_sphere().history.undo()
@@ -169,6 +165,7 @@ class SphereMenu(QMenu):
         self.get_sphere().edit_copy()
 
     def on_edit_paste(self):
+        # TODO: finding the center of the screen for pasting the node from the edit menu
         self.get_sphere().edit_paste()
 
     def on_file_new(self):
@@ -177,15 +174,16 @@ class SphereMenu(QMenu):
         self.reset_modified()
         self.main_win.set_title()
 
-    def on_file_open(self, fnames=None):
-        if not fnames:
-            fnames, filter = QFileDialog.getOpenFileNames(self, 'Open graph from file', self.getFileDialogDirectory(),
-                                                          self.getFileDialogFilter())
+    def on_file_open(self, file_names=None):
+        if not file_names:
+            file_names, _filter = QFileDialog.getOpenFileNames(self, 'Open graph from file',
+                                                               self.get_file_dialog_directory(),
+                                                               self.get_file_dialog_filter())
         try:
-            for fname in fnames:
-                if fname:
-                    self.main_win.sphere_widget.uv_widget.load_from_file(fname)
-                    self.main_win.filename = fname
+            for file_name in file_names:
+                if file_name:
+                    self.main_win.sphere_widget.uv_widget.load_from_file(file_name)
+                    self.main_win.filename = file_name
                     self.reset_modified()
                     self.main_win.set_title()
 
@@ -205,8 +203,8 @@ class SphereMenu(QMenu):
     def on_file_save_as(self):
         """Handle File Save As operation"""
 
-        file_name, filter = QFileDialog.getSaveFileName(self, 'Save graph to file', self.getFileDialogDirectory(),
-                                                        self.getFileDialogFilter())
+        file_name, _filter = QFileDialog.getSaveFileName(self, 'Save graph to file', self.get_file_dialog_directory(),
+                                                         self.get_file_dialog_filter())
         if file_name == '':
             return False
 
@@ -225,16 +223,15 @@ class SphereMenu(QMenu):
         self.main_win.set_title()
         return True
 
-    def getFileDialogDirectory(self):
+    @staticmethod
+    def get_file_dialog_directory():
         """Returns starting directory for ``QFileDialog`` file open/save"""
         return ''
 
-    def getFileDialogFilter(self):
+    @staticmethod
+    def get_file_dialog_filter():
         """Returns ``str`` standard file open/save filter for ``QFileDialog``"""
         return 'Graph (*.json);;All files (*)'
 
     def has_been_modified(self):
         return self.main_win.sphere_widget.uv_widget.uv.is_modified()
-
-
-
