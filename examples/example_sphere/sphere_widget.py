@@ -14,25 +14,17 @@ class SphereWidget(QWidget):
 
     def __init__(self, parent):
         super().__init__()
-        self.parent = parent
-        self._init_variables()
-        self._init_interface()
-        self.title = "Sphere "
-
-    def _init_variables(self):
+        self.main_win = parent
         self.selected_sphere_items = []
         self.selected_sphere = None
         self.selected_sphere_item = None
-
-    def _init_interface(self):
-        self.uv_widget = self.Uv_Widget_class(self.parent)
+        self.uv_widget = self.Uv_Widget_class(self.main_win)
 
         # delayed initialization waiting for OpenGL initialization
         self.uv_widget.add_to_delayed_init(self._delayed_init)
-
+        self.title = "Sphere "
 
     def _delayed_init(self):
-
         # cannot be initialized in the constructor, needs to be delayed until after openGL is initialized !!!!
         self.uv_widget.uv.add_selection_changed_listener(self.on_selection_changed)
 
@@ -41,6 +33,8 @@ class SphereWidget(QWidget):
         try:
             if os.path.exists(file):
                 self.uv_widget.load_from_file(file)
+                self.main_win.filename = os.path.basename(file)
+                self.main_win.set_title()
         except Exception as e:
             dump_exception(e)
 
@@ -50,7 +44,7 @@ class SphereWidget(QWidget):
 
     def on_selection_changed(self, sphere, items):
         """
-        Each time selection in on a sphere_base  changes, these variables get updated. Each sphere_base item needs a unique
+        Each time selection in on a sphere changes, these variables get updated. Each sphere item needs a unique
         detail node editor. Even when the detail node editor is being reused we need a unique detail node editor id
         binding the detail node editor nodes to the sphere_base node.
         """

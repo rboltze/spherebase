@@ -99,6 +99,7 @@ class Sphere(Serializable):
 
         self.selected_item = None
         self._last_selected_items = None
+        # self.last_collision_point = None
         self.items = []
         self.items_selected = []
         self.items_deselected = []
@@ -405,6 +406,38 @@ class Sphere(Serializable):
                 # updating the node trickles down to updating sockets and edges"
                 item.update_position()
 
+    # def drag_rotate(self, collision_point=None):
+    #     # rotate the sphere by dragging with the mouse
+    #     q = quaternion
+    #     a = set(self.last_collision_point)
+    #     b = set(collision_point)
+    #
+    #     try:
+    #         if a != b:
+    #             pass
+    #
+    #             start_angle = self.calc.find_angle(self.last_collision_point, self.orientation)
+    #             # offset = self.calc.find_angle(collision_point, start_angle)
+    #             new_angle = self.calc.find_angle(collision_point, self.orientation)
+    #             a = set(start_angle)
+    #             b = set(new_angle)
+    #             if a and b:
+    #                 print(start_angle, new_angle)
+    #                 offset = q.cross(start_angle, q.inverse(new_angle))
+    #
+    #                 self.orientation = quaternion.normalize(q.cross(self.orientation, q.inverse(offset)))
+    #                 # self.orientation = quaternion.normalize(q.cross(self.orientation, offset))
+    #                 # self.orientation = quaternion.normalize(q.cross(offset, q.inverse(self.orientation)))
+    #             # move = self.calc.find_angle(collision_point, self.target_sphere.last_collision_point)
+    #
+    #             # diff = q.cross(Quaternion(self.target_sphere.last_collision_point), q.inverse(Quaternion(collision_point)))
+    #             # print(diff)
+    #
+    #     except Exception as e:
+    #         dump_exception(e)
+    #
+    #     self.last_collision_point = collision_point
+
     def rotate_sphere(self, offset_degrees: int):
         """
         Rotating the sphere_base over the y-axis as per the offset_degrees.
@@ -422,7 +455,7 @@ class Sphere(Serializable):
 
         pitch = (pi / 180 * offset_degrees)
         rotation = quaternion.create_from_eulers([0.0, pitch, 0.0])
-        self.orientation = quaternion.cross(self.orientation, rotation)
+        self.orientation = quaternion.normalize(quaternion.cross(self.orientation, rotation))
         self.update_item_positions()
 
     def drag_items(self, mouse_ray_collision_point=None):

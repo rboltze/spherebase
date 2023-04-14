@@ -37,7 +37,7 @@ class OverlaySphere(Sphere):
         # create new node at the mouse pointer
 
         # calculate the cumulative angle based on the mouse position
-        orientation, yaw_degrees, pitch_degrees = self.calc.find_angle(mouse_ray_collision_point, self.orientation)
+        orientation = self.calc.find_angle(mouse_ray_collision_point, self.orientation)
 
         # create new node at the cumulative angle
 
@@ -45,11 +45,9 @@ class OverlaySphere(Sphere):
 
             if node_type:
 
-                node = get_class_from_type(node_type, SPHERE_NODE_EDITOR)(self, orientation_offset=orientation,
-                                                                          yaw_degrees=yaw_degrees,
-                                                                          pitch_degrees=pitch_degrees)
+                node = get_class_from_type(node_type, SPHERE_NODE_EDITOR)(self, orientation_offset=orientation)
             else:
-                node = self.Node(self, orientation, yaw_degrees=yaw_degrees, pitch_degrees=pitch_degrees)
+                node = self.Node(self, orientation)
 
         except Exception as e:
             dump_exception(e)

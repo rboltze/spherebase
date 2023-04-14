@@ -31,9 +31,9 @@ class WidgetSphereColorButtonSettings(QWidget):
         btn_white.clicked.connect(lambda: self.on_click_change('white'))
         btn_white.setToolTip("Default white sphere")
 
-        btn_red = QPushButton("Red", self)
-        btn_red.clicked.connect(lambda: self.on_click_change('red'))
-        btn_red.setToolTip("Default red sphere")
+        btn_red = QPushButton("Grey", self)
+        btn_red.clicked.connect(lambda: self.on_click_change('grey'))
+        btn_red.setToolTip("Default grey sphere")
 
         btn_green = QPushButton("Green", self)
         btn_green.clicked.connect(lambda: self.on_click_change('green'))
@@ -56,10 +56,10 @@ class WidgetSphereColorButtonSettings(QWidget):
     def on_click_change(self, color=None):
         if color == 'white':
             self.color = [1, 1, 1, 0.8]
-        elif color == 'red':
-            self.color = [0.8, 0.08, 0.08, 0.7]
+        elif color == 'grey':
+            self.color = [0.68, 0.68, 0.68, 0.75]
         elif color == 'green':
-            self.color = [0.37, 0.92, 0.63, 0.52]
+            self.color = [0.68, 0.92, 0.32, 0.75]
         elif color == 'blue':
             self.color = [0.20, 0.57, 0.65, 0.75]
         elif color == 'yellow':

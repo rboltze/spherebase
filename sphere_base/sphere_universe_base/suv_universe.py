@@ -5,6 +5,7 @@ Module universe. The universe contains all the spheres.
 
 """
 
+from pyrr import quaternion, Quaternion
 from collections import OrderedDict
 from sphere_base.serializable import Serializable
 from sphere_base.sphere.sphere import Sphere
@@ -16,6 +17,7 @@ from sphere_base.sphere_universe_base.suv_rubber_band import RubberBand
 from sphere_base.clipboard import Clipboard
 from sphere_base.config import UvConfig
 from sphere_base.shader.default_shader import DefaultShader
+from sphere_base.calc import *
 import os.path
 
 DEBUG = False
@@ -303,7 +305,7 @@ class Universe(Serializable):
                 self.on_selection_changed(self.target_sphere, None)
         return is_sphere
 
-    def rotate_target_sphere_with_mouse(self, offset: float = 0):
+    def rotate_target_sphere_with_mouse(self, offset: float = 0, collision_point=None):
         """
         Rotating the target sphere_base with the mouse y axis.
         Set the mouse offset here which will be picked up and used from the main loop and will be translated to rotation
@@ -317,7 +319,8 @@ class Universe(Serializable):
 
         """
         # set the mouse offset here which will be picked up and used from the main loop
-        offset *= .05 * self.cam.distance_to_target
+
+        offset *= .05   # * self.cam.distance_to_target
         self.mouse_offset += offset
 
     def rotate_target_sphere(self):

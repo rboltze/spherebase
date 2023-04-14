@@ -121,7 +121,7 @@ class Clipboard:
             length = len(data['nodes'])
 
             sphere_id, cp, mouse_x, mouse_y = self.uv.get_mouse_pos()
-            orientation, yaw_degrees, pitch_degrees = Calc.find_angle(cp, self.uv.target_sphere.orientation)
+            orientation = Calc.find_angle(cp, self.uv.target_sphere.orientation)
 
             if DEBUG_PASTE:
                 print("     mouse_ray_collision point - xyz:\n     ", cp)

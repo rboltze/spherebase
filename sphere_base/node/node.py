@@ -176,16 +176,17 @@ class Node(Serializable):
         q = quaternion
         try:
 
-            cp, yaw_deg, pitch_deg = self.calc.find_angle(mouse_ray_collision_point, self.sphere.orientation)
-
+            # first find the angle of the collision point
+            cp = self.calc.find_angle(mouse_ray_collision_point, self.sphere.orientation)
+            # print(mouse_ray_collision_point, self.sphere.orientation)
             if self.offset_with_collision_point is None:
-                 self.offset_with_collision_point = q.cross(self.pos_orientation_offset, q.inverse(cp))
+                # store the difference between the node center and the collision point
+                self.offset_with_collision_point = q.cross(self.pos_orientation_offset, q.inverse(cp))
 
-            # The position of the mouse_ray collision point in angles (Quaternion)
-            self.pos_orientation_offset, yaw_deg, pitch_deg = \
-                self.calc.find_angle(mouse_ray_collision_point, self.sphere.orientation)
+            # Move the node center to the position of the collision point
+            self.pos_orientation_offset = cp
 
-            # correct the position of the node with the difference with the stored mouse pointer diff
+            # correct the position of the node with the stored difference with the mouse pointer
             self.pos_orientation_offset = q.cross(self.offset_with_collision_point, self.pos_orientation_offset)
 
             self.update_position()

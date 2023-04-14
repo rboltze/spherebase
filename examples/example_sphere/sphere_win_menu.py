@@ -177,9 +177,10 @@ class SphereMenu(QMenu):
         self.reset_modified()
         self.main_win.set_title()
 
-    def on_file_open(self):
-        fnames, filter = QFileDialog.getOpenFileNames(self, 'Open graph from file', self.getFileDialogDirectory(),
-                                                      self.getFileDialogFilter())
+    def on_file_open(self, fnames=None):
+        if not fnames:
+            fnames, filter = QFileDialog.getOpenFileNames(self, 'Open graph from file', self.getFileDialogDirectory(),
+                                                          self.getFileDialogFilter())
         try:
             for fname in fnames:
                 if fname:

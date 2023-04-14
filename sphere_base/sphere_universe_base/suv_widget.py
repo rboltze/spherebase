@@ -178,6 +178,7 @@ class UVWidget(QGLWidget):
         if event.button() == Qt.MiddleButton:
             self._first_mouse = True
             self._middle_mouse_button_down = True
+            self.uv.target_sphere.last_collision_point = self.mouse_ray_collision_point
 
     def _reset_mouse(self):
         """
@@ -285,10 +286,12 @@ class UVWidget(QGLWidget):
 
             if self._clicked_on_item and self._clicked_on_item == self.uv.target_sphere.id:
                 # only rotate the sphere_base over the y axis
-                self.uv.rotate_target_sphere_with_mouse(x_offset)
+                self.uv.rotate_target_sphere_with_mouse(x_offset, self.mouse_ray_collision_point)
 
                 # rotation over the x axis are done through moving the camera
                 self.uv.cam.process_mouse_movement(self.uv.target_sphere, 0, -y_offset)
+            elif self._clicked_on_item:
+                pass
             else:
                 self.uv.cam.process_mouse_movement(self.uv.target_sphere, x_offset, -y_offset)
 
@@ -484,7 +487,10 @@ class UVWidget(QGLWidget):
 
         """
 
+        # checking if the camera is moved with the keyboard
         self.uv.do_camera_movement()
+
+        # checking if the target sphere is rotated with the keyboard
         self.uv.rotate_target_sphere()
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT)

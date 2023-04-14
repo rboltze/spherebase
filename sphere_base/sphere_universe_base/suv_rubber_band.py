@@ -7,7 +7,7 @@ for drawing a square selection box. Selecting all the items within the box.
 
 from sphere_base.sphere_universe_base.suv_graphic_item import GraphicItem
 
-RAY_SEED = 10  # 10 creates 10 x 10 = 100 rays, x creates x**2 rays
+RAY_SEED = 13  # 10 creates 10 x 10 = 100 rays, x creates x**2 rays
 
 
 class RubberBand(GraphicItem):
@@ -51,14 +51,11 @@ class RubberBand(GraphicItem):
         self.inner_square = self.uv.models.get_model('rubber_band')
         self.outer_border = self.uv.models.get_model('square')  # the border of the rubber band
 
-        self._init_variables()
-
-    def _init_variables(self):
         self.xyz = None
         self.scale = None
         self.texture_id = 0
 
-        self._dragging = False  # Flag is also set from outside the class
+        self._dragging = False
 
         self.orientation = [0., 0., 0., 1.]
         self.color = [0.0, 0.5, 0.7, 0.05]
@@ -121,7 +118,6 @@ class RubberBand(GraphicItem):
         starting point. The shader uses ``xyz`` as the center of the square and ``scale`` as the scaling factor
 
         """
-
         self.xyz, self.scale = self.get_position_and_scale()
 
     def get_position_and_scale(self) -> (list, list):
@@ -145,6 +141,7 @@ class RubberBand(GraphicItem):
         center_position = [x, y, z]
 
         scaling_factor = [diff[0], diff[1], diff[2]]
+
         return center_position, scaling_factor
 
     def get_selection(self) -> list:
@@ -164,12 +161,13 @@ class RubberBand(GraphicItem):
         if self._dragging:
             step_x = ((self.mouse_end_point[0] - self.mouse_start_point[0]) / RAY_SEED)
             step_y = ((self.mouse_end_point[1] - self.mouse_start_point[1]) / RAY_SEED)
+
             for x in range(RAY_SEED):
                 for y in range(RAY_SEED):
                     ray_start = self.uv.cam.xyz
                     ray_world = self.uv.mouse_ray.get_mouse_point(self.mouse_start_point[0] + x * step_x,
                                                                   self.mouse_start_point[1] + y * step_y)
-                    ray_end = self.uv.cam.xyz + ray_world * 3
+                    ray_end = self.uv.cam.xyz + ray_world * 30
                     ray_array_start.append(ray_start)
                     ray_array_end.append(ray_end)
 

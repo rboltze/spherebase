@@ -162,17 +162,13 @@ class Calc:
             try:
                 p1 = Vector3([0.0, 1.0, 0.0])
                 p1 = Quaternion(sphere_orientation_offset) * Vector3(p1)
+                p1 = quaternion.normalize(p1)
                 p2 = vector.normalize(Vector3([collision_point]))  # The position of the point in world space
 
                 x1, x2 = p1[0], p2[0]
                 y1, y2 = p1[1], p2[1]
                 z1, z2 = p1[2], p2[2]
 
-                # avoiding math domain errors as values need to be between -1 and 1
-                x2 = -1 if x2 < -1 else x2
-                x2 = 1 if x2 > 1 else x2
-                z2 = -1 if z2 < -1 else z2
-                z2 = 1 if z2 > 1 else z2
 
                 pitch = math.asin(x2) - math.acos(z1)
                 # and then over the x axis (yaw)
@@ -195,7 +191,7 @@ class Calc:
                 yaw_degrees = yaw / (math.pi / 180)
                 pitch_degrees = pitch / (math.pi / 180)
 
-                return pos_orientation_offset, yaw_degrees, pitch_degrees
+                return pos_orientation_offset  #, yaw_degrees, pitch_degrees
 
             except Exception as e:
                 dump_exception(e)
