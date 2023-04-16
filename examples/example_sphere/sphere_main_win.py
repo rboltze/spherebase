@@ -19,7 +19,7 @@ class MainWindow(QMainWindow):
 
         self.name_company = 'rboltze'
         self.name_product = 'sphere_base'
-        self.version = '0.0.4 Alfa'
+        self.version = '0.1.0 Beta 16/04/2023'
 
         self.filename = None
         self._set_win_properties()

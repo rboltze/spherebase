@@ -30,11 +30,13 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
-    description="This Sphere_base library creates spheres with draggable nodes and edges on its surface. "
-                "Nodes can be placed and removed from the sphere surface. \n"
+    description="The library was created to be used as a building block for applications were information"
+                "should appear on the surface of a sphere. It allows for creating spheres with nodes"
+                "and edges that can be dragged on its surface. Nodes and edges can be placed and removed "
+                "from the sphere surface. \n"
                 "This library is written in Python, PyOpenGL and PyQT5",
     install_requires=requirements,
-    license="BSD license",
+    license="MIT license",
     long_description=readme + '\n\n' + history,
     include_package_data=True,
     keywords='sphere_base',
@@ -44,6 +46,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/rboltze/sphere_base',
-    version='0.0.7 alfa',
+    version='0.1.0',
     zip_safe=False,
 )

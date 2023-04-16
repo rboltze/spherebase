@@ -1,37 +1,49 @@
-.. image:: https://img.shields.io/pypi/v/template.svg
-        :target: https://pypi.python.org/pypi/template
-
-
-============
 Sphere Base
+###########
+
+Introduction
 ============
+This library was created as a building block for use in applications were information should be displayed as nodes or
+labels on a sphere. These nodes are interactive so they can be moved by dragging and connecting them to other nodes.
 
-
-This package was created in python to display a sphere within a pyqt5 window and can be used in different projects.
-The library uses PyOpenGL and PyQT5
+This package is created in python using a pyqt5 window.
 
 * Development Status :: 4 - Beta
-* Free software: BSD license
+* Free software: MIT license
+
+
+Documentation
+=============
+
+`Read the Docs for Sphere Base`
 
 
 Features
---------
+========
 
-- Work in process
-- Provides a framework for creating customizable nodes, sockets and edges that can move on the surface of a sphere
-- Full support for undo / redo, cut and paste using serialization
+- Customizable spheres with textures and colors
+- Nodes, sockets and edges can be dragged over the surface of the sphere
+- Support for undo/redo, cut and paste using serialization
 - Hovering effects, dragging nodes, cutting edges
 - Example on how the library can be implemented
 
+
 Requirements
-------------
+============
 
 - Python 3.x
 - PyOpenGL
 - PyQt5
 
-Installation
-------------
+
+Supported Environments
+======================
+
+Platforms
+---------
+
+* Windows (Win32, x64)
+
 
 ::
 
