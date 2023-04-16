@@ -1,6 +1,7 @@
 Sphere Base
 ###########
 
+
 Introduction
 ============
 This library was created as a building block for use in applications were information should be displayed as nodes or
