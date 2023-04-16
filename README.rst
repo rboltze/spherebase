@@ -3,6 +3,7 @@ Sphere Base
 
 Introduction
 ============
+
 This library was created as a building block for use in applications were information should be displayed as nodes or
 labels on a sphere. These nodes are interactive so they can be moved by dragging and connecting them to other nodes.
 
@@ -10,12 +11,6 @@ This package is created in python using a pyqt5 window.
 
 * Development Status :: 4 - Beta
 * Free software: MIT license
-
-
-Documentation
-=============
-
-`Read the Docs for Sphere Base`
 
 
 Features
@@ -36,20 +31,10 @@ Requirements
 - PyQt5
 
 
-Supported Environments
+Supported Environment
 ======================
 
-Platforms
----------
-
 * Windows (Win32, x64)
-
-Examples
-========
-
-![SphereBase2](https://user-images.githubusercontent.com/127793229/232293008-0c649418-d733-4b0e-ab44-d80f6e74ba8f.png)
-
-![SphereBase1](https://user-images.githubusercontent.com/127793229/232293014-72edd729-6a78-4c76-bfdf-c6805be7adaa.png)
 
 ::
 
