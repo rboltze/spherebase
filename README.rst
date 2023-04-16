@@ -47,7 +47,8 @@ Platforms
 Examples
 ========
 
-![plot](https://github.com/rboltze/sphere_base/blob/3a08c44856eae7ac784a0767431bdea36d0ba02d/examples/example_sphere/SphereBase1.png?raw=true "Title")
+![SphereBase1](https://user-images.githubusercontent.com/127793229/232292160-7c93ea3b-7949-4822-b61d-624a8192e882.png)
+![SphereBase1](https://github.com/rboltze/sphere_base/blob/993e6cac8c612c2cb9dc2524a7ac3e0df71306ae/examples/example_sphere/SphereBase2.png)
 
 
 ::
