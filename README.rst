@@ -44,12 +44,6 @@ Platforms
 
 * Windows (Win32, x64)
 
-Examples
-========
-
-
-
-
 ::
 
 The library is available from PyPI::
