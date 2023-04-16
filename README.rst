@@ -28,13 +28,12 @@ Features
 - Hovering effects, dragging nodes, cutting edges
 - Example on how the library can be implemented
 
-
 Requirements
 ============
 
 - Python 3.x
 - PyOpenGL
-- PyQt5
+- PyQt5git remote rm origin
 
 
 Supported Environments
