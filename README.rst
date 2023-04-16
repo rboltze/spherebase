@@ -47,9 +47,8 @@ Platforms
 Examples
 ========
 
-![SphereBase1](https://user-images.githubusercontent.com/127793229/232292160-7c93ea3b-7949-4822-b61d-624a8192e882.png)
-![SphereBase1](https://github.com/rboltze/sphere_base/blob/993e6cac8c612c2cb9dc2524a7ac3e0df71306ae/examples/example_sphere/SphereBase2.png)
-
+![SphereBase2](https://user-images.githubusercontent.com/127793229/232293008-0c649418-d733-4b0e-ab44-d80f6e74ba8f.png)
+![SphereBase1](https://user-images.githubusercontent.com/127793229/232293014-72edd729-6a78-4c76-bfdf-c6805be7adaa.png)
 
 ::
 
