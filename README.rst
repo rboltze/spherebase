@@ -1,8 +1,8 @@
 Sphere Base
-###########
+############
 
 Introduction
-============
+=============
 
 This library was created as a building block for use in applications were information should be displayed as nodes or
 labels on a sphere. These nodes are interactive so they can be moved by dragging and connecting them to other nodes.
@@ -14,7 +14,7 @@ This package is created in python using a pyqt5 window.
 
 
 Features
-========
+=========
 
 - Customizable spheres with textures and colors
 - Nodes, sockets and edges can be dragged over the surface of the sphere
@@ -22,9 +22,8 @@ Features
 - Hovering effects, dragging nodes, cutting edges
 - Example on how the library can be implemented
 
-
 Requirements
-============
+=============
 
 - Python 3.x
 - PyOpenGL
@@ -40,7 +39,7 @@ Supported Environment
 
 The library is available from PyPI::
 
-    $ pip install sphere-base==0.0.1
+    $ pip install sphere-base
 
 
 ::
