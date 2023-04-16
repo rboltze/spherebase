@@ -48,7 +48,7 @@ Examples
 ========
 
 ![SphereBase2](https://user-images.githubusercontent.com/127793229/232293008-0c649418-d733-4b0e-ab44-d80f6e74ba8f.png)
-![SphereBase1](https://user-images.githubusercontent.com/127793229/232293014-72edd729-6a78-4c76-bfdf-c6805be7adaa.png)
+
 
 ::
 
