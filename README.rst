@@ -1,7 +1,6 @@
 Sphere Base
 ###########
 
-
 Introduction
 ============
 This library was created as a building block for use in applications were information should be displayed as nodes or
@@ -28,12 +27,13 @@ Features
 - Hovering effects, dragging nodes, cutting edges
 - Example on how the library can be implemented
 
+
 Requirements
 ============
 
 - Python 3.x
 - PyOpenGL
-- PyQt5git remote rm origin
+- PyQt5
 
 
 Supported Environments
@@ -43,6 +43,13 @@ Platforms
 ---------
 
 * Windows (Win32, x64)
+
+Examples
+========
+
+![SphereBase2](https://user-images.githubusercontent.com/127793229/232293008-0c649418-d733-4b0e-ab44-d80f6e74ba8f.png)
+
+![SphereBase1](https://user-images.githubusercontent.com/127793229/232293014-72edd729-6a78-4c76-bfdf-c6805be7adaa.png)
 
 ::
 
