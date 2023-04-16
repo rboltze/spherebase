@@ -132,7 +132,6 @@ class Clipboard:
             for i, node_data in enumerate(data['nodes']):
                 q = Quaternion(node_data['orientation_offset'])
                 if i == 0:
-                    first_node = q
                     old_centre = q
                 else:
                     old_centre = quaternion.slerp(old_centre, q, 0.5)
@@ -155,12 +154,14 @@ class Clipboard:
                 if length == 1:
                     new_node.pos_orientation_offset = orientation
                     new_node.update_position()
+                    new_node.update_collision_object()
                 else:
                     new_center = orientation
 
                     # apply the offset with the old center to the mouse_ray_collision point
                     new_node.pos_orientation_offset = quaternion.cross(offset, new_center)
                     new_node.update_position()
+                    new_node.update_collision_object()
 
             # create each edge
             if 'edges' in data:

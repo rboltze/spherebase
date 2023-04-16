@@ -50,7 +50,7 @@ class SurfaceEdge(Serializable):
     """
     GraphicsEdge_class = GraphicEdge
 
-    def __init__(self, target_sphere: 'sphere', socket_start: 'socket' = None, socket_end: 'socket' = None):
+    def __init__(self, target_sphere, socket_start=None, socket_end=None):
         """
         Constructor of the edge class. Creates an edge between a start and an end socket.
 
@@ -237,12 +237,7 @@ class SurfaceEdge(Serializable):
             p = self.calc.move_to_position(pos, self.sphere)
             n = vector.normalize(Vector3(p) - Vector3(self.sphere.xyz))  # finding the normal of the vertex
 
-            self.vert.append([p[0], p[1], p[2]])  # we need this for pybullet
-            vertices.extend(p)  # extending the vertices list with the vertex
-            buffer.extend(p)  # extending the buffer with the vertex
-            buffer.extend(tex)  # extending the buffer with the invented texture
-            buffer.extend(n)  # extending the buffer with the normal
-            indices.append(i)
+            vertices, buffer, indices = self.expand_mesh(vertices, buffer, indices, p, tex, n, i)
 
         if self._new_edge:
             # creating a collision object for mouse ray collisions
@@ -257,6 +252,22 @@ class SurfaceEdge(Serializable):
         self.xyz = self.sphere.xyz
         self.model.loader.load_mesh_into_opengl(self.mesh_id, self.mesh.buffer,
                                                 self.mesh.indices, self.model.shader)
+
+    def expand_mesh(self, vertices, buffer, indices, point, texture, normals, i):
+        # This can be used to expanding each point into a mesh.
+        p = point
+        self.vert.append([p[0], p[1], p[2]])  # we need this for pybullet
+        vertices.extend(p)  # extending the vertices list with the vertex
+        buffer = self.extend_buffer(buffer, point, texture, normals)
+        indices.append(i)
+        return vertices, buffer, indices
+
+    @staticmethod
+    def extend_buffer(buffer, vertex, texture, normal):
+        buffer.extend(vertex)  # extending the buffer with the vertex
+        buffer.extend(texture)  # extending the buffer with the texture
+        buffer.extend(normal)  # extending the buffer with the normal
+        return buffer
 
     def get_edge_start_end(self):
         """

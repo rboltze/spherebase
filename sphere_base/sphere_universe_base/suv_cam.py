@@ -8,11 +8,10 @@ current implementation there is only need for a single camera object.
 
 from pyrr import Vector3, Vector4, vector, matrix44
 from sphere_base.sphere_universe_base.suv_cam_movement import CameraMovement
-from sphere_base.constants import *
 from sphere_base.utils import dump_exception
 
 MOUSE_SENSITIVITY = .1
-TARGET = Vector3([0.0, 0.0, 0.0])
+DEFAULT_TARGET = Vector3([0.0, 0.0, 0.0])
 DEFAULT_POS = Vector3([0.0, 0.0, 3.0])
 
 
@@ -52,7 +51,7 @@ class Camera:
         """
 
         # camera target pointing at origin
-        self.target = TARGET
+        self.target = DEFAULT_TARGET
         self.xyz = DEFAULT_POS
         self.distance_to_target = None
         self.camera_direction = None
@@ -63,6 +62,7 @@ class Camera:
         self.target_stack = []
 
         self.uv = parent
+        self.target_sphere = None
         self.shader = parent.shader
         self.config = parent.config
 
@@ -70,25 +70,23 @@ class Camera:
 
         # has the calculations for camera movement
         self.cm = self.__class__.CameraMovement_class(self)
-        self.set_movement_values()
 
         view = self.get_view_matrix()
         self.config.set_view_loc(view)
 
     def _set_view(self):
+        sphere_xyz = self.target_sphere.xyz if self.target_sphere else DEFAULT_TARGET
+
         # distance to target
         self.distance_to_target = self.get_distance_to_target()
 
         # direction vector, points away from target
-        self.camera_direction = vector.normalize(Vector3(self.xyz) - Vector3(self.target))
+        self.camera_direction = vector.normalize(Vector3(self.xyz) - Vector3(sphere_xyz))
 
         # right vector that represents the positive x-axis of the camera space
         up = Vector3([0.0, 1.0, 0.0])
         camera_right = vector.normalize(Vector3.cross(up, self.camera_direction))
         self.camera_up = Vector3.cross(Vector3(self.camera_direction), Vector3(camera_right))
-
-    def set_movement_values(self, min_radius=MIN_RADIUS, cam_movement_steps=CAM_MOVEMENT_STEPS):
-        self.cm.set_minimum_values(min_radius, cam_movement_steps)
 
     def reset_to_default_view(self, target_sphere, offset=None):
         """
@@ -101,11 +99,11 @@ class Camera:
         pass
 
         offset = Vector3([0.0, 0.0, target_sphere.radius * 2]) if not offset else offset
-        offset = Vector3([0.0, 0.0, target_sphere.radius * 3]) if target_sphere.radius in (1, 2) else offset
+        offset = Vector3([0.0, 0.0, target_sphere.radius * 3]) if target_sphere.radius == 1 else offset
         offset = Vector3([0.0, 0.0, target_sphere.radius * 2.7]) if target_sphere.radius == 2 else offset
-        # # used when de-serializing
-        self.target = target_sphere.xyz
-        self.xyz = self.target + offset
+
+        # used when de-serializing
+        self.xyz = target_sphere.xyz + offset
         self.move_to_new_target_sphere(target_sphere)
         self.cm.reset()
         self._set_view()

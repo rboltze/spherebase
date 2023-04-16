@@ -39,7 +39,7 @@ class Sphere(Serializable):
     Edge_drag_class = EdgeDrag
     History_class = History
 
-    def __init__(self, universe: 'universe', position: list = None, texture_id: int = None, sphere_type='sphere_base'):
+    def __init__(self, universe, position: list = None, texture_id: int = None, sphere_type='sphere_base'):
         """
         Constructor of the sphere_base class.
 
@@ -172,28 +172,28 @@ class Sphere(Serializable):
         else:
             self._has_been_modified = value
 
-    def add_has_been_modified_listener(self, callback: 'function'):
+    def add_has_been_modified_listener(self, callback):
         """
         Register callback for 'has been modified' event.
         :param callback: callback function
         """
         self._has_been_modified_listeners.append(callback)
 
-    def add_selection_changed_listener(self, callback: 'function'):
+    def add_selection_changed_listener(self, callback):
         """
         Register callback for 'selection changed' event.
         :param callback: callback function
         """
         self._selection_changed_listeners.append(callback)
 
-    def add_item_deselected_listener(self, callback: 'function'):
+    def add_item_deselected_listener(self, callback):
         """
         Register callback for `deselected item` event.
         :param callback: callback function
         """
         self._items_deselected_listeners.append(callback)
 
-    def create_new_node(self, node_type: str = "person", abs_pos=None) -> 'node':
+    def create_new_node(self, node_type: str = "person", abs_pos=None):
         """
         Needs to be overridden.
         Can be used to create any type of node at the mouse pointer.
@@ -245,7 +245,7 @@ class Sphere(Serializable):
                 callback(self, item)
                 self.history.store_history("Deselected Everything")
 
-    def get_item_by_id(self, item_id: int) -> 'item':
+    def get_item_by_id(self, item_id: int):
         """
         Helper function returns an item of type `node` or `edge` based on id.
 
@@ -275,7 +275,7 @@ class Sphere(Serializable):
                 return item
         return None
 
-    def get_socket_edges(self, socket: 'socket') -> list:
+    def get_socket_edges(self, socket) -> list:
         """
         Helper function returns a list of all edges connected to a node socket.
 
@@ -314,7 +314,7 @@ class Sphere(Serializable):
         if item in self.items:
             self.items.remove(item)
 
-    def has_edge(self, start_socket: 'socket', end_socket: 'socket') -> bool:
+    def has_edge(self, start_socket, end_socket) -> bool:
         """
         Helper function that checks whether an edge with the same start and end socket already exists
 
@@ -332,7 +332,7 @@ class Sphere(Serializable):
                     return True
         return False
 
-    def create_edge(self, end_socket: 'socket') -> 'edge':
+    def create_edge(self, end_socket):
         """
         Create an edge between the _selected start socket and the received end socket if it does not already exist.
 
@@ -405,38 +405,6 @@ class Sphere(Serializable):
             if item.type == "node":
                 # updating the node trickles down to updating sockets and edges"
                 item.update_position()
-
-    # def drag_rotate(self, collision_point=None):
-    #     # rotate the sphere by dragging with the mouse
-    #     q = quaternion
-    #     a = set(self.last_collision_point)
-    #     b = set(collision_point)
-    #
-    #     try:
-    #         if a != b:
-    #             pass
-    #
-    #             start_angle = self.calc.find_angle(self.last_collision_point, self.orientation)
-    #             # offset = self.calc.find_angle(collision_point, start_angle)
-    #             new_angle = self.calc.find_angle(collision_point, self.orientation)
-    #             a = set(start_angle)
-    #             b = set(new_angle)
-    #             if a and b:
-    #                 print(start_angle, new_angle)
-    #                 offset = q.cross(start_angle, q.inverse(new_angle))
-    #
-    #                 self.orientation = quaternion.normalize(q.cross(self.orientation, q.inverse(offset)))
-    #                 # self.orientation = quaternion.normalize(q.cross(self.orientation, offset))
-    #                 # self.orientation = quaternion.normalize(q.cross(offset, q.inverse(self.orientation)))
-    #             # move = self.calc.find_angle(collision_point, self.target_sphere.last_collision_point)
-    #
-    #             # diff = q.cross(Quaternion(self.target_sphere.last_collision_point), q.inverse(Quaternion(collision_point)))
-    #             # print(diff)
-    #
-    #     except Exception as e:
-    #         dump_exception(e)
-    #
-    #     self.last_collision_point = collision_point
 
     def rotate_sphere(self, offset_degrees: int):
         """
@@ -565,7 +533,7 @@ class Sphere(Serializable):
         # find the current item that is under the mouse pointer
         hovered_item, hovered_item_pos = self.uv.mouse_ray.check_mouse_ray(mouse_x, mouse_y)
 
-        # if there is no sphere_base item under the mouse pointer the id will be the id of the sphere_base
+        # if there is no sphere item under the mouse pointer the id will be the id of the sphere
         if hovered_item and self._hovered_item and hovered_item == self.id:
             # no hovered items
             self._hovered_item.set_hovered(False)
@@ -580,6 +548,8 @@ class Sphere(Serializable):
                 else:
                     # remove hover
                     item.set_hovered(False)
+
+        return self._hovered_item
 
     def edit_cut(self):
         """
@@ -633,7 +603,7 @@ class Sphere(Serializable):
         """
         setting the radius of the sphere
 
-        :param value:
+        :param radius:
         :return:
         """
         self.radius = radius
@@ -642,7 +612,7 @@ class Sphere(Serializable):
         self.uv.cam.reset_to_default_view(self)
         self.collision_shape_id = self.uv.mouse_ray.get_collision_shape(self)
 
-    def set_node_class_selector(self, class_selecting_function: 'function'):
+    def set_node_class_selector(self, class_selecting_function):
         """
         Helper method that sets the function which decides what `Node` class to instantiate when deserializing
         If not set, we will always instantiate :class:`~3dSphere.editor_node.Node` for each `Node` in the `UV`.

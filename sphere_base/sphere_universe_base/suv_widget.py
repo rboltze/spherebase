@@ -8,6 +8,7 @@ Module UV_Widget. The layer on top of the universe.
 from PyQt5.QtOpenGL import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
+from PyQt5.QtGui import QCursor
 
 import json
 
@@ -189,6 +190,7 @@ class UVWidget(QGLWidget):
         self._clicked_on_item = None
         self._left_mouse_button_down = False
         self._right_mouse_button_down = False
+        self.setCursor(QCursor(Qt.ArrowCursor))
 
     def mouseReleaseEvent(self, event):
         """
@@ -253,13 +255,18 @@ class UVWidget(QGLWidget):
         self.get_mouse_pos()
 
         if self.uv.target_sphere and self.uv.cam.distance_to_target < HOVER_MIN_DISTANCE:
-            self.uv.target_sphere.check_for_hover(x, y)
+            hovered_item = self.uv.target_sphere.check_for_hover(x, y)
+            if hovered_item:
+                self.setCursor(QCursor(Qt.PointingHandCursor))
+            else:
+                self.setCursor(QCursor(Qt.ArrowCursor))
 
         if self._left_mouse_button_down:
 
             if self._clicked_on_item and self.uv.target_sphere.selected_item:
                 # dragging _selected items
                 self.is_dragging = True
+                self.setCursor(QCursor(Qt.ClosedHandCursor))
                 # we are only looking at the first object in the selected objects.
                 # If it is node or edge then try to drag the whole selected group of items.
                 if self.uv.target_sphere.selected_item.type in ("node", "edge"):
@@ -285,17 +292,15 @@ class UVWidget(QGLWidget):
             x_offset, y_offset = self.get_mouse_position_offset(x, y)
 
             if self._clicked_on_item and self._clicked_on_item == self.uv.target_sphere.id:
+                self.setCursor(QCursor(Qt.ClosedHandCursor))
+
                 # only rotate the sphere_base over the y axis
                 self.uv.rotate_target_sphere_with_mouse(x_offset, self.mouse_ray_collision_point)
 
                 # rotation over the x axis are done through moving the camera
                 self.uv.cam.process_mouse_movement(self.uv.target_sphere, 0, -y_offset)
-            elif self._clicked_on_item:
-                pass
-            else:
-                self.uv.cam.process_mouse_movement(self.uv.target_sphere, x_offset, -y_offset)
 
-    def wheelEvent(self, event: 'event'):
+    def wheelEvent(self, event):
         """
         Handles mouse wheel event.
 
