@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import os
 
+
 class WidgetTextureSettings(QWidget):
     texture_changed = pyqtSignal()
 
@@ -11,13 +12,10 @@ class WidgetTextureSettings(QWidget):
         self.uv = main_win.sphere_widget.uv_widget.uv
         self.sphere = self.uv.target_sphere
 
-        self._init_Values()
-        self._setup_ui()
-
-    def _init_Values(self):
         self.texture_list_box = QListWidget()
         self.groupBox = QGroupBox("Sphere textures")
         self.layout = QGridLayout()
+        self._setup_ui()
 
     def _setup_ui(self):
         self._setup_texture_list_box()

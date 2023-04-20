@@ -93,7 +93,7 @@ class SurfaceEdge(Serializable):
         self.edge_type = 0
         self.orientation = self.sphere.orientation
         self._new_edge = True
-        self.model = self.set_up_model('edge1')
+        self.model = self.set_up_model('edge')
 
         self.mesh = self.model.meshes[0]
         self.mesh_id = self.mesh.mesh_id
@@ -116,7 +116,7 @@ class SurfaceEdge(Serializable):
                 geometry_shader = MODELS[_name]["geometry_shader"]
                 geometry_shader = None if geometry_shader == "none" else geometry_shader
 
-        # create a model for this edge
+        # create a model for the edge
         model = Model(
                       models=self.uv.models,
                       model_id=0,

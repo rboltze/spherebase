@@ -144,6 +144,8 @@ class ObjectFileLoader:
         for d in data_values:
             if d == skip:
                 continue
+            elif d == '':
+                d = 0
             if data_type == 'float':
                 val_list.append(float(d))
             elif data_type == 'int':

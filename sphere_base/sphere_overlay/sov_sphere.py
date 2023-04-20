@@ -21,12 +21,8 @@ class OverlaySphere(Sphere):
         self._close_event_listeners = []
         self.billboard_id = random.randint(30, 31)
 
-
     def get_model(self):
-        # self.cube = self.uv.models.get_model('cube') #model in the middle of the globe
-        self.model_h = self.uv.models.get_model('holo_sphere')
-        self.model = self.uv.models.get_model('sphere_base')
-        self.shader = self.model.shader
+        self.model = self.uv.models.get_model('holo_sphere')
 
     def get_node_class_from_data(self, data):
         if 'op_code' not in data:
@@ -34,17 +30,14 @@ class OverlaySphere(Sphere):
         return get_class_from_type(data['op_code'], SPHERE_NODE_EDITOR)
 
     def create_new_node(self, node_type=0, mouse_ray_collision_point=None):
-        # create new node at the mouse pointer
+        node = None
 
         # calculate the cumulative angle based on the mouse position
         orientation = self.calc.find_angle(mouse_ray_collision_point, self.orientation)
 
-        # create new node at the cumulative angle
-
         try:
 
             if node_type:
-
                 node = get_class_from_type(node_type, SPHERE_NODE_EDITOR)(self, orientation_offset=orientation)
             else:
                 node = self.Node(self, orientation)
@@ -63,8 +56,7 @@ class OverlaySphere(Sphere):
         if self.animation != 0:
             self.rotate_sphere(self.animation)
 
-        # self.cube.draw(self, self.billboard_id, scale=[0.5, 0.5, 0.5])
-        self.model_h.draw(self, texture_id=self.texture_id, color=self.color)
+        self.model.draw(self, texture_id=self.texture_id, color=self.color)
 
         for item in self.items:
             if item.type == "node":

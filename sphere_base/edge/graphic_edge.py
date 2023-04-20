@@ -36,19 +36,13 @@ class GraphicEdge:
         self.sphere = parent.sphere
         self.calc = self.__class__.calc_class()
 
-        self._init_variables()
-        self._init_flags()
-        self._init_assets()
-
-    def _init_flags(self):
-        self._hover = False
-
-    def _init_variables(self):
         self._selected = False
         self._current_color = None
 
         self.unit_length = 0.05
         self.color = [0, 0, 0, .5]
+        self._hover = False
+        self._init_assets()
 
     def _init_assets(self):
         """Initialize ``QObjects`` like ``QColor``, ``QPen`` and ``QBrush``"""
@@ -56,7 +50,7 @@ class GraphicEdge:
         self.selected_color = [0.9, 0.0, 0.0, 0.4]
         self.hover_color = [191, 255, 0, 1]
 
-    def count_vertices(self, start_xyz: 'Vector3', end_xyz: 'Vector3', radius: float, unit_length: float):
+    def count_vertices(self, start_xyz, end_xyz, radius: float, unit_length: float):
         """
         Returns the number of vertices on the edge.
 
@@ -75,12 +69,13 @@ class GraphicEdge:
         length = self.calc.get_distance_on_sphere(end_xyz, start_xyz, radius)
         return int(math.ceil(length / unit_length))
 
-    def get_position(self, pos_orientation_offset: 'Quaternion', radius=None) -> 'Vector3':
+    def get_position(self, pos_orientation_offset, radius=None):
         """
         Returns xyz vector based on degree offset (position orientation offset)
 
         :param pos_orientation_offset: degree offset from the zero-position of the ``Sphere``.
         :param pos_orientation_offset: ``Quaternion``
+        :param radius:
         :returns: ``Vector3`` xyz-position
 
         """
@@ -90,7 +85,7 @@ class GraphicEdge:
         xyz = self.calc.move_to_position(cumulative_orientation, self.sphere)
         return xyz
 
-    def get_cumulative_rotation(self, pos_orientation_offset: 'Quaternion') -> 'Quaternion':
+    def get_cumulative_rotation(self, pos_orientation_offset):
         """
         Returns the cumulative rotation of the pos_orientation_offset with the sphere rotation.
 

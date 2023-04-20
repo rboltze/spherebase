@@ -9,6 +9,7 @@ from pyrr import quaternion
 from sphere_base.node.socket import *
 from sphere_base.edge.graphic_edge import GraphicEdge
 from sphere_base.shader.sphere_shader import SphereShader
+from sphere_base.model.model import Model
 
 
 class EdgeDrag:
@@ -32,7 +33,7 @@ class EdgeDrag:
         :Instance Attributes:
 
         - **gr_edge** - Instance of :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
-        - **calc** - Instance of :class:`~sphere_iot.uv_calc.UvCalc` from universe
+        - **calc** - Instance of :class:`~sphere_iot.uv_calc.UvCalc` from universe.
 
         :Instance Variables:
 
@@ -52,12 +53,8 @@ class EdgeDrag:
         """
         self.sphere = sphere
         self.config = sphere.config
-        self._init_variables()
 
-    def _init_variables(self):
         self.uv = self.sphere.uv
-        self.shader = self.sphere.shader
-        # self.shader = self.__class__.Shader_class(self)
 
         self.radius = self.sphere.radius
         self.start_socket = None
@@ -69,7 +66,33 @@ class EdgeDrag:
         self.pos_array = []
 
         self.gr_edge = self.__class__.GraphicsEdge_class(self)
+        self.model = self.set_up_model('drag_edge')
         self.calc = Calc()
+
+    def set_up_model(self, model_name):
+        shader, vertex_shader, fragment_shader, geometry_shader = None, None, None, None
+
+        # get the shaders for the edge
+        for _name in MODELS.keys():
+            if _name == model_name:
+                shader = MODELS[_name]["shader"]
+                vertex_shader = MODELS[_name]["vertex_shader"]
+                fragment_shader = MODELS[_name]["fragment_shader"]
+                geometry_shader = MODELS[_name]["geometry_shader"]
+                geometry_shader = None if geometry_shader == "none" else geometry_shader
+
+        # create a model for the edge
+        model = Model(
+                      models=self.uv.models,
+                      model_id=0,
+                      model_name=model_name,
+                      obj_file="",
+                      shader=shader,
+                      vertex_shader=vertex_shader,
+                      fragment_shader=fragment_shader,
+                      geometry_shader=geometry_shader)
+
+        return model
 
     def _init_start_dragging(self, start_socket: 'Socket'):
         # dragging start point is the start socket
@@ -98,7 +121,7 @@ class EdgeDrag:
         if not self._dragging and value:
             self._dragging = value
 
-    def drag(self, start_socket: 'socket', dragging: bool, mouse_ray_collision_point=None):
+    def drag(self, start_socket, dragging: bool, mouse_ray_collision_point=None):
         """
         Dragging an edge
 
@@ -185,4 +208,4 @@ class EdgeDrag:
 
         """
         if self._dragging:
-            self.shader.draw_edge(self.pos_array, width=2, color=[0, 0, 0, 1], dotted=True)
+            self.model.shader.draw_edge(self.pos_array, width=2, color=[0, 0, 0, 1], dotted=True)

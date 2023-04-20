@@ -3,6 +3,7 @@ from PyQt5.QtCore import *
 
 SPEED_CORRECTION = 50
 
+
 class WidgetSphereSettings(QWidget):
     color_changed = pyqtSignal()
     transparency_changed = pyqtSignal()
@@ -12,10 +13,6 @@ class WidgetSphereSettings(QWidget):
         super().__init__()
         self.uv = main_win.sphere_widget.uv_widget.uv
         self.sphere = self.uv.target_sphere
-        self._init_Values()
-        self._setup_ui()
-
-    def _init_Values(self):
         self._color = self.uv.target_sphere.color * SPEED_CORRECTION
         self._red = int(self._color[0] * 100)
         self._green = int(self._color[1] * 100)
@@ -26,6 +23,7 @@ class WidgetSphereSettings(QWidget):
         self.Skybox_random_startup = True
         self.groupBox = QGroupBox("Sphere setting")
         self.layout = QGridLayout()
+        self._setup_ui()
 
     def _setup_ui(self):
         self._setup_red_slider()
