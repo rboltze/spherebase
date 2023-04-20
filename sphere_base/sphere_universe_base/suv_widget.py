@@ -237,7 +237,8 @@ class UVWidget(QGLWidget):
 
         if self._middle_mouse_button_down:
             for item in self.uv.target_sphere.items:
-                item.update_collision_object()
+                if item.type in ('sphere', 'edge', 'node', 'socket'):
+                    item.update_collision_object()
 
         self._reset_mouse()
 

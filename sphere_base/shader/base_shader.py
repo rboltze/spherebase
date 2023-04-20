@@ -210,8 +210,8 @@ class BaseShader:
         return matrix44.create_from_scale(scale)
 
     def draw(self, object_index: int = 0, object_type: str = "", mesh_index: int = 0, indices_len=0,
-             position: 'Vector3' = None, orientation: 'Quaternion' = None,
-             scale: 'Vector3' = None, texture_id: int = 0, color: 'Vector4' = None,
+             position=None, orientation=None,
+             scale: 'Vector3' = None, texture_id: int = 0, color=None,
              switch: int = 0, ):
 
         """
@@ -228,8 +228,6 @@ class BaseShader:
         :type mesh_index: ``int``
         :param indices_len: length of Indices
         :type indices_len: ``int``
-        :param vertices: List of vertex coordinates
-        :type indices: ``list``
         :param position: Position of the object
         :type position: ``Vector3``
         :param orientation: Orientation of the object
@@ -277,48 +275,10 @@ class BaseShader:
         """
         Drawing edges. Using direct Open GL
 
-        :param points: list of Vector3 points positions
-        :type points: ``list``
-        :param width: width of the line
-        :type width: ``float``
-        :param color: color of the line
-        :type color: ``Vector4``
-        :param dotted: is the line dotted
-        :type dotted: ``bool``
-        :param switch: OpenGL switch
-        :type switch: ``int``
-
         .. Warning::
 
             This method is using obsolete direct OpenGL instead of modern OpenGL.
             This needs to be updated in a future iteration.
 
         """
-        # TODO: still needed do not remove yet
-        # drawing lines
-        glUseProgram(self.shader_id)  # using the standard shader
-        glUniform1i(self.switcher_loc, 3)  # switch to use fragment and vertex shader for lines
-        glLineWidth(width)
-
-        if color:
-            # enable blending
-            # glEnable(GL_BLEND)
-            glUniform4f(self.a_color, *color)
-            # glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-            glEnable(GL_LINE_SMOOTH)
-            glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
-
-        if dotted:
-            # dotted line for dragging
-            glLineStipple(4, 0xAAAA)
-            glEnable(GL_LINE_STIPPLE)
-        else:
-            # reset to normal
-            glDisable(GL_LINE_STIPPLE)
-
-        glBegin(GL_LINE_STRIP)
-        for point in points:
-            glVertex3f(point[0], point[1], point[2])
-        glEnd()
-        glDisable(GL_LINE_STIPPLE)  # just in case ....
-        glLineWidth(1)
+        return NotImplemented

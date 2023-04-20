@@ -75,9 +75,12 @@ MODELS = {
     "cube_sphere": {"model_id": 13, "model_file_name": "cubesphere.obj", "shader": "SphereShader",
                     "vertex_shader": "vert_sphere.glsl",
                     "fragment_shader": "frag_sphere.glsl", "geometry_shader": "none"},
-    "drag_edge": {"model_id": 10, "model_file_name": "sphere1.obj", "shader": "SphereShader",
+    "drag_edge": {"model_id": 10, "model_file_name": "sphere1.obj", "shader": "DragEdgeShader",
                   "vertex_shader": "vert_sphere.glsl",
                   "fragment_shader": "frag_sphere.glsl", "geometry_shader": "none"},
+    "sphere_lines": {"model_id": 10, "model_file_name": "line_1x1.obj", "shader": "EdgeShader",
+                     "vertex_shader": "vert_sphere_edge.glsl",
+                     "fragment_shader": "frag_sphere_edge.glsl", "geometry_shader": "none"},
 }
 
 SHADER_SWITCH = {"node": 0, "sphere_base": 1, "square1x1": 2, "rubber_band": 2, "sphere_small":

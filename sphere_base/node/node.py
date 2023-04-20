@@ -218,7 +218,6 @@ class Node(Serializable):
         """
         update the position of the node_disc on the sphere_base. Calculate the position and the direction.
         """
-
         self.xyz = self.get_position()
         self.orientation = self.get_orientation()
         self.socket.update_position()

@@ -10,6 +10,7 @@ from sphere_base.node.socket import *
 from sphere_base.edge.graphic_edge import GraphicEdge
 from sphere_base.shader.sphere_shader import SphereShader
 from sphere_base.model.model import Model
+from sphere_base.utils import dump_exception
 
 
 class EdgeDrag:
@@ -207,5 +208,8 @@ class EdgeDrag:
         Drawing the edge with dotted lines.
 
         """
-        if self._dragging:
-            self.model.shader.draw_edge(self.pos_array, width=2, color=[0, 0, 0, 1], dotted=True)
+        try:
+            if self._dragging:
+                self.model.shader.draw_edge(self.pos_array, width=2, color=[0, 0, 0, 1], dotted=True)
+        except Exception as e:
+            dump_exception(e)

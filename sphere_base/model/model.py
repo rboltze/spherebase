@@ -15,6 +15,7 @@ from sphere_base.shader.cross_shader import CrossShader
 from sphere_base.shader.holo_sphere_shader import HoloSphereShader
 from sphere_base.shader.sphere_small_shader import SphereSmallShader
 from sphere_base.shader.edge_shader import EdgeShader
+from sphere_base.shader.drag_edge_shader import DragEdgeShader
 # -----------------------------------------------------------------------
 
 from sphere_base.sphere_universe_base.suv_graphic_item import GraphicItem
@@ -143,3 +144,4 @@ class Model(GraphicItem):
 # from sphere_base.shader.uv_cross_shader import CrossShader
 # from sphere_base.shader.uv_holo_sphere_shader import HoloSphereShader
 # from sphere_base.shader.uv_sphere_small_shader import SphereSmallShader
+# from sphere_base.shader.drag_edge_shader import DragEdgeShader

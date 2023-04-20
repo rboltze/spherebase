@@ -14,6 +14,7 @@ from collections import OrderedDict
 from sphere_base.node.node import Node
 from sphere_base.edge.edge_drag import EdgeDrag
 from sphere_base.edge.surface_edge import SurfaceEdge
+from sphere_base.sphere.sphere_lines import SphereLines
 from sphere_base.history import History
 from pyrr import quaternion
 from math import pi
@@ -99,7 +100,7 @@ class Sphere(Serializable):
 
         self.selected_item = None
         self._last_selected_items = None
-        # self.last_collision_point = None
+
         self.items = []
         self.items_selected = []
         self.items_deselected = []
@@ -122,6 +123,8 @@ class Sphere(Serializable):
 
         self.collision_shape_id = self.uv.mouse_ray.get_collision_shape(self)
         self.collision_object_id = self.uv.mouse_ray.create_collision_object(self)
+
+        self.sphere_lines = SphereLines(self)
 
         # for testing purposes a number of random nodes can be created
         # self.create_test_node(NUMBER_OF_TEST_NODES)
@@ -402,7 +405,7 @@ class Sphere(Serializable):
 
         # update orientation of all nodes on sphere_base
         for item in self.items:
-            if item.type == "node":
+            if item.type in ('node', 'sphere_lines'):
                 # updating the node trickles down to updating sockets and edges"
                 item.update_position()
 
@@ -543,11 +546,13 @@ class Sphere(Serializable):
             for item in self.items:
                 if item.id == hovered_item:
                     # set hover
-                    item.set_hovered(True)
-                    self._hovered_item = item
+                    if item.type in ('node', 'socket', 'edge'):
+                        item.set_hovered(True)
+                        self._hovered_item = item
                 else:
                     # remove hover
-                    item.set_hovered(False)
+                    if item.type in ('node', 'socket', 'edge'):
+                        item.set_hovered(False)
 
         return self._hovered_item
 
@@ -642,6 +647,8 @@ class Sphere(Serializable):
             if item.type == "node":
                 item.draw()
             elif item.type == "edge":
+                item.draw()
+            elif item.type == "sphere_lines":
                 item.draw()
 
         if self.edge_drag.dragging:

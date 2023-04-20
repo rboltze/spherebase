@@ -169,7 +169,6 @@ class Calc:
                 y1, y2 = p1[1], p2[1]
                 z1, z2 = p1[2], p2[2]
 
-
                 pitch = math.asin(x2) - math.acos(z1)
                 # and then over the x axis (yaw)
                 yaw = math.atan2(z2, y2)

@@ -48,21 +48,21 @@ class OverlaySphere(Sphere):
         self.history.store_history("node created", True)
         return node
 
-    def draw(self):
-        """
-        Render the sphere_base and all the items on it.
-        """
-
-        if self.animation != 0:
-            self.rotate_sphere(self.animation)
-
-        self.model.draw(self, texture_id=self.texture_id, color=self.color)
-
-        for item in self.items:
-            if item.type == "node":
-                item.draw()
-            elif item.type == "edge":
-                item.draw()
-
-        if self.edge_drag.dragging:
-            self.edge_drag.draw()
+    # def draw(self):
+    #     """
+    #     Render the sphere_base and all the items on it.
+    #     """
+    #
+    #     if self.animation != 0:
+    #         self.rotate_sphere(self.animation)
+    #
+    #     self.model.draw(self, texture_id=self.texture_id, color=self.color)
+    #
+    #     for item in self.items:
+    #         if item.type == "node":
+    #             item.draw()
+    #         elif item.type == "edge":
+    #             item.draw()
+    #
+    #     if self.edge_drag.dragging:
+    #         self.edge_drag.draw()
