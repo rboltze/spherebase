@@ -9,13 +9,10 @@ class WidgetSphereColorButtonSettings(QWidget):
         super().__init__()
         self.uv = main_win.sphere_widget.uv_widget.uv
         self.sphere = self.uv.target_sphere
-        self._init_Values()
-        self._setup_ui()
-
-    def _init_Values(self):
         self.color = []
         self.groupBox = QGroupBox("Default sphere colors")
         self.layout = QGridLayout()
+        self._setup_ui()
 
     def _setup_ui(self):
         self._setup_buttons()
@@ -59,11 +56,10 @@ class WidgetSphereColorButtonSettings(QWidget):
         elif color == 'grey':
             self.color = [0.68, 0.68, 0.68, 0.75]
         elif color == 'green':
-            self.color = [0.68, 0.92, 0.32, 0.75]
+            self.color = [0.49, 0.58, 0.44, 0.75]
         elif color == 'blue':
             self.color = [0.20, 0.57, 0.65, 0.75]
         elif color == 'yellow':
             self.color = [0.88, 0.7, 0.32, 0.8]
         self.uv.target_sphere.color = self.color
         self.color_changed.emit()
-

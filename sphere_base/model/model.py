@@ -21,6 +21,7 @@ from sphere_base.shader.drag_edge_shader import DragEdgeShader
 from sphere_base.sphere_universe_base.suv_graphic_item import GraphicItem
 from sphere_base.model.mesh import Mesh
 from sphere_base.model.obj_file_loader import ObjectFileLoader
+from sphere_base.utils import dump_exception
 import pathlib
 
 DEBUG = True
@@ -102,7 +103,7 @@ class Model(GraphicItem):
         """
         return len(self.meshes)
 
-    def draw(self, parent, texture_id=0, color=None, switch=0, scale=None):
+    def draw(self, parent, texture_id=0, color=None, switch=0, scale=None, line_width=1):
         """
         Draw all ``Meshes`` for this ``Model``.
 
@@ -119,17 +120,20 @@ class Model(GraphicItem):
         """
 
         # draws all meshes
-        color = color if color else [0.0, 0.0, 0.0, 0.5]
-        for mesh in self.meshes:
-            mesh.draw(self.shader,
-                      model_id=self.model_id,
-                      position=parent.xyz,
-                      orientation=parent.orientation,
-                      scale=scale if scale else parent.scale,
-                      texture_id=texture_id,
-                      color=color,
-                      switch=switch
-                      )
+        try:
+            color = color if color else [0.0, 0.0, 0.0, 0.5]
+            for mesh in self.meshes:
+                mesh.draw(self.shader,
+                          model_id=self.model_id,
+                          position=parent.xyz,
+                          orientation=parent.orientation,
+                          scale=scale if scale else parent.scale,
+                          texture_id=texture_id,
+                          color=color,
+                          switch=switch,
+                          line_width=line_width)
+        except Exception as e:
+            dump_exception(e)
 
 # Do not remove these!!!
 # from sphere_base.shader.uv_skybox_shader import SkyboxShader

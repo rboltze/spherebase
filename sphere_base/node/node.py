@@ -68,7 +68,7 @@ class Node(Serializable):
 
         super().__init__(node_type)
 
-        self.node_type_name = "node"
+        self.node_type_name = 'node'
         self.sphere = target_sphere
         self.config = self.sphere.config
         self.calc = self.sphere.calc

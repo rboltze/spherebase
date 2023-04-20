@@ -59,7 +59,7 @@ class Mesh:
         self.buffer = None
 
     def draw(self, shader: 'Shader', model_id: int, position: 'Vector3', orientation: 'Quaternion', scale: list = None,
-             texture_id: int = 0, color: list = None, switch: int = 0):
+             texture_id: int = 0, color: list = None, switch: int = 0, line_width=1):
         """
         Sending the ``Mesh`` with all the parameters to the dedicated shader.
 
@@ -93,17 +93,8 @@ class Mesh:
                 print("texture_id", texture_id, "\n")
 
         try:
-            shader.draw(
-                         object_index=model_id,
-                         object_type=self.model.type,
-                         mesh_index=self.mesh_id,
-                         indices_len=self.indices_len,
-                         position=position,
-                         orientation=orientation,
-                         scale=scale,
-                         texture_id=texture_id,
-                         color=color,
-                         switch=switch
-                         )
+            shader.draw(object_index=model_id, object_type=self.model.type, mesh_index=self.mesh_id,
+                        indices_len=self.indices_len, position=position, orientation=orientation, scale=scale,
+                        texture_id=texture_id, color=color, switch=switch, line_width=line_width)
         except Exception as e:
             dump_exception(e)

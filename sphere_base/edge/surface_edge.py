@@ -88,6 +88,7 @@ class SurfaceEdge(Serializable):
         self.vert = []  # vertices needed for pybullet mouse ray
         self.serialized_detail_scene = None
         self._edge_moved = False
+        self.line_width = 2
         self.scale = [1.0, 1.0, 1.0]
         self.color = self.gr_edge.color
         self.edge_type = 0
@@ -349,7 +350,7 @@ class SurfaceEdge(Serializable):
         Renders the edge.
         """
         try:
-            self.model.draw(self, color=self.color)
+            self.model.draw(self, color=self.color, line_width=self.line_width)
         except Exception as e:
             dump_exception(e)
 

@@ -209,10 +209,8 @@ class BaseShader:
 
         return matrix44.create_from_scale(scale)
 
-    def draw(self, object_index: int = 0, object_type: str = "", mesh_index: int = 0, indices_len=0,
-             position=None, orientation=None,
-             scale: 'Vector3' = None, texture_id: int = 0, color=None,
-             switch: int = 0, ):
+    def draw(self, object_index: int = 0, object_type: str = "", mesh_index: int = 0, indices_len=0, position=None,
+             orientation=None, scale: 'Vector3' = None, texture_id: int = 0, color=None, switch: int = 0, line_width=1):
 
         """
 
@@ -220,6 +218,7 @@ class BaseShader:
 
         Rendering and preparing the OpenGL shader
 
+        :param line_width:
         :param object_index: ID of the object
         :type object_index: ``int``
         :param object_type: Object type name

@@ -124,7 +124,10 @@ class Sphere(Serializable):
         self.collision_shape_id = self.uv.mouse_ray.get_collision_shape(self)
         self.collision_object_id = self.uv.mouse_ray.create_collision_object(self)
 
-        self.sphere_lines = SphereLines(self)
+        self.sphere_lines_mayor = SphereLines(self, 20, 20, 0, [0.5, 0, 0, 0.05], 4)  # red lines
+        self.sphere_lines_minor = SphereLines(self, 40, 40, 0, [0.3, 0.3, 0.5, 0.1], 3)  # blue lines
+        self.sphere_lines_micro = SphereLines(self, 100, 100, 0, [0, 0, 0, 0.1], 1)  # black lines
+        self.sphere_lines_nano = SphereLines(self, 200, 200, 0, [0, 0, 0, 0.03], 1, 6)  # close distance only
 
         # for testing purposes a number of random nodes can be created
         # self.create_test_node(NUMBER_OF_TEST_NODES)
@@ -642,7 +645,7 @@ class Sphere(Serializable):
         if self.animation != 0:
             self.rotate_sphere(self.animation)
 
-        self.model.draw(self, texture_id=self.texture_id,  color=self.color)
+        self.model.draw(self, texture_id=self.texture_id, color=self.color)
         for item in self.items:
             if item.type == "node":
                 item.draw()

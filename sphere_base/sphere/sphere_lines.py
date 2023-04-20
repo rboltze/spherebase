@@ -13,7 +13,7 @@ class SphereLines(Serializable):
     """
     A class to put longitude and altitude lines on a sphere
     """
-    def __init__(self, target_sphere, longitud=15, latitude=15, start_degree=0, color=None, width=1):
+    def __init__(self, target_sphere, longitude=15, latitude=15, offset=0, color=None, width=1, max_distance=None):
         super().__init__('sphere_lines')
         self.sphere = target_sphere
         self.calc = self.sphere.calc
@@ -28,7 +28,11 @@ class SphereLines(Serializable):
 
         self.xyz, self.pos_orientation_offset = None, None
         self.color = color if color else [0, 0, 0, .5]
-        self.width = width if width else 5
+        self.line_width = width if width else 5
+        self.long_no = longitude  # number of longitude lines
+        self.lat_no = latitude  # number of latitude lines
+        self.max_distance = max_distance
+        self.offset = offset
 
         self.radius = self.sphere.radius  # - 0.01
         self.sphere.add_item(self)  # register the edge to the base for rendering
@@ -81,8 +85,11 @@ class SphereLines(Serializable):
         indices = []
         tex = [1.0, 1.0]  # made up surface edge, that needs to be added to the buffer
 
+        step = int(360 / self.long_no)
+
         # longitude
-        for i in range(0, 360, 15):
+        step = int(360 / self.long_no)
+        for i in range(0, 360, step + self.offset):
             theta = i * (pi / 180.0)
             for j in range(0, 180, 5):
                 phi = j * (pi / 180.0)
@@ -96,7 +103,8 @@ class SphereLines(Serializable):
                 count += 1
 
         # latitude
-        for i in range(0, 360, 15):
+        step = int(360 / self.lat_no)
+        for i in range(0, 360, step + self.offset):
             phi = i * (pi / 180.0)
             for j in range(0, 185, 5):
                 theta = j * (pi / 180.0)
@@ -142,7 +150,13 @@ class SphereLines(Serializable):
         """
 
         try:
-            self.model.draw(self, color=self.color)
+            if self.max_distance:
+
+                distance = vector.length(Vector3(self.sphere.xyz) - Vector3(self.uv.cam.xyz))
+                if distance < self.max_distance:
+                    self.model.draw(self, color=self.color, line_width=self.line_width)
+            else:
+                self.model.draw(self, color=self.color, line_width=self.line_width)
 
         except Exception as e:
             dump_exception(e)

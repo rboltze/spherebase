@@ -4,7 +4,7 @@
 Sphere edge shader module. This module contains the edge shader class which inherits from the base shader class.
 It is used to render edges between spheres.
 
-It works different than the other shaders as it does not use indices.
+It works different from the other shaders as it does not use indices.
 
     - Each shader instance holds one edge
 
@@ -22,7 +22,6 @@ class SphereEdgeShader(BaseShader):
         super().__init__(parent, vertex_shader=vertex_shader, fragment_shader=fragment_shader,
                          geometry_shader=geometry_shader)
 
-
     def _init_locations(self):
         """
         Initiates the OpenGL locations
@@ -34,8 +33,8 @@ class SphereEdgeShader(BaseShader):
         self.buffer = np.array(self.vertices, dtype=np.float32)
         self.vertices = np.array(self.vertices, dtype=np.float32)
 
-    def draw(self, object_index=0, object_type="", mesh_index=0, indices_len=0, position=None,
-             orientation=None, scale=None, texture_id=0, color=None, switch=0):
+    def draw(self, object_index=0, object_type="", mesh_index=0, indices_len=0, position=None, orientation=None,
+             scale=None, texture_id=0, color=None, switch=0, line_width=1):
 
         print("mesh_index", self.vertices)
         color = [0, 0, 0, 1]
@@ -65,8 +64,6 @@ class SphereEdgeShader(BaseShader):
         #              switch=switch)
 
         # ------------------------------
-
-
 
         glBindVertexArray(self.mesh_index)
 
