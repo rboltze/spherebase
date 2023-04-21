@@ -4,7 +4,7 @@ from sphere_base.constants import *
 from sphere_base.model.model import Model
 from sphere_base.utils import dump_exception
 from sphere_base.serializable import Serializable
-from pyrr import quaternion, vector, Vector3
+from pyrr import vector, Vector3
 import numpy as np
 import math
 
@@ -16,8 +16,6 @@ class SphereLines(Serializable):
     def __init__(self, target_sphere, longitude=15, latitude=15, offset=0, color=None, width=1, max_distance=None):
         super().__init__('sphere_lines')
         self.sphere = target_sphere
-        self.calc = self.sphere.calc
-        self.config = self.sphere.config
         self.uv = self.sphere.uv
         self.orientation = self.sphere.orientation
         self.scale = [1.0, 1.0, 1.0]
@@ -31,10 +29,10 @@ class SphereLines(Serializable):
         self.line_width = width if width else 5
         self.long_no = longitude  # number of longitude lines
         self.lat_no = latitude  # number of latitude lines
-        self.max_distance = max_distance
+        self.max_distance = max_distance  # the distance that lines are not painted anymore
         self.offset = offset
 
-        self.radius = self.sphere.radius  # - 0.01
+        self.radius = self.sphere.radius
         self.sphere.add_item(self)  # register the edge to the base for rendering
         self.create_lines()
 
@@ -78,14 +76,11 @@ class SphereLines(Serializable):
         r = self.sphere.radius
         pi = math.pi
 
-        count=1
-
+        count = 1
         vertices = []  # vertex coordinates
         buffer = []
         indices = []
         tex = [1.0, 1.0]  # made up surface edge, that needs to be added to the buffer
-
-        step = int(360 / self.long_no)
 
         # longitude
         step = int(360 / self.long_no)
@@ -151,7 +146,6 @@ class SphereLines(Serializable):
 
         try:
             if self.max_distance:
-
                 distance = vector.length(Vector3(self.sphere.xyz) - Vector3(self.uv.cam.xyz))
                 if distance < self.max_distance:
                     self.model.draw(self, color=self.color, line_width=self.line_width)

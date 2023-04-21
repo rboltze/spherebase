@@ -127,7 +127,7 @@ class Sphere(Serializable):
         self.sphere_lines_mayor = SphereLines(self, 20, 20, 0, [0.5, 0, 0, 0.05], 4)  # red lines
         self.sphere_lines_minor = SphereLines(self, 40, 40, 0, [0.3, 0.3, 0.5, 0.1], 3)  # blue lines
         self.sphere_lines_micro = SphereLines(self, 100, 100, 0, [0, 0, 0, 0.1], 1)  # black lines
-        self.sphere_lines_nano = SphereLines(self, 200, 200, 0, [0, 0, 0, 0.03], 1, 6)  # close distance only
+        self.sphere_lines_nano = SphereLines(self, 200, 200, 0, [0, 0, 0, 0.03], 1, 7)  # close distance only
 
         # for testing purposes a number of random nodes can be created
         # self.create_test_node(NUMBER_OF_TEST_NODES)
