@@ -30,10 +30,9 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
-    description="The library was created to be used as a building block for applications were information "
+    description="library for applications were information "
                 "should appear on the surface of a sphere. It allows for creating spheres with nodes "
-                "and edges that can be dragged on its surface. Nodes and edges can added and removed "
-                "from the sphere surface. This library is written in Python, PyOpenGL and PyQT5 ",
+                "and edges that can be dragged on its surface. ",
     install_requires=requirements,
     license="MIT license",
     long_description=readme,
