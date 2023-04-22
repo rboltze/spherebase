@@ -5,6 +5,9 @@ from sphere_base.utils import dump_exception
 from OpenGL.GL import *
 from PIL import Image
 
+from importlib_resources import files
+import sphere_base.model.resources.meshes
+
 DEBUG = False
 
 """
@@ -58,7 +61,9 @@ class ObjectFileLoader:
         meshes, buffer = [], []
 
         try:
-            with open(file_name, 'r') as f:
+            # with open(file_name, 'r') as f:
+            with files(sphere_base.model.resources.meshes).joinpath(file_name).open('r') as f:
+
                 for line in self.non_blank_lines(f):
 
                     values = line.split()

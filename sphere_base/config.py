@@ -9,9 +9,6 @@ from sphere_base.constants import *
 from sphere_base.utils import dump_exception
 import os
 
-from importlib_resources import files
-import importlib.resources as resources
-
 
 class UvConfig:
     """
@@ -48,9 +45,7 @@ class UvConfig:
 
         self.skybox_sets = self.create_skybox_set(skybox_img_dir)
         self.sphere_textures = self.create_texture_set(sphere_texture_dir)
-        # self.all_textures = self.create_texture_dict(SPHERE_TEXTURE_DIR, sphere_texture_dir, TEXTURES_DIR, ICONS_DIR)
         self.all_textures = self.create_texture_dict(sphere_texture_dir, sphere_icon_dir)
-
 
     @staticmethod
     def create_skybox_set(skybox_dir=""):
@@ -67,9 +62,7 @@ class UvConfig:
 
     def create_texture_dict(self, dir1, dir2):
         # Get all textures from the directories in a dictionary
-        print("here")
         textures = self.create_texture_set(dir1, dir2)
-        print(textures)
         _dict = {}
 
         try:
@@ -94,7 +87,6 @@ class UvConfig:
         # puts all the files of all the directories in a list
         _set = []
         for directory in args:
-            print(directory)
             s = [directory + file_name for file_name in os.listdir(directory)]
             _set += s
 

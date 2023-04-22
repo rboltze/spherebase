@@ -54,7 +54,8 @@ class Models:
         for _name in MODELS.keys():
             model_name = _name
             model_id = MODELS[_name]["model_id"]
-            model_file = MESH_DIR + MODELS[_name]["model_file_name"]
+            # model_file = MESH_DIR + MODELS[_name]["model_file_name"]
+            model_file = MODELS[_name]["model_file_name"]
             shader = MODELS[_name]["shader"]
             vertex_shader = MODELS[_name]["vertex_shader"]
             fragment_shader = MODELS[_name]["fragment_shader"]

@@ -93,7 +93,7 @@ class Model(GraphicItem):
             self.meshes = self.loader.get_meshes(obj_file)
         else:
             pass
-            # No object file passed, meshes need to be loaded later.
+            # No object file passed, meshes need to be loaded later. This works for edges.
             self.loader = ObjectFileLoader(self, config=self.config)
             self.meshes = self.loader.create_empty_mesh()
 
