@@ -296,7 +296,7 @@ class SurfaceEdge(Serializable):
     def update_content(self, value, item_id):
         """
         This is called on all sphere_base items but is currently not used on edges.
-        Updates the content like icons and images
+        Updates the content like sphere_icons and images
 
         """
         # needs to be overridden

@@ -39,7 +39,8 @@ class Universe(Serializable):
     Clipboard_class = Clipboard
     Config_class = UvConfig
 
-    def __init__(self, parent, skybox_img_dir=None, sphere_texture_dir=None, pybullet_key=None):
+    def __init__(self, parent, skybox_img_dir=None, sphere_texture_dir=None, sphere_icon_dir=None,
+                 pybullet_key=None):
         """
         Constructor of the ``Universe`` class
 
@@ -87,7 +88,8 @@ class Universe(Serializable):
         self._init_listeners()
 
         self.config = self.__class__.Config_class(self, skybox_img_dir=skybox_img_dir,
-                                                  sphere_texture_dir=sphere_texture_dir)
+                                                  sphere_texture_dir=sphere_texture_dir,
+                                                  sphere_icon_dir=sphere_icon_dir)
         self.shader = self.__class__.Shader_class(self)
         self.cam = self.__class__.Camera_class(self)
         self.models = self.__class__.Models_class(self)

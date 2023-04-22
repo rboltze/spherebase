@@ -25,7 +25,7 @@ def dump_exception(e=None):
 
 def load_style_sheet(filename: str):
     """
-    Loads an qss stylesheet to current QApplication instance
+    Loads a qss stylesheet to current QApplication instance
 
     :param filename: Filename of qss stylesheet
     :type filename: str

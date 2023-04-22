@@ -231,7 +231,7 @@ class Node(Serializable):
 
     def update_content(self, texture_id: int, sphere_id: int):
         """
-        Updates the content like icons and images
+        Updates the content like sphere_icons and images
 
         :param texture_id: new texture, image or icon
         :type texture_id: ``int``
@@ -277,7 +277,7 @@ class Node(Serializable):
 
     def draw(self):
         """
-        Renders all the icons and circles of the node_disc.
+        Renders all the sphere_icons and circles of the node_disc.
         """
         self.socket.draw()
         self.node_disc.draw(self, texture_id=self.texture_id, color=self.gr_node.main_image_color, switch=0)

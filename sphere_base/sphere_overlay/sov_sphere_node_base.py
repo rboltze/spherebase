@@ -31,7 +31,7 @@ class SphereNodeBase(Node):
         return res
 
     def update_content(self, value, sphere_id):
-        """ Each texture (icon, image) has a unique short name. The dictionary node icons
+        """ Each texture (icon, image) has a unique short name. The dictionary node sphere_icons
         contains a translation between a listbox text in the editor content nodes with the image short name
         """
 

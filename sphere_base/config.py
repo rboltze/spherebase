@@ -6,7 +6,11 @@ A module containing the Configuration class.
 """
 
 from sphere_base.constants import *
+from sphere_base.utils import dump_exception
 import os
+
+from importlib_resources import files
+import importlib.resources as resources
 
 
 class UvConfig:
@@ -14,7 +18,7 @@ class UvConfig:
     The configuration class contains project wide variables which can be easily shared between modules and classes.
 
     """
-    def __init__(self, universe, skybox_img_dir="", sphere_texture_dir=""):
+    def __init__(self, universe, skybox_img_dir="", sphere_texture_dir="", sphere_icon_dir=""):
         """
         Constructor of the sphere_base class.
 
@@ -43,47 +47,57 @@ class UvConfig:
         self._view_changed_listeners = []
 
         self.skybox_sets = self.create_skybox_set(skybox_img_dir)
-        self.sphere_textures = self.create_texture_set(SPHERE_TEXTURE_DIR, sphere_texture_dir)
-        self.all_textures = self.create_texture_dict(SPHERE_TEXTURE_DIR, sphere_texture_dir, TEXTURES_DIR, ICONS_DIR)
+        self.sphere_textures = self.create_texture_set(sphere_texture_dir)
+        # self.all_textures = self.create_texture_dict(SPHERE_TEXTURE_DIR, sphere_texture_dir, TEXTURES_DIR, ICONS_DIR)
+        self.all_textures = self.create_texture_dict(sphere_texture_dir, sphere_icon_dir)
+
 
     @staticmethod
     def create_skybox_set(skybox_dir=""):
-        set0 = [None]
-        set2 = []
-        set1 = [SKYBOX_IMG_DIR + name for name in os.listdir(SKYBOX_IMG_DIR) if
-                os.path.isdir(os.path.join(SKYBOX_IMG_DIR, name))]
-        if skybox_dir:
-            set2 = [skybox_dir + name for name in os.listdir(skybox_dir) if
-                    os.path.isdir(os.path.join(skybox_dir, name))]
 
-        return set0 + set1 + set2
+        set0, set1 = [None], []
+        try:
+            if skybox_dir:
+                set1 = [skybox_dir + name for name in os.listdir(skybox_dir) if
+                        os.path.isdir(os.path.join(skybox_dir, name))]
 
-    def create_texture_dict(self, dir1, dir2, dir3, dir4):
-        # Get all textures from the 3 directories in a dictionary
-        textures = self.create_texture_set(dir1, dir2, dir3, dir4)
+            return set0 + set1
+        except Exception as e:
+            dump_exception(e)
+
+    def create_texture_dict(self, dir1, dir2):
+        # Get all textures from the directories in a dictionary
+        print("here")
+        textures = self.create_texture_set(dir1, dir2)
+        print(textures)
         _dict = {}
 
-        for index, file_name in enumerate(textures):
-            key = os.path.basename(file_name)
-            _type = os.path.split(os.path.dirname(file_name))[1]
-            if key in _dict:
-                continue
-            if os.path.isfile(file_name):
-                if file_name.endswith('.jpg') or file_name.endswith('.png'):
-                    _dict[key] = {}
-                    _dict[key]['file_name'] = key
-                    _dict[key]['img_id'] = index
-                    _dict[key]['file_dir_name'] = file_name
-                    _dict[key]['type'] = _type[:-1]  # removing the 's'
-        return _dict
+        try:
+            for index, file_name in enumerate(textures):
+                key = os.path.basename(file_name)
+                _type = os.path.split(os.path.dirname(file_name))[1]
+                if key in _dict:
+                    continue
+                if os.path.isfile(file_name):
+                    if file_name.endswith('.jpg') or file_name.endswith('.png'):
+                        _dict[key] = {}
+                        _dict[key]['file_name'] = key
+                        _dict[key]['img_id'] = index
+                        _dict[key]['file_dir_name'] = file_name
+                        _dict[key]['type'] = _type[:-1]  # removing the 's'
+            return _dict
+        except Exception as e:
+            dump_exception(e)
 
     @staticmethod
     def create_texture_set(*args):
         # puts all the files of all the directories in a list
         _set = []
         for directory in args:
+            print(directory)
             s = [directory + file_name for file_name in os.listdir(directory)]
             _set += s
+
         return _set
 
     def set_view_loc(self, view):

@@ -61,7 +61,7 @@ class MainWindow(QMainWindow):
 
     def get_friendly_filename(self, file_name):
         """
-        Get user friendly filename. Used in the window title
+        Get user-friendly filename. Used in the window title
         """
         name = os.path.basename(file_name) if self.filename else "New Graph"
         return name + ("*" if self.sphere_widget.has_been_modified() else "")

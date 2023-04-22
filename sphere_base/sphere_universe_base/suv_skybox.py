@@ -18,6 +18,7 @@ from sphere_base.sphere_universe_base.suv_graphic_item import GraphicItem
 from collections import namedtuple
 from PIL import Image
 from random import randint
+from sphere_base.utils import dump_exception
 import os
 
 
@@ -68,9 +69,6 @@ class Skybox(GraphicItem):
         # We get the shader from the model
         self.shader = self.model.shader
 
-        self._init_variables()
-
-    def _init_variables(self):
         self.scale = None
         self.index = 0
         self.faces = []
@@ -121,15 +119,18 @@ class Skybox(GraphicItem):
         Returns the image path of the current active Skybox id
 
         """
+
         path = self.cf.skybox_sets[self.skb_id]
         self.paint_skybox = True if path else False
         return path + "/" if path else path
+
 
     def create_skybox_faces(self):
         """
         Gets the six faces of the Skybox from the image path and adds them to the faces array.
 
         """
+
         path = self.get_skybox_path()
 
         if path:

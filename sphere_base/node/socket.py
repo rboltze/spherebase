@@ -184,7 +184,7 @@ class Socket(Serializable):
 
     def draw(self):
         """
-        Renders all the icons and circles of the ``Socket``.
+        Renders all the sphere_icons and circles of the ``Socket``.
         """
         if self.gr_socket.is_hover():
             self.socket_disc.draw(self, color=self.gr_socket.current_background_color, switch=2)

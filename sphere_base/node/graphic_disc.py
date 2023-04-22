@@ -54,12 +54,12 @@ class GraphicDisc:
 
     def _init_unified_icons(self, img_id: int) -> int:
         """
-        This function sets all icons the same, independent of its state. Therefore
+        This function sets all sphere_icons the same, independent of its state. Therefore
         there is no difference between hovered, _selected and default.
 
         .. Warning::
 
-            In some cases all icons should be the same and independent of the state of the item.
+            In some cases all sphere_icons should be the same and independent of the state of the item.
             This is not always desired
 
         """
@@ -75,7 +75,7 @@ class GraphicDisc:
 
         .. Warning::
 
-            In some cases all icons should be the same and independent of the state of the item.
+            In some cases all sphere_icons should be the same and independent of the state of the item.
             This is not always desired
 
         """
@@ -87,7 +87,7 @@ class GraphicDisc:
 
     def set_icon_by_name(self, img_name: str) -> int:
         """
-        Receives an image name, sets all icons to that image and returns its id.
+        Receives an image name, sets all sphere_icons to that image and returns its id.
 
         :param img_name: The name of image
         :type img_name: ``str``
@@ -100,7 +100,7 @@ class GraphicDisc:
 
     def set_icon_by_id(self, img_id: int) -> int:
         """
-        Receives an image id and sets all icons to that image and returns the same id.
+        Receives an image id and sets all sphere_icons to that image and returns the same id.
 
         :param img_id: The id of the image
         :type img_id: ``int``

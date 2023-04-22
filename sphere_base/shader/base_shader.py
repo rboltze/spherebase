@@ -10,6 +10,10 @@ from pyrr import Vector3, matrix44
 import pyrr
 from OpenGL.GL.shaders import compileProgram, compileShader
 from sphere_base.constants import *
+from sphere_base.utils import dump_exception
+
+from importlib_resources import files
+import sphere_base.model.resources.shaders
 
 DEBUG = False
 
@@ -89,15 +93,15 @@ class BaseShader:
 
         """
 
-        file_name = SHADER_DIR + file_name
+        try:
 
-        file_name = file_name.replace('\\', '/')
-
-        with open(file_name, "r") as text:
-            output = ""
-            for line in text:
-                output += line
-        return output
+            with files(sphere_base.model.resources.shaders).joinpath(file_name).open('r') as text:
+                output = ""
+                for line in text:
+                    output += line
+            return output
+        except Exception as e:
+            dump_exception(e)
 
     def compile_shader(self):
         """

@@ -44,20 +44,20 @@ Supported Environment
 * Windows (Win32, x64)
 
 
-The library is available from PyPI::
+The library is available from PyPI
 
     $ pip install sphere-base
 
 
-::
 
 
-Or download the source code from github::
+
+Or download the source code from github
 
     git clone https://github.com/rboltze/sphere_base.git
 
 
-::
+
 
 
 

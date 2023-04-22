@@ -49,7 +49,7 @@ class Sphere(Serializable):
         :param position: position of the sphere_base in universe
         :type position: ``list`` with x, y, z values
         :param texture_id: number indicating which texture to use for the sphere_base
-        :type texture_id: int
+        :type texture_id: int.
 
         :Instance Attributes:
 
@@ -370,7 +370,7 @@ class Sphere(Serializable):
            between start and end other than the order of where the line is initially drawn from.
 
            In future implementations there could be a need to indicate the direction of the relationship between parents
-           and children or the direction of owner ship that goes from a person to the product.
+           and children or the direction of ownership that goes from a person to the product.
 
            This type of order or direction is currently not implemented.
 
@@ -448,7 +448,7 @@ class Sphere(Serializable):
            center sockets of the _selected nodes and any connected edges.
 
            It is important to maintain the distance to the mouse. So we need to calculate the difference between the
-           current mouse position and the center of the items we are dragging. Otherwise the node centers jumps to
+           current mouse position and the center of the items we are dragging, otherwise the node centers jumps to
            the collision point.
 
         """
