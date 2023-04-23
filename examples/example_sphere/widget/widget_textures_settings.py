@@ -37,9 +37,9 @@ class WidgetTextureSettings(QWidget):
         self.layout.addWidget(self.texture_list_box)
 
     def on_current_row_changed(self, qmodelindex=None):
-        if self.sphere.texture_id != self.texture_list_box.currentRow():
-            self.sphere.texture_id = self.texture_list_box.currentRow()
+        if self.sphere.img_id != self.texture_list_box.currentRow():
+            self.sphere.img_id = self.texture_list_box.currentRow()
             for item in self.texture_list_box.selectedItems():
                 for index, _item in enumerate(self.uv.config.all_textures.values()):
                     if _item['file_name'] == item.text():
-                        self.uv.target_sphere.texture_id = _item['img_id']
+                        self.uv.target_sphere.img_id = _item['img_id']

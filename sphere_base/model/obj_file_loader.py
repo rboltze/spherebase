@@ -224,9 +224,11 @@ class ObjectFileLoader:
         loads them into OpenGl
 
         """
-        self.config.textures = glGenTextures(len(self.config.all_textures))
+        self.  config.textures = glGenTextures(len(self.config.all_textures))
         for index, item in enumerate(self.config.all_textures.values()):
-            self.load_texture_into_opengl(item['file_dir_name'], item['img_id'] + 1)
+            path = item['file_dir_name']
+            item_id = item['img_id'] + 1
+            self.load_texture_into_opengl(path, item_id)
 
     @staticmethod
     def load_texture_into_opengl(texture_path, texture_id):
@@ -262,7 +264,6 @@ class ObjectFileLoader:
 
         #  Bind to 0 so it cannot be changed by mistake
         glBindTexture(GL_TEXTURE_2D, 0)
-
 
     @staticmethod
     def load_square1x1():

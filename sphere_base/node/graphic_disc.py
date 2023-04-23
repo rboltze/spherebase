@@ -7,7 +7,7 @@ Module Graphic Disc. The graphics disc class is used in all nodes and sockets.
 
 
 class GraphicDisc:
-    def __init__(self, node: 'Node'):
+    def __init__(self, node):
         """
         Constructor of the ``Editor Graphic Disc`` class. Contains graphic elements.
 
@@ -39,6 +39,8 @@ class GraphicDisc:
 
         self.scale, self.circle_scale, self.default_img_id, self.selected_img_id = None, None, None, None
         self.hover_img_id, self.main_image_color, self.default_background_color = None, None, None
+        self.default_img_name, self.selected_img_name = 'icon_question_mark', 'icon_question_mark'
+        self.hover_img_name = 'icon_question_mark'
 
         self.selected_background_color, self.hover_background_color, self.default_border_color = None, None, None
         self.selected_border_color, self.hover_border_color, self.default_border_width = None, None, None
@@ -52,9 +54,9 @@ class GraphicDisc:
         self.last_img_id = self.default_img_id
         self.init_assets()
 
-    def _init_unified_icons(self, img_id: int) -> int:
+    def _init_unified_icons(self, img_name, img_id: int) -> int:
         """
-        This function sets all sphere_icons the same, independent of its state. Therefore
+        This function sets all sphere_icons the same, independent of its state, therefore
         there is no difference between hovered, _selected and default.
 
         .. Warning::
@@ -63,14 +65,14 @@ class GraphicDisc:
             This is not always desired
 
         """
-
+        self.default_img_name, self.hover_img_name, self.selected_img_name = img_name, img_name, img_name
         self.default_img_id, self.selected_img_id, self.hover_img_id = img_id, img_id, img_id
         self.current_img_id, self.last_img_id = img_id, img_id
         return img_id
 
     def _init_unified_background_colors(self, background_color: list):
         """
-        This function sets all background colours the same, independent of its state. Therefore
+        This function sets all background colours the same, independent of its state, therefore
         there is no difference between hovered, _selected and default.
 
         .. Warning::
@@ -96,7 +98,7 @@ class GraphicDisc:
         """
 
         img_id = self.node.config.get_img_id(img_name)
-        return self._init_unified_icons(img_id)
+        return self._init_unified_icons(img_name, img_id)
 
     def set_icon_by_id(self, img_id: int) -> int:
         """
@@ -112,7 +114,6 @@ class GraphicDisc:
 
     def set_background_color(self, background_color: list):
         """
-        Sets background collor
         :param background_color: Color to use as the background
         :type background_color: ``Vector4``
         :return:
@@ -127,9 +128,9 @@ class GraphicDisc:
 
         self.scale = [.5, .5, .5]
         self.circle_scale = [0.05, 0.05, 0.05]
-        self.default_img_id = 4
-        self.selected_img_id = 2
-        self.hover_img_id = 2
+        self.default_img_id = self.node.config.get_img_id(self.default_img_name)
+        self.selected_img_id = self.node.config.get_img_id(self.selected_img_id)
+        self.hover_img_id = self.node.config.get_img_id(self.hover_img_name)
         self.main_image_color = [1.0, 1.0, 1.0, 1.0]  # black image
 
         self.default_background_color = [0.0, 0.0, 0.0, 1.0]

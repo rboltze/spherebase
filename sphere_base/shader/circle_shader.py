@@ -54,6 +54,13 @@ class CircleShader(BaseShader):
 
         glUniformMatrix4fv(self.transform_loc, 1, GL_FALSE, tm)
 
+        glEnable(GL_POLYGON_SMOOTH)
+        glEnable(GL_LINE_SMOOTH)
+
         glDrawElements(GL_POINTS, indices_len * 3, GL_UNSIGNED_INT, ctypes.c_void_p(0))
+
+        glDisable(GL_LINE_SMOOTH)
+        glDisable(GL_POLYGON_SMOOTH)
+
         glStencilFunc(GL_ALWAYS, object_index, -1)
         glLineWidth(1)

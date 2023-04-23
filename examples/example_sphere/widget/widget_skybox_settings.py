@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import os
 
+
 class WidgetSkyboxSettings(QWidget):
     skybox_startup_changed = pyqtSignal()
 

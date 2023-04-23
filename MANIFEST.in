@@ -2,9 +2,11 @@ include HISTORY.rst
 include LICENSE
 include README.rst
 include requirements.txt
+include sphere_base/model/resources/meshes/*
+include sphere_base/model/resources/shaders/*
 
 recursive-include tests *
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
 
-recursive-include docs *.rst conf.py Makefile make.bat *.jpg *.png *.gif
+recursive-include docs *.rst conf.py Makefile make.bat *.jpg *.png *.gif *.glsl *.obj

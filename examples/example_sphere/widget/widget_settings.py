@@ -15,12 +15,8 @@ class Settings(QWidget):
         # TODO: settings windows does not stay on top
         self.setWindowFlags(self.windowFlags() | Qt.Dialog)
         self.uv = self.main_win.sphere_widget.uv_widget.uv
-        self._init_Values()
         self._init_ui()
         self._setup_ui()
-
-    def _init_Values(self):
-        pass
 
     def _init_ui(self):
         self.group_box = QGroupBox()
@@ -50,10 +46,4 @@ class Settings(QWidget):
 
     def on_change_color_buttons(self):
         self.sphere_settings.color = self.sphere_color_buttons.color
-
-
-
-
-
-
 

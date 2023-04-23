@@ -25,10 +25,10 @@ class SphereNodeBase(Node):
         res['op_code'] = self.__class__.op_code
         return res
 
-    def deserialize(self, data, hashmap={}, restore_id=True):
-        res = super().deserialize(data, hashmap, restore_id)
-        self.gr_node.set_icon_by_id(self.texture_id)
-        return res
+    # def deserialize(self, data, hashmap={}, restore_id=True):
+    #     res = super().deserialize(data, hashmap, restore_id)
+    #     # self.gr_node.set_icon_by_id(self.image_id)
+    #     return res
 
     def update_content(self, value, sphere_id):
         """ Each texture (icon, image) has a unique short name. The dictionary node sphere_icons

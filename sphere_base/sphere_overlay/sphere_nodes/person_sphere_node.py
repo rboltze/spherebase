@@ -26,6 +26,7 @@ class PersonSphereNode(SphereNodeBase):
 
         super().__init__(target_sphere, orientation_offset, yaw_degrees, pitch_degrees)
         self.node_type_name = "person_sphere_node"
+        self.img_name = "icon_man"
         self.gender = None
 
 

@@ -5,9 +5,11 @@ A module containing the Configuration class.
 
 """
 
-from sphere_base.constants import *
 from sphere_base.utils import dump_exception
 import os
+
+from importlib_resources import files
+import sphere_base.model.resources.icons
 
 
 class UvConfig:
@@ -42,6 +44,7 @@ class UvConfig:
 
         self._win_size_changed_listeners = []
         self._view_changed_listeners = []
+        self.textures = []
 
         self.skybox_sets = self.create_skybox_set(skybox_img_dir)
         self.sphere_textures = self.create_texture_set(sphere_texture_dir)
@@ -89,7 +92,6 @@ class UvConfig:
         for directory in args:
             s = [directory + file_name for file_name in os.listdir(directory)]
             _set += s
-
         return _set
 
     def set_view_loc(self, view):
@@ -145,7 +147,7 @@ class UvConfig:
         :type img_name: str
 
         """
-
+        img_name = img_name if img_name else 'icon_question_mark'
         image_id = None
         for index, _item in enumerate(self.uv.config.all_textures.values()):
             if _item['file_name'] == img_name or _item['file_name'][:-4] == img_name:
@@ -162,3 +164,12 @@ class UvConfig:
         mesh_id = self.mesh_id_counter
         self.mesh_id_counter += 1
         return mesh_id
+
+    def get_texture(self, texture_id):
+
+        if texture_id is None:
+            tex = self.textures[self.get_img_id('')]  # default question mark icon
+        else:
+            tex = self.textures[texture_id]
+        return tex
+

@@ -44,7 +44,7 @@ class GraphicNode(GraphicDisc):
         self.scale = [3.0, 3.0, 3.0]
         self.circle_scale = [0.41, 0.44, 0.41]
 
-        img_id = self.node.config.get_img_id("icon_question_mark")
+        img_id = self.node.config.get_img_id('icon_question_mark')
         self.default_img_id = img_id
         self.selected_img = img_id
         self.hover_img_id = img_id

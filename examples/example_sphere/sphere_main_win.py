@@ -7,7 +7,7 @@ from PyQt5.QtCore import *
 from examples.example_sphere.sphere_win_menu import SphereMenu
 from examples.example_sphere.sphere_widget import SphereWidget
 from examples.example_sphere.sphere_uv_widget import UVWidget  # detail spheres
-
+from sphere_base.utils import dump_exception
 
 class MainWindow(QMainWindow):
     Menu_class = SphereMenu
@@ -21,15 +21,18 @@ class MainWindow(QMainWindow):
         self.name_product = 'sphere_base'
         self.version = '0.1.2 Beta 21/04/2023'
 
-        self.filename = None
-        self._set_win_properties()
-        self._read_settings()
-        self.sphere_widget = self.__class__.sphere_widget_class(self)
-        self.setCentralWidget(self.sphere_widget.uv_widget)
-        self.menu = self.__class__.Menu_class(self)
-        self.setWindowTitle("Sphere")
-        self.show()
-        self.sphere_widget.uv_widget.uv.skybox.get_skybox_set(skybox_id=self.skybox_id, random=self.random_skybox)
+        try:
+            self.filename = None
+            self._set_win_properties()
+            self._read_settings()
+            self.sphere_widget = self.__class__.sphere_widget_class(self)
+            self.setCentralWidget(self.sphere_widget.uv_widget)
+            self.menu = self.__class__.Menu_class(self)
+            self.setWindowTitle("Sphere")
+            self.show()
+            self.sphere_widget.uv_widget.uv.skybox.get_skybox_set(skybox_id=self.skybox_id, random=self.random_skybox)
+        except Exception as e:
+            dump_exception(e)
 
     def _set_win_properties(self):
         # set default window properties

@@ -4,7 +4,7 @@
 Module Node. A node is the basis for all nodes. Further nodes are derived from Node
 """
 
-from pyrr import quaternion, Vector3, Quaternion
+from pyrr import quaternion, Quaternion
 from sphere_base.serializable import Serializable
 from collections import OrderedDict
 from sphere_base.node.graphic_node import GraphicNode
@@ -12,7 +12,6 @@ from sphere_base.node.socket import Socket
 from sphere_base.constants import *
 from sphere_base.utils import dump_exception
 import numpy as np
-import math
 
 
 class Node(Serializable):
@@ -25,7 +24,7 @@ class Node(Serializable):
     NodeContent_class = None
     Socket_class = Socket
 
-    def __init__(self, target_sphere: 'sphere', orientation_offset: 'quaternion' = None,
+    def __init__(self, target_sphere, orientation_offset=None,
                  yaw_degrees=0, pitch_degrees=0, node_type: str = "node"):
         """
         Constructor of the ``Node`` class. Creates a node and calculates where to place it on the sphere_base.
@@ -95,7 +94,8 @@ class Node(Serializable):
 
         self._init_inner_classes()
         self.scale = self.gr_node.scale
-        self.texture_id = self.gr_node.default_img_id
+        self.img_name = 'icon_question_mark'
+        self.img_id = self.gr_node.default_img_id
         self.radius = target_sphere.radius
 
         self.xyz = self.get_position()  # the xyz position of the node on the surface of the sphere
@@ -173,7 +173,7 @@ class Node(Serializable):
         :type mouse_ray_collision_point: ``float``
 
         """
-        q = quaternion
+        q, cp = quaternion, None
         try:
 
             # first find the angle of the collision point
@@ -250,7 +250,7 @@ class Node(Serializable):
         :param event: ``True`` sets the state to '_selected'
         :type event: ``bool``
         """
-        self.texture_id = self.gr_node.on_selected_event(event)
+        self.img_id = self.gr_node.on_selected_event(event)
 
     def set_hovered(self, event: bool):
         """
@@ -260,7 +260,7 @@ class Node(Serializable):
         :param event: ``True`` sets the state to 'hovered'
         :type event: ``bool``
         """
-        self.texture_id = self.gr_node.on_hover_event(event)
+        self.img_id = self.gr_node.on_hover_event(event)
 
     def remove(self, with_edges: bool = True):
         """
@@ -280,7 +280,7 @@ class Node(Serializable):
         Renders all the sphere_icons and circles of the node_disc.
         """
         self.socket.draw()
-        self.node_disc.draw(self, texture_id=self.texture_id, color=self.gr_node.main_image_color, switch=0)
+        self.node_disc.draw(self, texture_id=self.img_id, color=self.gr_node.main_image_color, switch=0)
         self.node_disc.draw(self, color=self.gr_node.current_background_color, switch=2)
 
         self.circle.shader.line_width = self.gr_node.current_border_width
@@ -292,7 +292,8 @@ class Node(Serializable):
         return OrderedDict([
             ('id', self.id),
             ('node_type_name', self.node_type_name),
-            ('texture_id', self.texture_id),
+            # ('img_id', self.img_id),
+            ('img_name', self.img_name),
             ('orientation_offset', self.pos_orientation_offset.tolist()),
             ('scene', self.serialized_detail_scene),
             ('socket_id', self.socket.id),
@@ -302,7 +303,7 @@ class Node(Serializable):
 
     def deserialize(self, data: dict, hashmap: dict = None, restore_id: bool = True) -> bool:
         """
-        copy, cut paste also uses this. When pasting restore_id is false and new id's are created.
+        copy, cut paste also uses this. When pasting restore_id is false and new ids are created.
         """
 
         # hashmap = {} if hashmap is None else hashmap
@@ -314,7 +315,10 @@ class Node(Serializable):
         self.node_type_name = data['node_type_name']
         self.pos_orientation_offset = np.array(data['orientation_offset'])
         self.serialized_detail_scene = data['scene']
-        self.texture_id = data['texture_id']
+        # self.image_id = data['image_id']
+        if 'image_name' in data:
+            self.img_name = data['img_name']
+            # self.img_id = self.config.get_img_id(self.img_name)
         self.update_position()
         self.update_collision_object()
 

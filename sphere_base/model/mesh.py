@@ -98,3 +98,4 @@ class Mesh:
                         texture_id=texture_id, color=color, switch=switch, line_width=line_width)
         except Exception as e:
             dump_exception(e)
+
