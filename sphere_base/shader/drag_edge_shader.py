@@ -61,7 +61,7 @@ class DragEdgeShader(BaseShader):
         else:
             # reset to normal
             glDisable(GL_LINE_STIPPLE)
-        print("here")
+
         glBegin(GL_LINE_STRIP)
         for point in points:
             glVertex3f(point[0], point[1], point[2])
