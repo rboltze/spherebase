@@ -67,33 +67,8 @@ class EdgeDrag:
         self.pos_array = []
 
         self.gr_edge = self.__class__.GraphicsEdge_class(self)
-        self.model = self.set_up_model('drag_edge')
+        self.model = self.uv.models.get_model('drag_edge')
         self.calc = Calc()
-
-    def set_up_model(self, model_name):
-        shader, vertex_shader, fragment_shader, geometry_shader = None, None, None, None
-
-        # get the shaders for the edge
-        for _name in MODELS.keys():
-            if _name == model_name:
-                shader = MODELS[_name]["shader"]
-                vertex_shader = MODELS[_name]["vertex_shader"]
-                fragment_shader = MODELS[_name]["fragment_shader"]
-                geometry_shader = MODELS[_name]["geometry_shader"]
-                geometry_shader = None if geometry_shader == "none" else geometry_shader
-
-        # create a model for the edge
-        model = Model(
-                      models=self.uv.models,
-                      model_id=0,
-                      model_name=model_name,
-                      obj_file="",
-                      shader=shader,
-                      vertex_shader=vertex_shader,
-                      fragment_shader=fragment_shader,
-                      geometry_shader=geometry_shader)
-
-        return model
 
     def _init_start_dragging(self, start_socket: 'Socket'):
         # dragging start point is the start socket

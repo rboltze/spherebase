@@ -205,4 +205,3 @@ class Camera:
             print(angle)
         except Exception as e:
             dump_exception(e)
-

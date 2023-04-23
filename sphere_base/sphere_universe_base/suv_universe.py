@@ -5,7 +5,6 @@ Module universe. The universe contains all the spheres.
 
 """
 
-from pyrr import quaternion, Quaternion
 from collections import OrderedDict
 from sphere_base.serializable import Serializable
 from sphere_base.sphere.sphere import Sphere
@@ -18,6 +17,7 @@ from sphere_base.clipboard import Clipboard
 from sphere_base.config import UvConfig
 from sphere_base.shader.default_shader import DefaultShader
 from sphere_base.calc import *
+import json
 import os.path
 
 DEBUG = False
@@ -167,7 +167,7 @@ class Universe(Serializable):
             sphere = self.Sphere(self)
             sphere.index = i
 
-    def add_sphere(self, sphere: 'sphere_base'):
+    def add_sphere(self, sphere):
         """
         Add a new sphere_base to the internal list. Adds listeners.
 
@@ -180,7 +180,7 @@ class Universe(Serializable):
         sphere.add_selection_changed_listener(self.on_selection_changed)
         sphere.add_has_been_modified_listener(self.on_modified)
 
-    def remove_sphere(self, sphere: 'sphere_base'):
+    def remove_sphere(self, sphere):
         """
         Removing a sphere_base from the internal list.
 
@@ -192,7 +192,7 @@ class Universe(Serializable):
         if sphere in self._spheres:
             self._spheres.remove(sphere)
 
-    def add_edge(self, edge: 'Edge'):
+    def add_edge(self, edge):
         """
         Add a new edge to the internal list.
 
@@ -203,7 +203,7 @@ class Universe(Serializable):
 
         self._edges.append(edge)
 
-    def remove_edge(self, edge: 'edge'):
+    def remove_edge(self, edge):
         """
         Removing a sphere_base from the internal list.
 
@@ -215,7 +215,7 @@ class Universe(Serializable):
         if edge in self._edges:
             self._edges.remove(edge)
 
-    def add_selection_changed_listener(self, callback: 'function'):
+    def add_selection_changed_listener(self, callback):
         """
         Register callback for 'selection changed' event.
 
@@ -224,7 +224,7 @@ class Universe(Serializable):
         """
         self._selection_changed_listeners.append(callback)
 
-    def add_modified_listener(self, callback: 'function'):
+    def add_modified_listener(self, callback):
         """
         Register callback for 'modified' event.
 
@@ -233,7 +233,7 @@ class Universe(Serializable):
         """
         self._has_been_modified_listeners.append(callback)
 
-    def on_selection_changed(self, sphere: 'sphere_base', sphere_items: list):
+    def on_selection_changed(self, sphere, sphere_items: list):
         """
         Handles 'selection changed' and triggers event 'selection changed'.
 
@@ -309,10 +309,11 @@ class Universe(Serializable):
 
     def rotate_target_sphere_with_mouse(self, offset: float = 0, collision_point=None):
         """
-        Rotating the target sphere_base with the mouse y axis.
+        Rotating the target sphere_base with the mouse y-axis.
         Set the mouse offset here which will be picked up and used from the main loop and will be translated to rotation
 
         :param offset: mouse current x-position offset and last stored position.
+        :param collision_point: mouse ray collision point with sphere.
         :type offset: ``float``
 
         .. note::
@@ -386,14 +387,21 @@ class Universe(Serializable):
         for sphere in self._spheres:
             spheres.append(sphere.serialize())
 
-        return OrderedDict([
-            ('id', self.id),
-            ('type', self.type),
-            ('view_width', self.view.view_width),
-            ('view_height', self.view.view_height),
-            ('spheres', spheres),
-            ('target_sphere_id', self.target_sphere.id)
-        ])
+        try:
+            p = self.cam.xyz
+            cam_pos = json.dumps([p[0], p[1], p[2]])
+            return OrderedDict([
+                ('id', self.id),
+                ('type', self.type),
+                ('view_width', self.view.view_width),
+                ('view_height', self.view.view_height),
+                ('cam_pos', cam_pos),
+                ('cam_yaw', self.cam.cm.yaw),
+                ('spheres', spheres),
+                ('target_sphere_id', self.target_sphere.id)
+            ])
+        except Exception as e:
+            dump_exception(e)
 
     def deserialize(self, data: dict, hashmap: dict = None, restore_id: bool = True) -> bool:
         self.clear()
@@ -410,5 +418,11 @@ class Universe(Serializable):
                 self.target_sphere = sphere
 
         self.cam.reset_to_default_view(self.target_sphere)
+        if 'cam_pos' in data:
+            p = json.loads(data['cam_pos'])
+            cam_pos = (round(p[0], 1), round(p[1], 1), round(p[2], 1))
+            self.cam.xyz = cam_pos
+            self.cam.cm.yaw = data['cam_yaw']
+            self.cam.cm.radius = self.cam.get_distance_to_target()
 
         return True

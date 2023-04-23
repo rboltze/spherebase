@@ -44,7 +44,8 @@ class DragEdgeShader(BaseShader):
 
         """
         # drawing lines
-        glUseProgram(self.shader_id)  # using the standard shader
+
+        glUseProgram(self.shader_id)  # using the standard shader ?????
         glUniform1i(self.switcher_loc, 3)  # switch to use fragment and vertex shader for lines
         glLineWidth(width)
 

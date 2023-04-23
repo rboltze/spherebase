@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-A module containing Serializable "Interface". We pretend its an abstract class
+A module containing Serializable "Interface". We pretend it is an abstract class
 
 """
 

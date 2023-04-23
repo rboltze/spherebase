@@ -96,7 +96,6 @@ class CameraMovement:
 
     def move_to_new_target(self, target_sphere):
         """
-
         Moves the camera to a new ``Target Sphere``
 
         :param target_sphere: The current ``Target Sphere``

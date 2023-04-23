@@ -124,7 +124,6 @@ class Skybox(GraphicItem):
         self.paint_skybox = True if path else False
         return path + "/" if path else path
 
-
     def create_skybox_faces(self):
         """
         Gets the six faces of the Skybox from the image path and adds them to the faces array.

@@ -20,7 +20,7 @@ from sphere_base.utils import dump_exception
 
 class UVWidget(QGLWidget):
     """
-    This class represents the ``Universe Widget class`` its a pyqt5 wrapper around the OpenGL widget.
+    This class represents the ``Universe Widget class`` it is a pyqt5 wrapper around the OpenGL widget.
 
     """
 
@@ -110,7 +110,7 @@ class UVWidget(QGLWidget):
         self.uv.view_width = width
         self.uv.view_height = height
 
-    def contextMenuEvent(self, event: 'event') -> 'event':
+    def contextMenuEvent(self, event):
         """
 
         :param event: xy-mouse position
@@ -135,7 +135,7 @@ class UVWidget(QGLWidget):
                                                                                                   self.mouse_y)
         return self._clicked_on_item, self.mouse_ray_collision_point, self.mouse_x, self.mouse_y
 
-    def mousePressEvent(self, event: 'event'):
+    def mousePressEvent(self, event):
         """
         Handles mouse press event
 
@@ -242,7 +242,7 @@ class UVWidget(QGLWidget):
 
         self._reset_mouse()
 
-    def mouseMoveEvent(self, event: 'event'):
+    def mouseMoveEvent(self, event):
         """
         Handles mouse release event
 
@@ -295,10 +295,10 @@ class UVWidget(QGLWidget):
             if self._clicked_on_item and self._clicked_on_item == self.uv.target_sphere.id:
                 self.setCursor(QCursor(Qt.ClosedHandCursor))
 
-                # only rotate the sphere_base over the y axis
+                # only rotate the sphere_base over the y-axis
                 self.uv.rotate_target_sphere_with_mouse(x_offset, self.mouse_ray_collision_point)
 
-                # rotation over the x axis are done through moving the camera
+                # rotation over the x-axis are done through moving the camera
                 self.uv.cam.process_mouse_movement(self.uv.target_sphere, 0, -y_offset)
 
     def wheelEvent(self, event):
@@ -416,7 +416,7 @@ class UVWidget(QGLWidget):
 
         return x_offset, y_offset
 
-    def handle_context_menu(self, event: 'event'):
+    def handle_context_menu(self, event):
         """
         Handles context menu
 
@@ -425,7 +425,7 @@ class UVWidget(QGLWidget):
 
         """
 
-        menuStyle = (
+        menu_style = (
             "QMenu::item{"
             "background-color: lightGrey;"
             "color: black;"
@@ -437,7 +437,7 @@ class UVWidget(QGLWidget):
         )
 
         context_menu = QMenu(self)
-        context_menu.setStyleSheet(menuStyle)
+        context_menu.setStyleSheet(menu_style)
         context_menu.setGraphicsEffect(QGraphicsOpacityEffect(opacity=.8))
         create_person_node = context_menu.addAction("Person node")  # 1
         create_item_node = context_menu.addAction("Item node")  # 2

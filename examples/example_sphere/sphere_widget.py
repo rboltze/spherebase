@@ -37,6 +37,7 @@ class SphereWidget(QWidget):
                 self.main_win.set_title()
         except Exception as e:
             dump_exception(e)
+            self.uv_widget.uv_new()
 
     def on_modified(self):
         pass
