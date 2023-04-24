@@ -298,7 +298,6 @@ class Node(Serializable):
             ('scene', self.serialized_detail_scene),
             ('socket_id', self.socket.id),
             ('socket', socket)
-
         ])
 
     def deserialize(self, data: dict, hashmap: dict = None, restore_id: bool = True) -> bool:

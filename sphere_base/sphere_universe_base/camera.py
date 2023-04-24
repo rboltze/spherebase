@@ -9,13 +9,16 @@ current implementation there is only need for a single camera object.
 from pyrr import Vector3, Vector4, vector, matrix44
 from sphere_base.sphere_universe_base.suv_cam_movement import CameraMovement
 from sphere_base.utils import dump_exception
+from sphere_base.serializable import Serializable
+from collections import OrderedDict
+import json
 
 MOUSE_SENSITIVITY = .1
 DEFAULT_TARGET = Vector3([0.0, 0.0, 0.0])
 DEFAULT_POS = Vector3([0.0, 0.0, 3.0])
 
 
-class Camera:
+class Camera(Serializable):
     CameraMovement_class = CameraMovement
     """
     Class representing the camera. 
@@ -49,6 +52,8 @@ class Camera:
         - **mouse_sensitivity** - ``float`` modifier to adjust the sensitivity of the mouse when moving the camera.
 
         """
+
+        super().__init__("camera")
 
         # camera target pointing at origin
         self.target = DEFAULT_TARGET
@@ -205,3 +210,26 @@ class Camera:
             print(angle)
         except Exception as e:
             dump_exception(e)
+
+    def serialize(self):
+        p = self.xyz
+
+        return OrderedDict([
+            ('id', self.id),
+            ('cam_pos', json.dumps([p[0], p[1], p[2]])),
+            ('cam_yaw', self.cm.yaw),
+        ])
+
+    def deserialize(self, data: dict, hashmap: dict = None, restore_id: bool = True) -> bool:
+
+        if restore_id:
+            self.id = data['id']
+
+        if 'cam_pos' in data:
+            p = json.loads(data['cam_pos'])
+            self.xyz = (round(p[0], 1), round(p[1], 1), round(p[2], 1))
+            self.cm.yaw = data['cam_yaw']
+            self.cm.radius = self.get_distance_to_target()
+
+        return True
+

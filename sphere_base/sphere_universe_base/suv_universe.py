@@ -10,8 +10,8 @@ from sphere_base.serializable import Serializable
 from sphere_base.sphere.sphere import Sphere
 from sphere_base.model.models import Models
 from sphere_base.sphere_universe_base.suv_mouse_ray import MouseRay
-from sphere_base.sphere_universe_base.suv_cam import Camera
-from sphere_base.sphere_universe_base.suv_skybox import Skybox
+from sphere_base.sphere_universe_base.camera import Camera
+from sphere_base.sphere_universe_base.skybox import Skybox
 from sphere_base.sphere_universe_base.suv_rubber_band import RubberBand
 from sphere_base.clipboard import Clipboard
 from sphere_base.config import UvConfig
@@ -71,7 +71,7 @@ class Universe(Serializable):
 
         """
 
-        super().__init__("sphere_iot")
+        super().__init__("universe")
 
         self.view = parent
 
@@ -388,15 +388,13 @@ class Universe(Serializable):
             spheres.append(sphere.serialize())
 
         try:
-            p = self.cam.xyz
-            cam_pos = json.dumps([p[0], p[1], p[2]])
             return OrderedDict([
                 ('id', self.id),
                 ('type', self.type),
                 ('view_width', self.view.view_width),
                 ('view_height', self.view.view_height),
-                ('cam_pos', cam_pos),
-                ('cam_yaw', self.cam.cm.yaw),
+                ('skybox_id', self.skybox.skybox_id),
+                ('camera', [self.cam.serialize()]),
                 ('spheres', spheres),
                 ('target_sphere_id', self.target_sphere.id)
             ])
@@ -408,6 +406,10 @@ class Universe(Serializable):
         hashmap = hashmap if hashmap else {}
         self.id = data['id']
         self.mouse_ray.reset()
+        if 'skybox_id' in data:
+            if self.skybox.skybox_id != data['skybox_id']:
+                self.skybox.skybox_id = data['skybox_id']
+                self.skybox.create_skybox_faces()
 
         # deserialize spheres
         for sphere_data in data['spheres']:
@@ -417,12 +419,8 @@ class Universe(Serializable):
             if data['target_sphere_id'] == sphere.id:
                 self.target_sphere = sphere
 
-        self.cam.reset_to_default_view(self.target_sphere)
-        if 'cam_pos' in data:
-            p = json.loads(data['cam_pos'])
-            cam_pos = (round(p[0], 1), round(p[1], 1), round(p[2], 1))
-            self.cam.xyz = cam_pos
-            self.cam.cm.yaw = data['cam_yaw']
-            self.cam.cm.radius = self.cam.get_distance_to_target()
+        # deserialize camera
+        for camera in data['camera']:
+            self.cam.deserialize(camera, hashmap)
 
         return True

@@ -412,6 +412,14 @@ class Sphere(Serializable):
                 # updating the node trickles down to updating sockets and edges"
                 item.update_position()
 
+    def update_item_collision_objects(self):
+        """
+        Update the collision objects of all items on the sphere_base.
+        """
+        for item in self.items:
+            if item.type in ('sphere', 'edge', 'node', 'socket'):
+                item.update_collision_object()
+
     def rotate_sphere(self, offset_degrees: int):
         """
         Rotating the sphere_base over the y-axis as per the offset_degrees.
@@ -673,8 +681,6 @@ class Sphere(Serializable):
             ('orientation', self.orientation.tolist()),
             ('texture_id', self.texture_id),
             ('color', self.color),
-            # ('color_id', self.color_id),
-            # ('color_id_per_lens', self.get_color_id_per_lens()),
             ('nodes', nodes),
             ('edges', edges),
         ])
@@ -685,12 +691,11 @@ class Sphere(Serializable):
         hashmap[data['id']] = self
 
         self.xyz = data['pos']
-        self.orientation = np.array(data['orientation'])
+        orientation = np.array(data['orientation'])
+
         self.texture_id = data['texture_id']
-        if 'color' in data:
-            self.color = data['color']
-        if 'radius' in data:
-            self.set_radius(data['radius'])
+        self.color = data['color']
+        self.set_radius(data['radius'])
         self.uv.mouse_ray.reset_position_collision_object(self)
 
         # -- deserialize nodes on sphere_base
@@ -739,7 +744,12 @@ class Sphere(Serializable):
                 found.deserialize(edge_data, hashmap, restore_id)
                 all_items.remove(found)
 
-            # remove items which are left in the scene and were NOT in the serialized data!
+        # rotate the sphere
+        self.orientation = orientation
+        self.update_item_positions()
+        self.update_item_collision_objects()
+
+        # remove items which are left in the scene and were NOT in the serialized data!
         while all_items:
             item = all_items.pop()
             item.remove()

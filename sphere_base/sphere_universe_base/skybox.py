@@ -65,6 +65,7 @@ class Skybox(GraphicItem):
         self.model = self.uv.models.get_model('skybox')
         self.xyz = self.uv.cam.xyz
         self.cf = self.uv.config
+        self.skybox_id = None
 
         # We get the shader from the model
         self.shader = self.model.shader
@@ -78,17 +79,17 @@ class Skybox(GraphicItem):
     def get_skybox_set(self, skybox_name=None, skybox_id=None, random=False):
 
         if skybox_id == 0:  # Do not use a skybox
-            self.skb_id = skybox_id
+            self.skybox_id = skybox_id
         elif not skybox_name and not skybox_id and not random:
             random = True  # select a random skybox
         elif skybox_name:
             lst = ['None' if not txt else os.path.basename(txt) for txt in self.uv.config.skybox_sets]
-            self.skb_id = lst.index(skybox_name)  # choose a skybox by its name
+            self.skybox_id = lst.index(skybox_name)  # choose a skybox by its name
         elif skybox_id:
-            self.skb_id = skybox_id  # choose a skybox by its index
+            self.skybox_id = skybox_id  # choose a skybox by its index
 
         if random:
-            self.skb_id = randint(1, len(self.cf.skybox_sets) - 1)  # select a random skybox
+            self.skybox_id = randint(1, len(self.cf.skybox_sets) - 1)  # select a random skybox
 
         self.create_skybox_faces()
 
@@ -97,9 +98,9 @@ class Skybox(GraphicItem):
         Activate next Skybox set in the id sequence.
 
         """
-        _id = self.skb_id
-        _id = 0 if self.skb_id + 1 == len(self.cf.skybox_sets) else _id + 1
-        self.skb_id = _id
+        _id = self.skybox_id
+        _id = 0 if self.skybox_id + 1 == len(self.cf.skybox_sets) else _id + 1
+        self.skybox_id = _id
         self.create_skybox_faces()
 
     def get_former_set(self):
@@ -108,10 +109,10 @@ class Skybox(GraphicItem):
 
         """
         # get the one before current sky box image set
-        if self.skb_id - 1 < 0:
-            self.skb_id = len(self.cf.skybox_sets) - 1
+        if self.skybox_id - 1 < 0:
+            self.skybox_id = len(self.cf.skybox_sets) - 1
         else:
-            self.skb_id -= 1
+            self.skybox_id -= 1
         self.create_skybox_faces()
 
     def get_skybox_path(self) -> str:
@@ -120,7 +121,7 @@ class Skybox(GraphicItem):
 
         """
 
-        path = self.cf.skybox_sets[self.skb_id]
+        path = self.cf.skybox_sets[self.skybox_id]
         self.paint_skybox = True if path else False
         return path + "/" if path else path
 
