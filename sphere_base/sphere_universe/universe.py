@@ -9,10 +9,10 @@ from collections import OrderedDict
 from sphere_base.serializable import Serializable
 from sphere_base.sphere.sphere import Sphere
 from sphere_base.model.models import Models
-from sphere_base.sphere_universe_base.suv_mouse_ray import MouseRay
-from sphere_base.sphere_universe_base.camera import Camera
-from sphere_base.sphere_universe_base.skybox import Skybox
-from sphere_base.sphere_universe_base.suv_rubber_band import RubberBand
+from sphere_base.sphere_universe.mouse_ray import MouseRay
+from sphere_base.sphere_universe.camera import Camera
+from sphere_base.sphere_universe.skybox import Skybox
+from sphere_base.sphere_universe.rubber_band_box import RubberBand
 from sphere_base.clipboard import Clipboard
 from sphere_base.config import UvConfig
 from sphere_base.shader.default_shader import DefaultShader

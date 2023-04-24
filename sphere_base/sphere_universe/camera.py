@@ -7,7 +7,7 @@ current implementation there is only need for a single camera object.
 """
 
 from pyrr import Vector3, Vector4, vector, matrix44
-from sphere_base.sphere_universe_base.suv_cam_movement import CameraMovement
+from sphere_base.sphere_universe.camera_movement import CameraMovement
 from sphere_base.utils import dump_exception
 from sphere_base.serializable import Serializable
 from collections import OrderedDict

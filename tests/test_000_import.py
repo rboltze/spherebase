@@ -5,7 +5,7 @@
 
 import unittest
 
-from sphere_base.sphere_universe_base.suv_universe import Universe
+from sphere_base.sphere_universe_base.universe import Universe
 
 
 class TestTemplate(unittest.TestCase):

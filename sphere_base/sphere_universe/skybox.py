@@ -14,7 +14,7 @@ This is a Modern OpenGL implementation known by the name: ``Skybox``.
 
 """
 
-from sphere_base.sphere_universe_base.suv_graphic_item import GraphicItem
+from sphere_base.sphere_universe.graphic_item import GraphicItem
 from collections import namedtuple
 from PIL import Image
 from random import randint

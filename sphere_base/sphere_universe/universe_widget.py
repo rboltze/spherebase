@@ -13,7 +13,7 @@ from PyQt5.QtGui import QCursor
 import json
 
 from OpenGL.GL import *
-from sphere_base.sphere_universe_base.suv_universe import Universe
+from sphere_base.sphere_universe.universe import Universe
 from sphere_base.constants import *
 from sphere_base.utils import dump_exception
 
