@@ -9,6 +9,7 @@ from examples.example_sphere.sphere_widget import SphereWidget
 from examples.example_sphere.sphere_uv_widget import UVWidget  # detail spheres
 from sphere_base.utils import dump_exception
 
+
 class MainWindow(QMainWindow):
     Menu_class = SphereMenu
     sphere_widget_class = SphereWidget
@@ -19,7 +20,7 @@ class MainWindow(QMainWindow):
 
         self.name_company = 'rboltze'
         self.name_product = 'sphere_base'
-        self.version = '0.1.2 Beta 21/04/2023'
+        self.version = '0.1.10 Beta 25/04/2023'
 
         try:
             self.filename = None

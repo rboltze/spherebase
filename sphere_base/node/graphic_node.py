@@ -46,7 +46,7 @@ class GraphicNode(GraphicDisc):
 
         img_id = self.node.config.get_img_id('icon_question_mark')
         self.default_img_id = img_id
-        self.selected_img = img_id
+        self.selected_img_id = img_id
         self.hover_img_id = img_id
         self.main_image_color = [1.0, 1.0, 1.0, 1.0]  # black image
 
@@ -68,8 +68,3 @@ class GraphicNode(GraphicDisc):
         self.current_border_width = self.default_border_width
 
         self.last_img_id = self.default_img_id
-
-
-
-
-

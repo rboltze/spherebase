@@ -32,7 +32,7 @@ class SphereLines(Serializable):
         self.max_distance = max_distance  # the distance that lines are not painted anymore
         self.offset = offset
 
-        self.radius = self.sphere.radius
+        self.radius = self.sphere.radius - 0.01
         self.sphere.add_item(self)  # register the edge to the base for rendering
         self.create_lines()
 
@@ -73,7 +73,7 @@ class SphereLines(Serializable):
 
         # create an edge for the first time or recreate it during dragging
         pass
-        r = self.sphere.radius
+        r = self.radius
         pi = math.pi
 
         count = 1
