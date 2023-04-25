@@ -286,6 +286,10 @@ class Node(Serializable):
         self.circle.shader.line_width = self.gr_node.current_border_width
         self.circle.draw(self, scale=self.gr_node.circle_scale, color=self.gr_node.current_border_color)
 
+    def set_img(self, img_name):
+        self.img_name = img_name
+        self.img_id = self.gr_node.set_icon_by_name(img_name)
+
     def serialize(self):
         socket = self.socket.serialize()
 
@@ -314,10 +318,11 @@ class Node(Serializable):
         self.node_type_name = data['node_type_name']
         self.pos_orientation_offset = np.array(data['orientation_offset'])
         self.serialized_detail_scene = data['scene']
-        # self.image_id = data['image_id']
-        if 'image_name' in data:
+
+        if 'img_name' in data:
             self.img_name = data['img_name']
-            # self.img_id = self.config.get_img_id(self.img_name)
+            self.img_id = self.config.get_img_id(self.img_name)
+            self.set_img(self.img_name)
         self.update_position()
         self.update_collision_object()
 

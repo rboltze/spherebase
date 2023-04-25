@@ -84,7 +84,7 @@ class SphereLines(Serializable):
 
         # longitude
         step = int(360 / self.long_no)
-        for i in range(0, 360, step + self.offset):
+        for i in range(0, 360, step):
             theta = i * (pi / 180.0)
             for j in range(0, 180, 5):
                 phi = j * (pi / 180.0)
@@ -99,7 +99,7 @@ class SphereLines(Serializable):
 
         # latitude
         step = int(360 / self.lat_no)
-        for i in range(0, 360, step + self.offset):
+        for i in range(0, 360, step):
             phi = i * (pi / 180.0)
             for j in range(0, 185, 5):
                 theta = j * (pi / 180.0)

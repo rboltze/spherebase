@@ -177,7 +177,7 @@ class MouseRay:
         .. warning::
 
             The build in 'reset method' of PyBullet does not not give the desired result. It did not work for me.
-            The work around is to delete the current collision object and create a new one. This is likely
+            The workaround is to delete the current collision object and create a new one. This is likely
             more expensive.
 
             It is also executed quite often and more than is strictly needed. When the position
@@ -204,6 +204,8 @@ class MouseRay:
             self.create_collision_object(item, vertices)
 
         except Exception as e:
+            print("item", item)
+            print("vertices", vertices)
             dump_exception(e)
 
         if DEBUG and item.collision_object_id == 1:

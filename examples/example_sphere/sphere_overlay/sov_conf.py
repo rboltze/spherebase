@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 LISTBOX_MIMETYPE = "application/x-item"
 
 """
@@ -27,9 +29,16 @@ DICTIONARY_SPHERE_NODE_ICONS = \
     }
 
 
-class ConfException(Exception): pass
-class InvalidNodeRegistration(ConfException): pass
-class OpCodeNotRegistered(ConfException): pass
+class ConfException(Exception):
+    pass
+
+
+class InvalidNodeRegistration(ConfException):
+    pass
+
+
+class OpCodeNotRegistered(ConfException):
+    pass
 
 
 def register_node_now(op_code, class_reference, editor_type):
@@ -58,5 +67,3 @@ def get_class_from_type(node_type, editor_type):
 
 # import all nodes both from the sphere_iot spheres as from the detail node editor and register them
 from examples.example_sphere.sphere_overlay.sphere_nodes import *
-
-
