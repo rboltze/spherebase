@@ -292,7 +292,6 @@ class Node(Serializable):
 
     def serialize(self):
         socket = self.socket.serialize()
-
         return OrderedDict([
             ('id', self.id),
             ('node_type_name', self.node_type_name),

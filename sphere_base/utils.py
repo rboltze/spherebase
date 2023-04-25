@@ -30,7 +30,7 @@ def load_style_sheet(filename: str):
     :param filename: Filename of qss stylesheet
     :type filename: str
     """
-    print('STYLE loading:', filename)
+    # print('STYLE loading:', filename)
     file = QFile(filename)
     file.open(QFile.ReadOnly | QFile.Text)
     stylesheet = file.readAll()

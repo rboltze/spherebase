@@ -125,32 +125,33 @@ class GraphicDisc:
         Needs to be overridden
 
         """
+        return NotImplemented
 
-        self.scale = [.5, .5, .5]
-        self.circle_scale = [0.05, 0.05, 0.05]
-        self.default_img_id = self.node.config.get_img_id(self.default_img_name)
-        self.selected_img_id = self.node.config.get_img_id(self.selected_img_id)
-        self.hover_img_id = self.node.config.get_img_id(self.hover_img_name)
-        self.main_image_color = [1.0, 1.0, 1.0, 1.0]  # black image
-
-        self.default_background_color = [0.0, 0.0, 0.0, 1.0]
-        self.selected_background_color = [0.9, 0.0, 0.0, 0.9]  # [0.89, 0.15, 0.21, 0.1]
-        self.hover_background_color = [0.9, 0.0, 0.0, 0.9]
-
-        self.default_border_color = [0.0, 0.07, 0.4, 0.0]
-        self.selected_border_color = [0.9, 0.0, 0.0, 0.4]
-        self.hover_border_color = [0.9, 0.0, 0.0, 0.4]
-
-        self.default_border_width = 1
-        self.selected_border_width = 2
-        self.hover_border_width = 3
-
-        self.current_img_id = self.default_img_id
-        self.current_background_color = self.default_background_color
-        self.current_border_color = self.default_border_color
-        self.current_border_width = self.default_border_width
-
-        self.last_img_id = self.default_img_id
+        # self.scale = [.5, .5, .5]
+        # self.circle_scale = [0.05, 0.05, 0.05]
+        # self.default_img_id = self.node.config.get_img_id(self.default_img_name)
+        # self.selected_img_id = self.node.config.get_img_id(self.selected_img_id)
+        # self.hover_img_id = self.node.config.get_img_id(self.hover_img_name)
+        # self.main_image_color = [1.0, 1.0, 1.0, 1.0]  # black image
+        #
+        # self.default_background_color = [0.0, 0.0, 0.0, 1.0]
+        # self.selected_background_color = [0.9, 0.0, 0.0, 0.9]  # [0.89, 0.15, 0.21, 0.1]
+        # self.hover_background_color = [0.9, 0.0, 0.0, 0.9]
+        #
+        # self.default_border_color = [0.0, 0.07, 0.4, 0.0]
+        # self.selected_border_color = [0.9, 0.0, 0.0, 0.4]
+        # self.hover_border_color = [0.9, 0.0, 0.0, 0.4]
+        #
+        # self.default_border_width = 1
+        # self.selected_border_width = 2
+        # self.hover_border_width = 3
+        #
+        # self.current_img_id = self.default_img_id
+        # self.current_background_color = self.default_background_color
+        # self.current_border_color = self.default_border_color
+        # self.current_border_width = self.default_border_width
+        #
+        # self.last_img_id = self.default_img_id
 
     def on_selected_event(self, event: bool) -> int:
         """
