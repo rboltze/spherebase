@@ -20,7 +20,7 @@ class MainWindow(QMainWindow):
 
         self.name_company = 'rboltze'
         self.name_product = 'sphere_base'
-        self.version = '0.1.10 Beta 25/04/2023'
+        self.version = '0.1.14 Beta 27/04/2023'
 
         try:
             self.filename = None
@@ -86,9 +86,6 @@ class MainWindow(QMainWindow):
         if self.may_be_saved():
             event.accept()
             self.write_settings()
-            # # Save the window size and position before exiting
-            # self.settings.setValue("geometry", self.saveGeometry())
-            # self.settings.setValue("windowState", self.saveState())
             QMainWindow.closeEvent(self, event)
         else:
             event.ignore()
