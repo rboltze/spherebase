@@ -98,7 +98,7 @@ class Node(Serializable):
         self.img_id = self.gr_node.default_img_id
         self.radius = target_sphere.radius
 
-        self.xyz = self.get_position()  # the xyz position of the node on the surface of the sphere
+        self.xyz = self.get_position(self.radius)  # the xyz position of the node on the surface of the sphere
         # get the orientation of the disc pointing away from the center of the sphere_base
         self.orientation = self.get_orientation()  # the normal for the node
         self.cumulative_rotation = self.get_cumulative_rotation(self.pos_orientation_offset, self.sphere.orientation)
@@ -200,12 +200,12 @@ class Node(Serializable):
             print('offset_with_collision_point', self.offset_with_collision_point)
             dump_exception(e)
 
-    def get_position(self):
+    def get_position(self, radius):
         # cumulative sphere_base rotation with position offset of node
         cumulative_orientation = self.get_cumulative_rotation(self.pos_orientation_offset, self.sphere.orientation)
 
         # get the position of the node on the sphere
-        xyz = self.calc.move_to_position(cumulative_orientation, self.sphere)
+        xyz = self.calc.move_to_position(cumulative_orientation, self.sphere, radius)
 
         return xyz
 
@@ -218,7 +218,7 @@ class Node(Serializable):
         """
         update the position of the node_disc on the sphere_base. Calculate the position and the direction.
         """
-        self.xyz = self.get_position()
+        self.xyz = self.get_position(self.radius)
         self.orientation = self.get_orientation()
         self.socket.update_position()
 

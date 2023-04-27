@@ -235,7 +235,7 @@ class SurfaceEdge(Serializable):
         for i in range(number_of_vertices):
             pos = quaternion.slerp(start, end, step * i)
 
-            p = self.calc.move_to_position(pos, self.sphere)
+            p = self.calc.move_to_position(pos, self.sphere, self.sphere.radius)
             n = vector.normalize(Vector3(p) - Vector3(self.sphere.xyz))  # finding the normal of the vertex
 
             vertices, buffer, indices = self.expand_mesh(vertices, buffer, indices, p, tex, n, i)

@@ -2,7 +2,7 @@
 
 """
 Module Socket. Each sphere_base node has exactly one socket.
-The position of the socket is always is always in the center of the node disc it belongs to
+The position of the socket is always in the center of the node disc it belongs to
 """
 
 
@@ -70,7 +70,7 @@ class Socket(Serializable):
         self.radius = self.node.radius + 0.001
         self.orientation = self.node.orientation
         self.cumulative_rotation = self.node.cumulative_rotation
-        self.xyz = self.node.xyz
+        self.xyz = self.node.get_position(self.radius)
         self.pos_orientation_offset = self.node.pos_orientation_offset
 
         self.edges = []
@@ -111,7 +111,7 @@ class Socket(Serializable):
         Node Disc. The collision object and the connected edges are also updated.
         """
 
-        self.xyz = self.node.xyz
+        self.xyz = self.node.get_position(self.radius)
         self.orientation = self.node.orientation  # same orientation as the node disc
         self.pos_orientation_offset = self.node.pos_orientation_offset
 
@@ -182,15 +182,6 @@ class Socket(Serializable):
         """
         return self.node.is_dragging(value)
 
-    def draw(self):
-        """
-        Renders all the sphere_icons and circles of the ``Socket``.
-        """
-        if self.gr_socket.is_hover():
-            self.socket_disc.draw(self, color=self.gr_socket.current_background_color, switch=2)
-            self.circle.shader.line_width = self.gr_socket.current_border_width
-            self.circle.draw(self, scale=self.gr_socket.circle_scale, color=self.gr_socket.current_border_color)
-
     def remove(self, with_edges: bool = True):
         """
         Safely remove this socket and all edges connect to it
@@ -206,6 +197,15 @@ class Socket(Serializable):
 
         self.node.sphere.remove_item(self)
         self.delete_collision_object()
+
+    def draw(self):
+        """
+        Renders all the sphere_icons and circles of the ``Socket``.
+        """
+        if self.gr_socket.is_hover():
+            self.socket_disc.draw(self, color=self.gr_socket.current_background_color, switch=2)
+            self.circle.shader.line_width = self.gr_socket.current_border_width
+            self.circle.draw(self, scale=self.gr_socket.circle_scale, color=self.gr_socket.current_border_color)
 
     def update_content(self):
         """

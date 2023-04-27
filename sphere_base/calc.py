@@ -42,7 +42,7 @@ class Calc:
         return quaternion.create_from_matrix(m)
 
     @staticmethod
-    def move_to_position(cumulative_orientation, sphere) -> 'Vector4':
+    def move_to_position(cumulative_orientation, sphere, radius) -> 'Vector4':
         """
 
         :param cumulative_orientation:
@@ -58,9 +58,9 @@ class Calc:
         default position.
 
         The calculation starts with a node vector in the center of the default sphere_base at the [0.0, 0.0, 0.0]
-        position, with a length 1.0 on the y axis. This node vector is then rotated so it points at the
+        position, with a length 1.0 on the y-axis. This node vector is then rotated, so it points at the
         cumulative_orientation. It is then moved over the radius distance to take its place on the surface of the
-        default sphere_base. Finally it needs to be translated to the sphere it is actually on.
+        default sphere_base. Finally, it needs to be translated to the sphere it is actually on.
 
         """
 
@@ -68,7 +68,7 @@ class Calc:
         rm = matrix44.create_from_quaternion(cumulative_orientation)
 
         # rotating the node vector
-        node_origin = Vector4([0.0, sphere.radius, 0.0, 1.0])
+        node_origin = Vector4([0.0, radius, 0.0, 1.0])
         xyzw = matrix44.apply_to_vector(rm, node_origin)
 
         # translation matrix to move the node to world space
@@ -170,7 +170,7 @@ class Calc:
                 z1, z2 = p1[2], p2[2]
 
                 pitch = math.asin(x2) - math.acos(z1)
-                # and then over the x axis (yaw)
+                # and then over the x-axis (yaw)
                 yaw = math.atan2(z2, y2)
 
                 # Correct the rotation with the default sphere position with the default camera direction

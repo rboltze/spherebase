@@ -38,7 +38,7 @@ class GraphicSocket(GraphicDisc):
         initializing the graphic assets. Can be partially or fully overridden.
 
         """
-        self.scale = [.5, .5, .5]
+        self.scale = [.7, .7, .7]
         self.circle_scale = [0.05, 0.05, 0.05]
         self.default_img_id = 4
         self.selected_img_id = 2

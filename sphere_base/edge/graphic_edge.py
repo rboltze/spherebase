@@ -82,7 +82,7 @@ class GraphicEdge:
         cumulative_orientation = self.get_cumulative_rotation(pos_orientation_offset)
 
         # get the position of the edge vertex on the sphere_base, calculated from the cumulative rotation
-        xyz = self.calc.move_to_position(cumulative_orientation, self.sphere)
+        xyz = self.calc.move_to_position(cumulative_orientation, self.sphere, self.sphere.radius)
         return xyz
 
     def get_cumulative_rotation(self, pos_orientation_offset):
