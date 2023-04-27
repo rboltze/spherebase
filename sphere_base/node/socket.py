@@ -125,7 +125,14 @@ class Socket(Serializable):
         # find connected edges
         edges = self.node.sphere.get_edges(self)
         for edge in edges:
-            edge.update_position()
+            if not edge.vert:
+                # print("vertex is empty and should be removed")
+                if edge in self.edges:
+                    # print("edge in self.edges")
+                    self.edges.remove(edge)
+                    edge.remove()
+            else:
+                edge.update_position()
 
     def add_edge(self, edge):
         self.edges.append(edge)
@@ -209,7 +216,7 @@ class Socket(Serializable):
 
     def update_content(self):
         """
-        Do not remove. All sphere_base objects needs this method. Needs to be overridden.
+        Do not remove. All sphere objects needs this method. Needs to be overridden.
         """
 
         pass

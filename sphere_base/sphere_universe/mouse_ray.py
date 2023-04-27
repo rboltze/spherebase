@@ -128,6 +128,10 @@ class MouseRay:
             if key == obj.type:
 
                 if key == "edge":
+                    if not vertices:
+                        # print("edge with no vertex list")
+                        return None
+
                     collision_shape_id = self.bullet.createCollisionShape(p.GEOM_MESH, vertices=vertices,
                                                                           flags=p.GEOM_FORCE_CONCAVE_TRIMESH)
                     # print(obj.type, collision_shape_id)
@@ -176,7 +180,7 @@ class MouseRay:
 
         .. warning::
 
-            The build in 'reset method' of PyBullet does not not give the desired result. It did not work for me.
+            The build in 'reset method' of PyBullet does not give the desired result. It did not work for me.
             The workaround is to delete the current collision object and create a new one. This is likely
             more expensive.
 
@@ -215,7 +219,7 @@ class MouseRay:
 
     def check_mouse_ray(self, mouse_x: float, mouse_y: float) -> (int, list):
         """
-        returns name and position of the collision object the the mouse ray collides with.
+        returns name and position of the collision object the mouse ray collides with.
 
         :param mouse_x: mouse x position
         :type mouse_x: ``float``
