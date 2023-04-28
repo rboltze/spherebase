@@ -36,8 +36,9 @@ class History:
         """
 
         self.sphere = sphere
+        self.uv = sphere.uv
 
-        # history limit pere Sphere
+        # history limit per Sphere
         self.history_limit = 32
 
         self.undo_selection_has_changed = False
@@ -147,7 +148,7 @@ class History:
         if self.history_current_step + 1 < len(self.history_stack):
             self.history_stack = self.history_stack[0:self.history_current_step + 1]
 
-        # history is outside of the limits
+        # history is exceeding the limits
         if self.history_current_step + 1 >= self.history_limit:
             self.history_stack = self.history_stack[1:]
             self.history_current_step -= 1
@@ -194,7 +195,7 @@ class History:
         """
         Create History Stamp. Internally serialize whole sphere and current selection.
         :param description: Descriptive label for the History Stamp
-        :return: History stamp serializing state of `Sphere` and current selection
+        :return: serializing state of `Sphere` and current selection
         :rtype: ``dict``
         """
         if DEBUG_STORE:
@@ -202,6 +203,7 @@ class History:
         history_stamp = {
             'description': description,
             'snapshot': self.sphere.serialize(),
+            # 'snapshot': self.uv.serialize(),
             'selection': self.capture_current_selection(),
         }
 

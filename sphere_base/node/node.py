@@ -295,7 +295,6 @@ class Node(Serializable):
         return OrderedDict([
             ('id', self.id),
             ('node_type_name', self.node_type_name),
-            # ('img_id', self.img_id),
             ('img_name', self.img_name),
             ('orientation_offset', self.pos_orientation_offset.tolist()),
             ('scene', self.serialized_detail_scene),

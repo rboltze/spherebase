@@ -19,7 +19,6 @@ class OverlaySphere(Sphere):
 
         self.set_node_class_selector(self.get_node_class_from_data)
         self._close_event_listeners = []
-        self.billboard_id = random.randint(30, 31)
 
     def get_model(self):
         self.model = self.uv.models.get_model('holo_sphere')
@@ -47,22 +46,3 @@ class OverlaySphere(Sphere):
 
         self.history.store_history("node created", True)
         return node
-
-    # def draw(self):
-    #     """
-    #     Render the sphere_base and all the items on it.
-    #     """
-    #
-    #     if self.animation != 0:
-    #         self.rotate_sphere(self.animation)
-    #
-    #     self.model.draw(self, texture_id=self.texture_id, color=self.color)
-    #
-    #     for item in self.items:
-    #         if item.type == "node":
-    #             item.draw()
-    #         elif item.type == "edge":
-    #             item.draw()
-    #
-    #     if self.edge_drag.dragging:
-    #         self.edge_drag.draw()

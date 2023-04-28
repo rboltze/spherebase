@@ -210,13 +210,6 @@ class Sphere(Serializable):
         :param abs_pos: position in space
         :type abs_pos:
         """
-        # # calculate the cumulative angle based on the mouse position
-        # orientation = self.calc_mouse_position_in_angles(mouse_x, mouse_y)
-        #
-        # # create new node at the cumulative angle
-        # node = self.Node(self, orientation)
-        # self.history.store_history("node created", True)
-        # return node
 
         return NotImplemented
 

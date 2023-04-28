@@ -16,6 +16,7 @@ class SphereNodeBase(Node):
     op_code = OP_SPHERE_NODE_BASE
 
     def __init__(self, target_sphere, orientation_offset=None, yaw_degrees=0, pitch_degrees=0,):
+        # self.texture_id = None
         super().__init__(target_sphere, orientation_offset, yaw_degrees, pitch_degrees, "node")
         self.node_type_name = "sphere_node_base"
 
@@ -35,4 +36,4 @@ class SphereNodeBase(Node):
             icon_name = DICTIONARY_SPHERE_NODE_ICONS[value]
 
             # sets all state images (_selected, hovered)
-            self.texture_id = self.gr_node.set_icon_by_name(icon_name)
+            self.img_id = self.gr_node.set_icon_by_name(icon_name)

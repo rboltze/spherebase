@@ -339,11 +339,11 @@ class UniverseWidget(QGLWidget):
         elif event.key() == Qt.Key_S:
             self.back = True
         elif event.key() == Qt.Key_A:
-            self.left = True
+            self.right = True
         elif event.key() == Qt.Key_Left:
             self.arrow_left = True
         elif event.key() == Qt.Key_D:
-            self.right = True
+            self.left = True
         elif event.key() == Qt.Key_Right:
             self.arrow_right = True
         elif event.key() == Qt.Key_Up:
@@ -373,11 +373,11 @@ class UniverseWidget(QGLWidget):
         elif event.key() == Qt.Key_S:
             self.back = False
         elif event.key() == Qt.Key_A:
-            self.left = False
+            self.right = False
         elif event.key() == Qt.Key_Left:
             self.arrow_left = False
         elif event.key() == Qt.Key_D:
-            self.right = False
+            self.left = False
         elif event.key() == Qt.Key_Right:
             self.arrow_right = False
         elif event.key() == Qt.Key_Up:
