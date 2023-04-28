@@ -142,7 +142,6 @@ class Universe(Serializable):
         """
         Re-create the sphere_iot universe
         :return:
-
         """
 
         self.clear()

@@ -118,8 +118,8 @@ class UniverseWidget(QGLWidget):
         :return:
 
         """
-        x, y = event.x(), event.y()
-        self._clicked_on_item, self.mouse_ray_collision_point = self.uv.mouse_ray.check_mouse_ray(x, y)
+        _x, _y = event.x(), event.y()
+        self._clicked_on_item, self.mouse_ray_collision_point = self.uv.mouse_ray.check_mouse_ray(_x, _y)
 
         if self._clicked_on_item == self.uv.target_sphere.id:
             self.handle_context_menu(event)
@@ -144,9 +144,7 @@ class UniverseWidget(QGLWidget):
 
         """
 
-        x, y = event.x(), event.y()
-        self.mouse_x = x
-        self.mouse_y = y
+        self.mouse_x, self.mouse_y = event.x(), event.y()
         self.get_mouse_pos()
 
         if event.button() == Qt.LeftButton:
@@ -250,12 +248,11 @@ class UniverseWidget(QGLWidget):
 
         """
 
-        x, y = event.x(), event.y()
-        self.mouse_x, self.mouse_y = x, y
+        self.mouse_x, self.mouse_y = event.x(), event.y()
         self.get_mouse_pos()
 
         if self.uv.target_sphere and self.uv.cam.distance_to_target < HOVER_MIN_DISTANCE:
-            hovered_item = self.uv.target_sphere.check_for_hover(x, y)
+            hovered_item = self.uv.target_sphere.check_for_hover(self.mouse_x, self.mouse_y)
             if hovered_item:
                 self.setCursor(QCursor(Qt.PointingHandCursor))
             else:
@@ -282,14 +279,14 @@ class UniverseWidget(QGLWidget):
 
                 if self.uv.rubber_band_box.dragging:
                     # if already dragging a rubber_band_box keep dragging
-                    self.uv.rubber_band_box.drag(start=False, mouse_x=x, mouse_y=y)
+                    self.uv.rubber_band_box.drag(start=False, mouse_x=self.mouse_x, mouse_y=self.mouse_y)
                 else:
                     # start a new rubber_band_box and drag its size
-                    self.uv.rubber_band_box.drag(start=True, mouse_x=x, mouse_y=y)
+                    self.uv.rubber_band_box.drag(start=True, mouse_x=self.mouse_x, mouse_y=self.mouse_y)
 
         elif self._middle_mouse_button_down:
 
-            x_offset, y_offset = self.get_mouse_position_offset(x, y)
+            x_offset, y_offset = self.get_mouse_position_offset(self.mouse_x, self.mouse_y)
 
             if self._clicked_on_item and self._clicked_on_item == self.uv.target_sphere.id:
                 self.setCursor(QCursor(Qt.ClosedHandCursor))
@@ -323,19 +320,19 @@ class UniverseWidget(QGLWidget):
             self.forward = True
         elif event.key() == Qt.Key_Z and event.modifiers() == Qt.ControlModifier:
             # UNDO
-            self.uv.target_sphere.history.undo()
+            self.on_edit_undo()
         elif event.key() == Qt.Key_Z and event.modifiers() == (Qt.ControlModifier | Qt.ShiftModifier):
             # REDO
-            self.uv.target_sphere.history.redo()
+            self.on_edit_redo()
         elif event.key() == Qt.Key_C and event.modifiers() == Qt.ControlModifier:
             # copy to clipboard
-            self.uv.target_sphere.edit_copy()
+            self.on_edit_copy()
         elif event.key() == Qt.Key_X and event.modifiers() == Qt.ControlModifier:
             # cut to clip board
-            self.uv.target_sphere.edit_cut()
+            self.on_edit_cut()
         elif event.key() == Qt.Key_V and event.modifiers() == Qt.ControlModifier:
             # paste from clipboard
-            self.uv.target_sphere.edit_paste()
+            self.on_edit_paste()
         elif event.key() == Qt.Key_S:
             self.back = True
         elif event.key() == Qt.Key_A:
@@ -480,11 +477,29 @@ class UniverseWidget(QGLWidget):
 
     def uv_new(self):
         """
-        re-create the sphere_iot
-
+        re-create the universe
         """
-
         self.uv.uv_new()
+
+    def on_edit_undo(self):
+        self.uv.target_sphere.history.undo()
+
+    def on_edit_redo(self):
+        self.uv.target_sphere.history.redo()
+
+    def on_edit_delete(self):
+        self.uv.target_sphere.delete_selected_items()
+
+    def on_edit_cut(self):
+        # cut to clip board
+        self.uv.target_sphere.edit_cut()
+
+    def on_edit_copy(self):
+        self.uv.target_sphere.edit_copy()
+
+    def on_edit_paste(self):
+        # TODO: finding the center of the screen for pasting the node from the edit menu
+        self.uv.target_sphere.edit_paste()
 
     def paintGL(self):
         """

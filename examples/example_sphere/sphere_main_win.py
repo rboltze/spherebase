@@ -22,25 +22,38 @@ class MainWindow(QMainWindow):
         self.name_product = 'sphere_base'
         self.version = '0.1.14 Beta 27/04/2023'
 
+        self.skybox_id, self.random_skybox = None, True
+        self.filename = None
+
         try:
-            self.filename = None
             self._set_win_properties()
             self._read_settings()
             self.sphere_widget = self.__class__.sphere_widget_class(self)
             self.setCentralWidget(self.sphere_widget.uv_widget)
             self.menu = self.__class__.Menu_class(self)
             self.setWindowTitle("Sphere")
+            self.create_status_bar()
             self.show()
-            self.sphere_widget.uv_widget.uv.skybox.get_skybox_set(skybox_id=self.skybox_id, random=self.random_skybox)
+            self.set_skybox(self.skybox_id, self.random_skybox)
+
         except Exception as e:
             dump_exception(e)
+
+    def create_status_bar(self):
+        """Create Status bar """
+        self.statusBar().showMessage("Ready")
+
+    def set_skybox(self, skybox_id, random_skybox=True):
+        self.sphere_widget.uv_widget.uv.skybox.get_skybox_set(skybox_id=self.skybox_id, random=self.random_skybox)
 
     def _set_win_properties(self):
         # set default window properties
         self.setGeometry(200, 200, 800, 600)
 
-    def set_title(self, title=None):
+    def set_title(self, title=None, file_name=None):
         title = title if title else self.sphere_widget.title
+        if file_name:
+            self.filename = file_name
         self.setWindowTitle(title + self.get_friendly_filename(self.filename))
 
     def may_be_saved(self) -> bool:
@@ -57,7 +70,7 @@ class MainWindow(QMainWindow):
                                      )
 
         if result == QMessageBox.Save:
-            return self.menu.on_file_save()
+            return self.on_file_save()
         elif result == QMessageBox.Cancel:
             return False
 
@@ -78,6 +91,75 @@ class MainWindow(QMainWindow):
                     "on its surface. Written by: Richard Boltze, email: <a>rboltze@protonmail.com")
         msg.setInformativeText("version: " + self.version)
         msg.exec_()
+
+    def on_file_new(self):
+        self.filename = ""
+        self.sphere_widget.uv_widget.uv_new()
+        self.reset_modified()
+        self.set_title()
+
+    def on_file_open(self, file_names=None):
+        if not file_names:
+            file_names, _filter = QFileDialog.getOpenFileNames(self, 'Open graph from file',
+                                                               self.get_file_dialog_directory(),
+                                                               self.get_file_dialog_filter())
+        try:
+            for file_name in file_names:
+                if file_name:
+                    self.sphere_widget.uv_widget.load_from_file(file_name)
+                    self.reset_modified()
+                    self.set_title(file_name=file_name)
+
+        except Exception as e:
+            dump_exception(e)
+
+    def on_file_save(self):
+        """Handle File Save operation"""
+
+        if not self.filename:
+            return self.on_file_save_as()
+
+        self.file_save(self.filename)
+        self.statusBar().showMessage("Successfully saved %s" % self.filename, 5000)
+        return True
+
+    def on_file_save_as(self):
+        """Handle File Save As operation"""
+
+        file_name, _filter = QFileDialog.getSaveFileName(self, 'Save graph to file', self.get_file_dialog_directory(),
+                                                         self.get_file_dialog_filter())
+        if file_name == '':
+            return False
+
+        self.file_save(file_name)
+        self.statusBar().showMessage("Successfully saved as %s" % self.filename, 5000)
+        return True
+
+    def file_save(self, filename=None):
+        if filename is not None:
+            self.filename = filename
+
+        self.sphere_widget.uv_widget.save_to_file(self.filename)
+        QApplication.restoreOverrideCursor()
+
+        self.reset_modified()
+        self.set_title()
+        return True
+
+    def reset_modified(self):
+        # resetting the modified flag
+        self.sphere_widget.uv_widget.uv.reset_has_been_modified()
+        self.sphere_widget.on_selection_changed(None, None)
+
+    @staticmethod
+    def get_file_dialog_directory():
+        """Returns starting directory for ``QFileDialog`` file open/save"""
+        return ''
+
+    @staticmethod
+    def get_file_dialog_filter():
+        """Returns ``str`` standard file open/save filter for ``QFileDialog``"""
+        return 'Graph (*.json);;All files (*)'
 
     def closeEvent(self, event):
         """
