@@ -150,10 +150,6 @@ class SphereMenu(QMenu):
         self.help_menu = self.main_win.menuBar().addMenu("&Help")
         self.help_menu.addAction(self.action_about)
 
-    # def create_status_bar(self):
-    #     """Create Status bar """
-    #     self.main_win.statusBar().showMessage("Ready")
-
     def update_edit_menu(self):
         self.action_paste.setEnabled(False)
         self.action_cut.setEnabled(False)
@@ -181,14 +177,7 @@ class SphereMenu(QMenu):
             self.action_undo.setEnabled(self.get_sphere().history.can_undo())
             self.action_redo.setEnabled(self.get_sphere().history.can_redo())
 
-    def reset_modified(self):
-        # resetting the modified flag
-        self.main_win.sphere_widget.uv_widget.uv.reset_has_been_modified()
-        self.main_win.sphere_widget.on_selection_changed(None, None)
-
     def get_sphere(self):
         # helper function to get the active target sphere_base from the sphere_iot
         return self.main_win.sphere_widget.uv_widget.uv.target_sphere
 
-    def has_been_modified(self):
-        return self.main_win.sphere_widget.uv_widget.uv.is_modified()

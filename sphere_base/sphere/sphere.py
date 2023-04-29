@@ -618,7 +618,6 @@ class Sphere(Serializable):
         self.radius = radius
         self.scale = [radius, radius, radius]
         self.orientation = quaternion.create_from_eulers([0.0, radius, 0.0])
-        self.uv.cam.reset_to_default_view(self)
         self.collision_shape_id = self.uv.mouse_ray.get_collision_shape(self)
 
     def set_node_class_selector(self, class_selecting_function):

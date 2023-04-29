@@ -23,7 +23,7 @@ class MainWindow(QMainWindow):
         self.version = '0.1.14 Beta 27/04/2023'
 
         self.skybox_id, self.random_skybox = None, True
-        self.filename = None
+        self._filename = None
 
         try:
             self._set_win_properties()
@@ -34,10 +34,21 @@ class MainWindow(QMainWindow):
             self.setWindowTitle("Sphere")
             self.create_status_bar()
             self.show()
+
+            self.sphere_widget.uv_widget.uv.add_modified_listener(self.set_title)
             self.set_skybox(self.skybox_id, self.random_skybox)
 
         except Exception as e:
             dump_exception(e)
+
+    @property
+    def filename(self):
+        return self._filename
+
+    @filename.setter
+    def filename(self, value):
+        self._filename = os.path.basename(value)
+        self.set_title()
 
     def create_status_bar(self):
         """Create Status bar """
@@ -53,7 +64,7 @@ class MainWindow(QMainWindow):
     def set_title(self, title=None, file_name=None):
         title = title if title else self.sphere_widget.title
         if file_name:
-            self.filename = file_name
+            self._filename = file_name
         self.setWindowTitle(title + self.get_friendly_filename(self.filename))
 
     def may_be_saved(self) -> bool:
@@ -80,7 +91,7 @@ class MainWindow(QMainWindow):
         """
         Get user-friendly filename. Used in the window title
         """
-        name = os.path.basename(file_name) if self.filename else "New Graph"
+        name = os.path.basename(file_name) if self._filename else "New Graph"
         return name + ("*" if self.sphere_widget.has_been_modified() else "")
 
     def on_about(self):
@@ -93,7 +104,7 @@ class MainWindow(QMainWindow):
         msg.exec_()
 
     def on_file_new(self):
-        self.filename = ""
+        self._filename = ""
         self.sphere_widget.uv_widget.uv_new()
         self.reset_modified()
         self.set_title()
@@ -120,7 +131,7 @@ class MainWindow(QMainWindow):
             return self.on_file_save_as()
 
         self.file_save(self.filename)
-        self.statusBar().showMessage("Successfully saved %s" % self.filename, 5000)
+        self.statusBar().showMessage("Successfully saved %s" % self._filename, 5000)
         return True
 
     def on_file_save_as(self):
@@ -137,9 +148,9 @@ class MainWindow(QMainWindow):
 
     def file_save(self, filename=None):
         if filename is not None:
-            self.filename = filename
+            self._filename = filename
 
-        self.sphere_widget.uv_widget.save_to_file(self.filename)
+        self.sphere_widget.uv_widget.save_to_file(self._filename)
         QApplication.restoreOverrideCursor()
 
         self.reset_modified()

@@ -3,8 +3,8 @@
 from PyQt5.QtWidgets import *
 
 from examples.example_sphere.sphere_uv_widget import UVWidget  # detail spheres
-import os.path
 from sphere_base.utils import dump_exception
+import os.path
 
 TAB_NAMES = {0: "Node editor", 1: "Description"}
 
@@ -34,14 +34,12 @@ class SphereWidget(QWidget):
             if os.path.exists(file):
                 self.uv_widget.load_from_file(file)
                 self.main_win.filename = os.path.basename(file)
-                self.main_win.set_title()
+            else:
+                self.uv_widget.uv_new()
+
         except Exception as e:
             dump_exception(e)
             self.uv_widget.uv_new()
-
-    def on_modified(self):
-        pass
-        # self.set_title()
 
     def on_selection_changed(self, sphere, items):
         """
@@ -71,7 +69,3 @@ class SphereWidget(QWidget):
 
     def has_been_modified(self):
         return self.uv_widget.uv.is_modified()
-
-    def set_title(self, title=None):
-        title = title if title else self.title
-        self.setWindowTitle(title)
