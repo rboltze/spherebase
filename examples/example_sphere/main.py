@@ -1,7 +1,7 @@
 import os
 import sys
 from PyQt5.QtWidgets import *
-from examples.example_sphere.sphere_main_win import MainWindow
+from examples.example_sphere.main_win import MainWindow
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 

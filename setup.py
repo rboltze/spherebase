@@ -30,8 +30,8 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
-    description="library for applications were information "
-                "should appear on the surface of a sphere. It allows for creating spheres with nodes "
+    description="Library for applications were information "
+                "should be displayed on the surface of a sphere. It allows for creating spheres with nodes "
                 "and edges that can be dragged on its surface. ",
     install_requires=requirements,
     license="MIT license",
@@ -44,6 +44,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/rboltze/spherebase',
-    version='0.1.14',
+    version='0.1.15',
     zip_safe=False,
 )

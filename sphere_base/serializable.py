@@ -2,6 +2,7 @@
 
 """
 A module containing Serializable "Interface". We pretend it is an abstract class
+And then Richard  made a mess by adding default method implementation.... :-(
 
 """
 
@@ -9,7 +10,7 @@ from collections import OrderedDict
 
 
 class Serializable:
-    def __init__(self, item_type=None):
+    def __init__(self, item_type: str = None):
         """
         Default constructor automatically creates data which are common to any serializable object.
         In our case we create ``self.id`` which we use in every object in NodeEditor.
@@ -28,8 +29,7 @@ class Serializable:
         raise NotImplemented()
 
     def deserialize(self, data: dict, hashmap: dict = None, restore_id: bool = True) -> bool:
-        hashmap = hashmap if hashmap else {}
-        print(hashmap)
+
         """
         Deserialization method which take data in python ``dict`` format with helping `hashmap` containing
         references to existing entities.

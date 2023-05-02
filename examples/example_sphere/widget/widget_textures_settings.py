@@ -9,7 +9,7 @@ class WidgetTextureSettings(QWidget):
     def __init__(self, main_win):
         super().__init__()
         self.main_win = main_win
-        self.uv = main_win.sphere_widget.uv_widget.uv
+        self.uv = main_win.uv_widget.uv
         self.sphere = self.uv.target_sphere
 
         self.texture_list_box = QListWidget()

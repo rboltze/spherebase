@@ -6,9 +6,9 @@ Using the universe for the detail sphere_base. This universe will only contain a
 
 """
 
-from sphere_base.sphere_universe.universe_widget import UniverseWidget
-from sphere_base.sphere_universe.universe import Universe
 from examples.example_sphere.sphere_overlay.sov_sphere import OverlaySphere
+from sphere_base.sphere_universe.universe import Universe
+from sphere_base.sphere_universe.universe_widget import UniverseWidget
 
 # PYBULLET_KEY_ID
 KEY = 2

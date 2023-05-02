@@ -4,21 +4,21 @@
 A module containing the Main Window menu class
 """
 
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QKeySequence
-from examples.example_sphere.widget.widget_settings import Settings
-import pyperclip
 import json
+import pyperclip
+from PyQt5.QtCore import Qt, QRect
+from PyQt5.QtGui import QKeySequence
+from PyQt5.QtWidgets import *
+
+from examples.example_sphere.widget.widget_settings import Settings
 
 
 class SphereMenu(QMenu):
-    def __init__(self, main_win):
+    def __init__(self, parent):
         super().__init__()
 
-        self.main_win = main_win
-        self.uv_widget = self.main_win.sphere_widget.uv_widget
+        self.main_win = parent
+        self.uv_widget = self.main_win.uv_widget
         self.action_new, self.action_open, self.action_save, self.action_copy = None, None, None, None
         self.action_save_as, self.action_exit, self.action_undo, self.action_paste = None, None, None, None
         self.action_redo, self.action_cut, self.action_copy, self.action_delete = None, None, None, None
@@ -158,7 +158,7 @@ class SphereMenu(QMenu):
         self.action_undo.setEnabled(False)
         self.action_redo.setEnabled(False)
 
-        if self.main_win.sphere_widget.uv_widget.uv:
+        if self.uv_widget.uv:
             active_sphere = True if self.get_sphere() else False
             active = True if len(self.get_sphere().items_selected) > 0 else False
             self.action_paste.setEnabled(active_sphere)
@@ -179,5 +179,4 @@ class SphereMenu(QMenu):
 
     def get_sphere(self):
         # helper function to get the active target sphere_base from the sphere_iot
-        return self.main_win.sphere_widget.uv_widget.uv.target_sphere
-
+        return self.uv_widget.uv.target_sphere
