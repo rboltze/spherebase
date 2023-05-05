@@ -87,7 +87,7 @@ class Clipboard:
             print("our final list of edges:", edges_final)
 
         data = OrderedDict([
-            ('nodes', selected_nodes),
+            ('sphere_nodes', selected_nodes),
             ('edges', edges_final),
             ])
 
@@ -118,7 +118,7 @@ class Clipboard:
         try:
             hashmap = {}
             created_nodes = []
-            length = len(data['nodes'])
+            length = len(data['sphere_nodes'])
 
             sphere_id, cp, mouse_x, mouse_y = self.uv.get_mouse_pos()
             orientation = Calc.find_angle(cp, self.uv.target_sphere.orientation)
@@ -129,7 +129,7 @@ class Clipboard:
 
             # Find the middle between the nodes
             old_centre, first_node = None, None
-            for i, node_data in enumerate(data['nodes']):
+            for i, node_data in enumerate(data['sphere_nodes']):
                 q = Quaternion(node_data['orientation_offset'])
                 if i == 0:
                     old_centre = q
@@ -137,7 +137,7 @@ class Clipboard:
                     old_centre = quaternion.slerp(old_centre, q, 0.5)
 
             sockets_map = {}
-            for i, node_data in enumerate(data['nodes']):
+            for i, node_data in enumerate(data['sphere_nodes']):
                 new_node = self.uv.target_sphere.get_node_class_from_data(node_data)(self.uv.target_sphere)
                 new_node.deserialize(node_data, hashmap, restore_id=False)
                 created_nodes.append(new_node)
