@@ -167,7 +167,7 @@ class Sphere(Serializable):
         return self._has_been_modified
 
     @has_been_modified.setter
-    def has_been_modified(self, value):
+    def has_been_modified(self, value: bool):
         if not self._has_been_modified and value:
             # set it now, because we will be reading it soon
             self._has_been_modified = value
@@ -521,7 +521,7 @@ class Sphere(Serializable):
             self.items_selected = []
             for selected in item_list:
                 for item in self.items:
-                    if selected == item.id and item.type == 'node':
+                    if selected == item.id and item.type == 'sphere_node':
                         self.select_item(item, True)
                     if selected == item.id and item.type == 'edge':
                         self.select_item(item, True)
@@ -682,7 +682,7 @@ class Sphere(Serializable):
             ('orientation', self.orientation.tolist()),
             ('texture_id', self.texture_id),
             ('color', self.color),
-            ('nodes', nodes),
+            ('sphere_nodes', nodes),
             ('edges', edges),
         ])
 

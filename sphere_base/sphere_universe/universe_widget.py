@@ -236,6 +236,7 @@ class UniverseWidget(QGLWidget):
         if self._middle_mouse_button_down:
             # update all the collision objects on the sphere
             self.uv.target_sphere.update_item_collision_objects()
+            self.uv.target_sphere.has_been_modified = True
 
         self._reset_mouse()
 
@@ -308,6 +309,7 @@ class UniverseWidget(QGLWidget):
         radius = .05 * -step
 
         self.uv.cam.process_movement(self.uv.target_sphere, radius=radius)
+        self.uv.target_sphere.has_been_modified = True
 
     def keyPressEvent(self, event):
         """
