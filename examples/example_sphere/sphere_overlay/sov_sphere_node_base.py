@@ -17,7 +17,7 @@ class SphereNodeBase(Node):
 
     def __init__(self, target_sphere, orientation_offset=None, yaw_degrees=0, pitch_degrees=0,):
         # self.texture_id = None
-        super().__init__(target_sphere, orientation_offset, yaw_degrees, pitch_degrees, "node")
+        super().__init__(target_sphere, orientation_offset, yaw_degrees, pitch_degrees, "sphere_node")
         self.node_type_name = "sphere_node_base"
 
     def serialize(self):

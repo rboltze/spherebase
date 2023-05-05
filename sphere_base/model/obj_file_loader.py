@@ -87,7 +87,7 @@ class ObjectFileLoader:
                 vert, indices, buffer = self.load_square1x1()
             elif self.model.name == "circle" or self.model.name == "square" or self.model.name == "cross_hair1":
                 vert, indices, buffer = self.load_vertex1()
-            elif self.model.name == "node" or self.model.name == "socket":
+            elif self.model.name == "sphere_node" or self.model.name == "socket":
                 vert, indices, buffer = self.load_node_disc()
 
             mesh_id = self.config.get_mesh_id()
@@ -98,7 +98,7 @@ class ObjectFileLoader:
             dump_exception(e)
 
         if DEBUG:
-            if self.model.name == "node":
+            if self.model.name == "sphere_node":
                 print("vertices", self.model.name, vert)
                 print("indices", self.model.name, indices)
                 print("buffer", self.model.name, buffer)

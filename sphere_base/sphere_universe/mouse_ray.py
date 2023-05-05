@@ -25,8 +25,8 @@ DEBUG_MOUSE_RAY = False
 COLLISION_SHAPES = {
     "sphere_base": {"type": p.GEOM_SPHERE, "radius": SPHERE_RADIUS, "height": 0, "base_mass": 0,
                     "baseVisualShapeIndex": -1},
-    "node": {"type": p.GEOM_SPHERE, "radius": NODE_DISC_RADIUS, "height": 0, "base_mass": 0,
-             "baseVisualShapeIndex": -1},
+    "sphere_node": {"type": p.GEOM_SPHERE, "radius": NODE_DISC_RADIUS, "height": 0, "base_mass": 0,
+                    "baseVisualShapeIndex": -1},
     "socket": {"type": p.GEOM_CYLINDER, "radius": SOCKET_RADIUS, "height": 0, "base_mass": 0,
                "baseVisualShapeIndex": -1},
     "edge": {"type": p.GEOM_MESH, "height": .025, "base_mass": 0, "baseVisualShapeIndex": -1},
@@ -97,7 +97,7 @@ class MouseRay:
         self._collision_shapes = {
             'sphere_small': self.bullet.createCollisionShape(p.GEOM_SPHERE, radius=SPHERE_SMALL_RADIUS, height=0),
             'sphere_base': self.bullet.createCollisionShape(p.GEOM_SPHERE, radius=SPHERE_RADIUS, height=0),
-            'node': self.bullet.createCollisionShape(p.GEOM_CYLINDER, radius=NODE_DISC_RADIUS, height=0.025),
+            'sphere_node': self.bullet.createCollisionShape(p.GEOM_CYLINDER, radius=NODE_DISC_RADIUS, height=0.025),
             'socket': self.bullet.createCollisionShape(p.GEOM_CYLINDER, radius=SOCKET_RADIUS, height=0.027),
 
         }
@@ -106,7 +106,7 @@ class MouseRay:
         shape_id = None
         if obj.type.startswith('sphere'):
             shape_id = self.bullet.createCollisionShape(p.GEOM_SPHERE, radius=obj.radius, height=0)
-        elif obj.type == 'node':
+        elif obj.type == 'sphere_node':
             shape_id = self.bullet.createCollisionShape(p.GEOM_CYLINDER, radius=obj.radius, height=0.025)
         elif obj.type == 'socket':
             shape_id = self.bullet.createCollisionShape(p.GEOM_CYLINDER, radius=obj.radius, height=0.026)

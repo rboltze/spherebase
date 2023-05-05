@@ -144,7 +144,7 @@ class EdgeDrag:
         # if under the mouse is a node_disc then 'snap' to its socket
         item = self.sphere.get_item_by_id(item_id)
 
-        if item and item.type == "node" and item != self.start_socket.node:
+        if item and item.type == "sphere_node" and item != self.start_socket.node:
             # snap to socket
             self.xyz = item.socket.xyz
             self.pos_orientation_offset = item.socket.pos_orientation_offset

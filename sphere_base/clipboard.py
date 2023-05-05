@@ -48,7 +48,7 @@ class Clipboard:
 
         # sort edges and nodes
         for item in self.uv.target_sphere.items_selected:
-            if item.type == 'node':
+            if item.type == 'sphere_node':
                 selected_nodes.append(item.serialize())
                 selected_edges.extend(item.socket.edges)  # find any edges that are connecting selected sockets
                 selected_sockets_ids.append(item.socket.id)

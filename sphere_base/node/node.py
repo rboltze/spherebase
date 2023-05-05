@@ -25,7 +25,7 @@ class Node(Serializable):
     Socket_class = Socket
 
     def __init__(self, target_sphere, orientation_offset=None,
-                 yaw_degrees=0, pitch_degrees=0, node_type: str = "node"):
+                 yaw_degrees=0, pitch_degrees=0, node_type: str = "sphere_node"):
         """
         Constructor of the ``Node`` class. Creates a node and calculates where to place it on the sphere_base.
         Needs to be overridden in the implementation to allow for other type of nodes.
@@ -67,11 +67,11 @@ class Node(Serializable):
 
         super().__init__(node_type)
 
-        self.node_type_name = 'node'
+        self.node_type_name = 'sphere_node'
         self.sphere = target_sphere
         self.config = self.sphere.config
         self.calc = self.sphere.calc
-        self.node_disc = self.sphere.uv.models.get_model('node')
+        self.node_disc = self.sphere.uv.models.get_model('sphere_node')
         self.circle = self.sphere.uv.models.get_model('circle')
         self.ray = self.sphere.uv.mouse_ray
 

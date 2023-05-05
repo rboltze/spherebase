@@ -48,7 +48,7 @@ MODELS = {
     "skybox": {"model_id": 4, "model_file_name": "skybox.obj", "shader": "SkyboxShader",
                "vertex_shader": "vert_skybox.glsl",
                "fragment_shader": "frag_skybox.glsl", "geometry_shader": "none"},
-    "node": {"model_id": 5, "model_file_name": "node_disc1.obj", "shader": "NodeShader",
+    "sphere_node": {"model_id": 5, "model_file_name": "node_disc1.obj", "shader": "NodeShader",
              "vertex_shader": "vert_node.glsl",
              "fragment_shader": "frag_node.glsl", "geometry_shader": "none"},
     "socket": {"model_id": 6, "model_file_name": "node_disc1.obj", "shader": "SocketShader",
@@ -83,7 +83,7 @@ MODELS = {
                      "fragment_shader": "frag_sphere_edge.glsl", "geometry_shader": "none"},
 }
 
-SHADER_SWITCH = {"node": 0, "sphere_base": 1, "square1x1": 2, "rubber_band": 2, "sphere_small":
+SHADER_SWITCH = {"sphere_node": 0, "sphere_base": 1, "square1x1": 2, "rubber_band": 2, "sphere_small":
                  1, "socket": 2, "cube": 1, "cube_sphere": 1}
 
 EDGE_TYPE_DIRECT = 1

@@ -227,7 +227,7 @@ class UniverseWidget(QGLWidget):
                     if item and item.type == "socket":
                         # if edge does not already exist, create it
                         self.uv.target_sphere.create_edge(item)
-                    elif item and item.type == "node":
+                    elif item and item.type == "sphere_node":
                         # if edge does not already exist, create it
                         self.uv.target_sphere.create_edge(item.socket)
             except Exception as e:
@@ -266,7 +266,7 @@ class UniverseWidget(QGLWidget):
                 self.setCursor(QCursor(Qt.ClosedHandCursor))
                 # we are only looking at the first object in the selected objects.
                 # If it is node or edge then try to drag the whole selected group of items.
-                if self.uv.target_sphere.selected_item.type in ("node", "edge"):
+                if self.uv.target_sphere.selected_item.type in ("sphere_node", "edge"):
                     self.uv.target_sphere.drag_items(self.mouse_ray_collision_point)
                 elif self.uv.target_sphere.selected_item.type == "socket":
                     # drag edge from socket to the mouse_ray collision point

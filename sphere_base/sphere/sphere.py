@@ -401,7 +401,7 @@ class Sphere(Serializable):
 
         # update orientation of all nodes on sphere_base
         for item in self.items:
-            if item.type in ('node', 'sphere_lines'):
+            if item.type in ('sphere_node', 'sphere_lines'):
                 # updating the node trickles down to updating sockets and edges"
                 item.update_position()
 
@@ -410,7 +410,7 @@ class Sphere(Serializable):
         Update the collision objects of all items on the sphere_base.
         """
         for item in self.items:
-            if item.type in ('sphere', 'edge', 'node', 'socket'):
+            if item.type in ('sphere', 'edge', 'sphere_node', 'socket'):
                 item.update_collision_object()
 
     def rotate_sphere(self, offset_degrees: int):
@@ -454,7 +454,7 @@ class Sphere(Serializable):
 
         """
         for item in self.items_selected:
-            if item.type == "node":
+            if item.type == "sphere_node":
                 # only drag any nodes in the _selected item list
                 item.drag_to(mouse_ray_collision_point)
                 item.mouse_ray_collision_point = mouse_ray_collision_point
@@ -499,7 +499,7 @@ class Sphere(Serializable):
         for selected_item in self.items_selected:
             for i, item in enumerate(self.items):
                 if item.id == selected_item.id:
-                    if item.type == "node":
+                    if item.type == "sphere_node":
                         item.remove(with_edges=True)  # remove node, socket and connected items
                     elif item.type == "edge":
                         self.remove_edges([item])
@@ -550,12 +550,12 @@ class Sphere(Serializable):
             for item in self.items:
                 if item.id == hovered_item:
                     # set hover
-                    if item.type in ('node', 'socket', 'edge'):
+                    if item.type in ('sphere_node', 'socket', 'edge'):
                         item.set_hovered(True)
                         self._hovered_item = item
                 else:
                     # remove hover
-                    if item.type in ('node', 'socket', 'edge'):
+                    if item.type in ('sphere_node', 'socket', 'edge'):
                         item.set_hovered(False)
 
         return self._hovered_item
@@ -601,7 +601,7 @@ class Sphere(Serializable):
             return
 
         # check if the json data is correct
-        if "nodes" not in data:
+        if "sphere_nodes" not in data:
             print("JSON does not contain any nodes!")
             return
 
@@ -656,7 +656,7 @@ class Sphere(Serializable):
 
         self.model.draw(self, texture_id=self.texture_id, color=self.color)
         for item in self.items:
-            if item.type == "node":
+            if item.type == "sphere_node":
                 item.draw()
             elif item.type == "edge":
                 item.draw()
@@ -669,7 +669,7 @@ class Sphere(Serializable):
     def serialize(self):
         nodes, edges = [], []
         for item in self.items:
-            if item.type == "node":
+            if item.type == "sphere_node":
                 nodes.append(item.serialize())
             elif item.type == "edge":
                 edges.append(item.serialize())
@@ -710,7 +710,7 @@ class Sphere(Serializable):
                 all_items.remove(item)
 
         # go through deserialized nodes:
-        for node_data in data['nodes']:
+        for node_data in data['sphere_nodes']:
             # can we find this node in the data?
             found = None
             for item in all_items:

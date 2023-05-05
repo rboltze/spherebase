@@ -177,13 +177,13 @@ class History:
             print("  -- capturing current selection ")
 
         sel_obj = {
-            'nodes': [],
+            'sphere_nodes': [],
             'edges': [],
         }
 
         for item in self.sphere.items_selected:
-            if item.type == 'node':
-                sel_obj['nodes'].append(item.id)
+            if item.type == 'sphere_node':
+                sel_obj['sphere_nodes'].append(item.id)
             elif item.type == 'edge':
                 sel_obj['edges'].append(item.id)
 
@@ -240,7 +240,7 @@ class History:
             self.undo_selection_has_changed = False
             previous_selection = self.capture_current_selection()
             if DEBUG_RESTORE:
-                print("_selected nodes before restore:", previous_selection['nodes'])
+                print("_selected nodes before restore:", previous_selection['sphere_nodes'])
                 print("_selected edges before restore:", previous_selection['edges'])
 
             self.sphere.deserialize(history_stamp['snapshot'])
@@ -259,7 +259,7 @@ class History:
                         break
 
             # now restore _selected nodes from history_stamp
-            for node_id in history_stamp['selection']['nodes']:
+            for node_id in history_stamp['selection']['sphere_nodes']:
                 for item in self.sphere.items:
                     if item.id == node_id:
                         self.sphere.select_item(item, True)
@@ -267,14 +267,14 @@ class History:
 
             current_selection = self.capture_current_selection()
             if DEBUG_RESTORE:
-                print("_selected nodes after restore:", current_selection['nodes'])
+                print("_selected nodes after restore:", current_selection['sphere_nodes'])
                 print("_selected edges after restore:", current_selection['edges'])
 
             # reset the last_selected_items - since we're comparing change to the last_selected state
             self.sphere._last_selected_items = self.sphere.items_selected
 
             # if the selection of nodes differ before and after restoration, set flag
-            if current_selection['nodes'] != previous_selection['nodes'] or current_selection['edges'] != \
+            if current_selection['sphere_nodes'] != previous_selection['sphere_nodes'] or current_selection['edges'] != \
                     previous_selection['edges']:
                 if DEBUG_RESTORE:
                     print("\nSCENE: Selection has changed")
