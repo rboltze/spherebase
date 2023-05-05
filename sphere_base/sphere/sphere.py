@@ -560,7 +560,16 @@ class Sphere(Serializable):
 
         return self._hovered_item
 
-    def edit_cut(self):
+    def on_edit_undo(self):
+        self.history.undo()
+
+    def on_edit_redo(self):
+        self.history.redo()
+
+    def on_edit_delete(self):
+        self.delete_selected_items()
+
+    def on_edit_cut(self):
         """
         Cut _selected sphere_base items to clipboard
         """
@@ -569,7 +578,7 @@ class Sphere(Serializable):
 
         pyperclip.copy(str_data)
 
-    def edit_copy(self):
+    def on_edit_copy(self):
         """
         Copy _selected sphere_base items to clipboard
         """
@@ -577,7 +586,7 @@ class Sphere(Serializable):
         str_data = json.dumps(data, indent=4)
         pyperclip.copy(str_data)
 
-    def edit_paste(self):
+    def on_edit_paste(self):
         """
         Paste _selected sphere_base items from clipboard to the target sphere_base
         check that the mouse pointer is above the sphere and get the position of the mouse_ray collision point.

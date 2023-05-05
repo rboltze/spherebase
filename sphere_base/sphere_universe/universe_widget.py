@@ -482,24 +482,24 @@ class UniverseWidget(QGLWidget):
         self.uv.uv_new()
 
     def on_edit_undo(self):
-        self.uv.target_sphere.history.undo()
+        self.uv.target_sphere.on_edit_undo()
 
     def on_edit_redo(self):
-        self.uv.target_sphere.history.redo()
+        self.uv.target_sphere.on_edit_redo()
 
     def on_edit_delete(self):
-        self.uv.target_sphere.delete_selected_items()
+        self.uv.target_sphere.on_edit_delete()
 
     def on_edit_cut(self):
         # cut to clip board
-        self.uv.target_sphere.edit_cut()
+        self.uv.target_sphere.on_edit_cut()
 
     def on_edit_copy(self):
-        self.uv.target_sphere.edit_copy()
+        self.uv.target_sphere.on_edit_copy()
 
     def on_edit_paste(self):
         # TODO: finding the center of the screen for pasting the node from the edit menu
-        self.uv.target_sphere.edit_paste()
+        self.uv.target_sphere.on_edit_paste()
 
     def paintGL(self):
         """

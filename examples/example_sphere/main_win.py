@@ -20,6 +20,7 @@ class MainWindow(SphereMainWindow):
     def create_actions(self):
         self.action_settings = QAction('&Settings', self)
         self.action_settings.setStatusTip('Application settings')
+
         # noinspection PyUnresolvedReferences
         self.action_settings.triggered.connect(self.open_settings_window)
 
