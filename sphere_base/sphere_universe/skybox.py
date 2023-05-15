@@ -120,10 +120,14 @@ class Skybox(GraphicItem):
         Returns the image path of the current active Skybox id
 
         """
-
-        path = self.cf.skybox_sets[self.skybox_id]
-        self.paint_skybox = True if path else False
-        return path + "/" if path else path
+        try:
+            path = self.cf.skybox_sets[self.skybox_id]
+            self.paint_skybox = True if path else False
+            return path + "/" if path else path
+        except IndexError:
+            path = self.cf.skybox_sets[0]
+            self.paint_skybox = True if path else False
+            return path + "/" if path else path
 
     def create_skybox_faces(self):
         """

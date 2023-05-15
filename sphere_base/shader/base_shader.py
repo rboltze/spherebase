@@ -8,10 +8,8 @@ Base shader. This module contains the base shader class. It needs to be inherite
 from OpenGL.GL import *
 from pyrr import Vector3, matrix44
 import pyrr
-from OpenGL.GL.shaders import compileProgram, compileShader
 from sphere_base.constants import *
 from sphere_base.utils import dump_exception
-
 from importlib_resources import files
 import sphere_base.model.resources.shaders
 
@@ -103,23 +101,61 @@ class BaseShader:
         except Exception as e:
             dump_exception(e)
 
+    # activate the shader
+    # ------------------------------------------------------------------------
+    def use(self) -> None:
+        glUseProgram(self.shader_id)
+
     def compile_shader(self):
         """
         compiling the OpenGL shaders
 
         """
+        geometry_source, geometry = None, None
 
         vertex_source = self.shader_from_file(self.vertex_shader)
         fragment_source = self.shader_from_file(self.fragment_shader)
 
         if self.geometry_shader:
             geometry_source = self.shader_from_file(self.geometry_shader)
-            shader_id = compileProgram(compileShader(vertex_source, GL_VERTEX_SHADER),
-                                       compileShader(fragment_source, GL_FRAGMENT_SHADER),
-                                       compileShader(geometry_source, GL_GEOMETRY_SHADER))
-        else:
-            shader_id = compileProgram(compileShader(vertex_source, GL_VERTEX_SHADER),
-                                       compileShader(fragment_source, GL_FRAGMENT_SHADER))
+
+        # 2. compile shaders
+        # vertex shader
+        vertex = glCreateShader(GL_VERTEX_SHADER)
+        glShaderSource(vertex, vertex_source)
+        glCompileShader(vertex)
+        self.check_compile_errors(vertex, "VERTEX")
+
+        # fragment Shader
+        fragment = glCreateShader(GL_FRAGMENT_SHADER)
+        glShaderSource(fragment, fragment_source)
+        glCompileShader(fragment)
+        self.check_compile_errors(fragment, "FRAGMENT")
+
+        # geometry shader
+        if self.geometry_shader:
+            geometry = glCreateShader(GL_GEOMETRY_SHADER)
+            glShaderSource(geometry, geometry_source)
+            glCompileShader(geometry)
+            self.check_compile_errors(geometry, "GEOMETRY")
+
+        # shader Program
+        shader_id = glCreateProgram()
+        glAttachShader(shader_id, vertex)
+        glAttachShader(shader_id, fragment)
+
+        if self.geometry_shader:
+            glAttachShader(shader_id, geometry)
+
+        glLinkProgram(shader_id)
+        self.check_compile_errors(shader_id, "PROGRAM")
+        # delete the shaders as they're linked into our program now and no longer necessary
+        glDeleteShader(vertex)
+        glDeleteShader(fragment)
+
+        if self.geometry_shader:
+            glDeleteShader(geometry)
+
 
         return shader_id
 
@@ -285,3 +321,20 @@ class BaseShader:
 
         """
         return NotImplemented
+
+    @staticmethod
+    def check_compile_errors(shader: int, activity_type: str) -> None:
+        if activity_type != "PROGRAM":
+            success = glGetShaderiv(shader, GL_COMPILE_STATUS)
+            if not success:
+                info_log = glGetShaderInfoLog(shader)
+                print(
+                    "ERROR::SHADER_COMPILATION_ERROR of type: " + activity_type + "\n" + info_log.decode() + "\n -- --------------------------------------------------- -- ")
+        else:
+            success = glGetProgramiv(shader, GL_LINK_STATUS)
+            if not success:
+                info_log = glGetProgramInfoLog(shader)
+                print(
+                    "ERROR::PROGRAM_LINKING_ERROR of type: " + activity_type + "\n" + info_log.decode() + "\n -- --------------------------------------------------- -- ")
+
+

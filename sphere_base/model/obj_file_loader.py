@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from sphere_base.model.mesh import Mesh
-from sphere_base.utils import dump_exception
 from OpenGL.GL import *
 from PIL import Image
-
 from importlib_resources import files
+
 import sphere_base.model.resources.meshes
+from sphere_base.model.mesh import Mesh
+from sphere_base.utils import dump_exception
 
 DEBUG = False
 
@@ -34,20 +34,20 @@ class ObjectFileLoader:
         :type size: ``int``
 
         """
-        VAO = glGenVertexArrays(size)
-        VBO = glGenBuffers(size)
-        EBO = glGenBuffers(size)
+        vao = glGenVertexArrays(size)
+        vbo = glGenBuffers(size)
+        ebo = glGenBuffers(size)
 
         if size == 1:
             # if size is 1, glGenVertexArrays does not allow to iterate :-(
-            self.config.VAO.append(VAO)
-            self.config.VBO.append(VBO)
-            self.config.EBO.append(EBO)
+            self.config.VAO.append(vao)
+            self.config.VBO.append(vbo)
+            self.config.EBO.append(ebo)
         else:
-            for counter, value in enumerate(VAO):
-                self.config.VAO.append(VAO[counter])
-                self.config.VBO.append(VBO[counter])
-                self.config.EBO.append(EBO[counter])
+            for counter, value in enumerate(vao):
+                self.config.VAO.append(vao[counter])
+                self.config.VBO.append(vbo[counter])
+                self.config.EBO.append(ebo[counter])
 
         return len(self.config.VAO) - 1
 
@@ -61,7 +61,6 @@ class ObjectFileLoader:
         meshes, buffer = [], []
 
         try:
-            # with open(file_name, 'r') as f:
             with files(sphere_base.model.resources.meshes).joinpath(file_name).open('r') as f:
 
                 for line in self.non_blank_lines(f):
@@ -165,7 +164,7 @@ class ObjectFileLoader:
             end = start + 8
             print(buffer[start:end])
 
-    def load_mesh_into_opengl(self, mesh_id=0, buffer=[], indices=[], shader=""):
+    def load_mesh_into_opengl(self, mesh_id=0, buffer=None, indices=None, shader=""):
         """
         Loads a single mesh into Opengl buffers
 
@@ -224,7 +223,7 @@ class ObjectFileLoader:
         loads them into OpenGl
 
         """
-        self.  config.textures = glGenTextures(len(self.config.all_textures))
+        self.config.textures = glGenTextures(len(self.config.all_textures))
         for index, item in enumerate(self.config.all_textures.values()):
             path = item['file_dir_name']
             item_id = item['img_id'] + 1
