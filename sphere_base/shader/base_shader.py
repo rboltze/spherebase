@@ -228,7 +228,8 @@ class BaseShader:
             glUniformMatrix4fv(self.proj_loc, 1, GL_FALSE, self.projection_matrix)
 
     def set_view(self):
-        glUseProgram(self.shader_id)
+        # glUseProgram(self.shader_id)
+        self.use()
         glUniformMatrix4fv(self.view_loc, 1, GL_FALSE, self.config.view_loc)
 
     @staticmethod
@@ -290,7 +291,7 @@ class BaseShader:
                 print("scale", scale)
                 print("texture_id", texture_id, "\n")
 
-        glUseProgram(self.shader_id)
+        self.use()
         glBindVertexArray(self.config.VAO[mesh_index])
 
         # if texture_id > 0:
