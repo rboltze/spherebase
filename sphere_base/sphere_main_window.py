@@ -2,7 +2,7 @@
 
 import os.path
 
-# from PyQt5.QtCore import *
+from PyQt5.QtGui import QSurfaceFormat
 from PyQt5.QtCore import QSettings, QPoint, QSize
 from PyQt5.QtWidgets import *
 
@@ -31,7 +31,16 @@ class SphereMainWindow(QMainWindow):
 
         self._set_win_properties()
         self._read_settings()
+
         self.uv_widget = self.Uv_Widget_class(self)
+
+        # ---------------------------------------
+        # _format = QSurfaceFormat()
+        # _format.setVersion(3, 2)
+        # _format.setProfile(QSurfaceFormat.CoreProfile)
+        # self.uv_widget.setFormat(_format)
+        # ---------------------------------------
+
         self.setCentralWidget(self.uv_widget)
         self.setWindowTitle("Sphere")
         self.create_status_bar()

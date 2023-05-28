@@ -81,6 +81,8 @@ class Model(GraphicItem):
         self.models = models
         self.model_id = model_id if model_id else self.id
         self.name = model_name
+        self.loader = models.loader
+
 
         self.meshes = []  # list holding instances of mesh class
         self.texture_coordinates = []
@@ -89,13 +91,13 @@ class Model(GraphicItem):
         self.shader = eval(shader)(self, vertex_shader, fragment_shader, geometry_shader)
 
         if ".obj" == pathlib.Path(obj_file).suffix:
-            self.loader = ObjectFileLoader(self, config=self.config)
-            self.meshes = self.loader.get_meshes(obj_file)
+            self.loader = ObjectFileLoader(config=self.config)
+            self.meshes = self.loader.get_meshes(self, obj_file)
         else:
             pass
             # No object file passed, meshes need to be loaded later. This works for edges.
-            self.loader = ObjectFileLoader(self, config=self.config)
-            self.meshes = self.loader.create_empty_mesh()
+            self.loader = ObjectFileLoader(config=self.config)
+            self.meshes = self.loader.create_empty_mesh(self)
 
     def get_number_of_meshes_in_model(self) -> int:
         """
@@ -108,7 +110,7 @@ class Model(GraphicItem):
         Draw all ``Meshes`` for this ``Model``.
 
         :param parent: Parent object where this model was created.
-        :param texture_id: Id of the ``Texture`` that needs to be applied.
+        :param texture_id: ID of the ``Texture`` that needs to be applied.
         :type texture_id: ``int``
         :param color: color array rgb with alpha value
         :type color: ``Vector4``

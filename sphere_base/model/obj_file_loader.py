@@ -21,8 +21,7 @@ OpenGL in python e15 - loading 3D .obj files) and only works with .obj wavefront
 class ObjectFileLoader:
     Mesh_class = Mesh
 
-    def __init__(self, model=None, config=None):
-        self.model = model
+    def __init__(self, config=None):
         self.config = config
         self.index = 0
 
@@ -51,7 +50,7 @@ class ObjectFileLoader:
 
         return len(self.config.VAO) - 1
 
-    def get_meshes(self, file_name):
+    def get_meshes(self, model, file_name):
         # Creates:
         indices = []  # how many f x/x/x indices there are
         vert = []  # vertex coordinates
@@ -82,34 +81,34 @@ class ObjectFileLoader:
 
             buffer = self.create_sorted_vertex_buffer(all_indices, vert, tex, norm)
 
-            if self.model.name == "square1x1" or self.model.name == "rubber_band":
+            if model.name == "square1x1" or model.name == "rubber_band":
                 vert, indices, buffer = self.load_square1x1()
-            elif self.model.name == "circle" or self.model.name == "square" or self.model.name == "cross_hair1":
+            elif model.name == "circle" or model.name == "square" or model.name == "cross_hair1":
                 vert, indices, buffer = self.load_vertex1()
-            elif self.model.name == "sphere_node" or self.model.name == "socket":
+            elif model.name == "sphere_node" or model.name == "socket":
                 vert, indices, buffer = self.load_node_disc()
 
             mesh_id = self.config.get_mesh_id()
-            mesh = self.__class__.Mesh_class(self.model, mesh_id, vertices=vert, indices=indices,
+            mesh = self.__class__.Mesh_class(model, mesh_id, vertices=vert, indices=indices,
                                              buffer=buffer)
             meshes.append(mesh)
         except Exception as e:
             dump_exception(e)
 
         if DEBUG:
-            if self.model.name == "sphere_node":
-                print("vertices", self.model.name, vert)
-                print("indices", self.model.name, indices)
-                print("buffer", self.model.name, buffer)
+            if model.name == "sphere_node":
+                print("vertices", model.name, vert)
+                print("indices", model.name, indices)
+                print("buffer", model.name, buffer)
                 self.show_buffer_data(buffer)
                 print("\n")
 
         return meshes
 
-    def create_empty_mesh(self):
+    def create_empty_mesh(self, model):
         meshes = []
         mesh_id = self.create_buffers(1)
-        mesh = self.__class__.Mesh_class(self.model, mesh_id, vertices=[], indices=[],
+        mesh = self.__class__.Mesh_class(model, mesh_id, vertices=[], indices=[],
                                          buffer=[])
         meshes.append(mesh)
         return meshes
