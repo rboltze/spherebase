@@ -52,6 +52,7 @@ class ObjectFileLoader:
 
     def get_meshes(self, model, file_name):
         # Creates:
+        self.index = 0
         indices = []  # how many f x/x/x indices there are
         vert = []  # vertex coordinates
         tex = []  # texture coordinates

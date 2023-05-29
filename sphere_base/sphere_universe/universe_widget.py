@@ -18,8 +18,8 @@ from sphere_base.constants import *
 from sphere_base.utils import dump_exception
 
 
-# class UniverseWidget(QOpenGLWidget):
-class UniverseWidget(QGLWidget):
+class UniverseWidget(QOpenGLWidget):
+
     """
     This class represents the ``Universe Widget class`` it is a pyqt5 wrapper around the OpenGL widget.
 

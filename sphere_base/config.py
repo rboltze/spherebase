@@ -30,7 +30,7 @@ class UvConfig:
             - **uv** - Instance of :class:`~sphere_iot.uv_universe.Universe`
 
         """
-
+        # self.index = 0
         self.uv = universe
         self.view = self.uv.view
         self.view_loc = None

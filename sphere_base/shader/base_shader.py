@@ -14,7 +14,7 @@ from importlib_resources import files
 import sphere_base.model.resources.shaders
 import glm
 
-DEBUG = False
+DEBUG = True
 
 
 class BaseShader:
@@ -296,6 +296,7 @@ class BaseShader:
         glBindVertexArray(self.config.VAO[mesh_index])
 
         # if texture_id > 0:
+        #     print("texture_id>0", self.config.get_texture(texture_id))
         glActiveTexture(GL_TEXTURE0)
 
         glBindTexture(GL_TEXTURE_2D, self.config.get_texture(texture_id))
