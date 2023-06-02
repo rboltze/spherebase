@@ -38,7 +38,7 @@ class Models:
         self.config = universe.config
 
         self._models = []
-        self.loader = ObjectFileLoader(config=self.config)
+        self.loader = ObjectFileLoader(self)
         self.loader.load_all_textures_into_opengl()
         self.Model = self.__class__.Model_class
         self.setup_models()

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from PyQt5.QtGui import *
 from OpenGL.GL import *
 from PIL import Image
 from importlib_resources import files
@@ -21,9 +22,11 @@ OpenGL in python e15 - loading 3D .obj files) and only works with .obj wavefront
 class ObjectFileLoader:
     Mesh_class = Mesh
 
-    def __init__(self, config=None):
-        self.config = config
+    def __init__(self, parent):
+        self.config = parent.config
+        self.uv_widget = parent.uv.uv_widget
         self.index = 0
+        self.context = QOpenGLContext.currentContext()
 
     def create_buffers(self, size=1):
         """
@@ -179,6 +182,7 @@ class ObjectFileLoader:
 
         """
 
+        self.context.makeCurrent(self.uv_widget.surface)
         glBindVertexArray(self.config.VAO[mesh_id])
 
         # vertex Buffer Object
@@ -229,8 +233,7 @@ class ObjectFileLoader:
             item_id = item['img_id'] + 1
             self.load_texture_into_opengl(path, item_id)
 
-    @staticmethod
-    def load_texture_into_opengl(texture_path, texture_id):
+    def load_texture_into_opengl(self, texture_path, texture_id):
         """
         Load a texture into ``OpenGl``
 
@@ -241,6 +244,7 @@ class ObjectFileLoader:
 
         """
 
+        self.context.makeCurrent(self.uv_widget.surface)
         glBindTexture(GL_TEXTURE_2D, texture_id)
 
         # Set the texture wrapping parameters

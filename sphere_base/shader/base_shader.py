@@ -5,6 +5,7 @@ Base shader. This module contains the base shader class. It needs to be inherite
 
 """
 
+from PyQt5.QtGui import *
 from OpenGL.GL import *
 from pyrr import Vector3, matrix44
 import pyrr
@@ -36,9 +37,11 @@ class BaseShader:
         """
 
         self.config = parent.config
-        self.width = self.config.view.view_width
-        self.height = self.config.view.view_height
+        self.uv_widget = self.config.uv_widget
+        self.width = self.config.uv_widget.view_width
+        self.height = self.config.uv_widget.view_height
 
+        self.context = QOpenGLContext.currentContext()
         self.projection_matrix = None
 
         self.vertex_shader = vertex_shader
@@ -209,8 +212,8 @@ class BaseShader:
         Prepare OpenGL projection Matrix
 
         """
-        self.width = self.config.view.view_width
-        self.height = self.config.view.view_height
+        self.width = self.config.uv_widget.view_width
+        self.height = self.config.uv_widget.view_height
         self.set_projection_matrix()
 
     def set_projection_matrix(self):
@@ -292,6 +295,7 @@ class BaseShader:
                 print("scale", scale)
                 print("texture_id", texture_id, "\n")
 
+        # self.context.makeCurrent(self.uv_widget.surface)
         self.use()
         glBindVertexArray(self.config.VAO[mesh_index])
 

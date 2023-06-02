@@ -284,8 +284,8 @@ class MouseRay:
         :return: ``Vector4`` mouse position as a fraction of the screen
 
         """
-        x = (2.0 * mouse_x) / self.uv.view.view_width - 1.0
-        y = 1.0 - (2.0 * mouse_y) / self.uv.view.view_height
+        x = (2.0 * mouse_x) / self.uv.uv_widget.view_width - 1.0
+        y = 1.0 - (2.0 * mouse_y) / self.uv.uv_widget.view_height
         z = mouse_z
         return Vector4([x, y, z, 1.0])
 

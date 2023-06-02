@@ -91,7 +91,6 @@ class Model(GraphicItem):
         self.shader = eval(shader)(self, vertex_shader, fragment_shader, geometry_shader)
 
         if ".obj" == pathlib.Path(obj_file).suffix:
-            # self.loader = ObjectFileLoader(config=self.config)
             self.meshes = self.loader.get_meshes(self, obj_file)
         else:
             pass

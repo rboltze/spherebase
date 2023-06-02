@@ -139,7 +139,7 @@ class EdgeDrag:
         
         """
         # check what is under the mouse_pointer
-        item_id, item_pos = self.uv.mouse_ray.check_mouse_ray(self.uv.view.mouse_x, self.uv.view.mouse_y)
+        item_id, item_pos = self.uv.mouse_ray.check_mouse_ray(self.uv.uv_widget.mouse_x, self.uv.uv_widget.mouse_y)
 
         # if under the mouse is a node_disc then 'snap' to its socket
         item = self.sphere.get_item_by_id(item_id)

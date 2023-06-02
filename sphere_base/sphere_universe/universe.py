@@ -73,13 +73,13 @@ class Universe(Serializable):
 
         super().__init__("universe")
 
-        self.view = parent
+        self.uv_widget = parent
 
         self._spheres = []
         self._edges = []
         self._lens_index = 1  # variable to decide how to texture a sphere_base
 
-        self.mouse_last_x, self.mouse_last_y = self.view.view_width / 2, self.view.view_height / 2
+        self.mouse_last_x, self.mouse_last_y = self.uv_widget.view_width / 2, self.uv_widget.view_height / 2
         self.mouse_x, self.mouse_y = self.mouse_last_x, self.mouse_last_y
         self.mouse_offset = 0
         self.target_sphere = None
@@ -334,9 +334,9 @@ class Universe(Serializable):
         offset = 0
 
         # rotating the target sphere with the left and right arrows
-        if self.view.arrow_right:
+        if self.uv_widget.arrow_right:
             offset = 1.0  # degree
-        if self.view.arrow_left:
+        if self.uv_widget.arrow_left:
             offset = -1.0  # degree
         if self.mouse_offset != 0:
             offset = self.mouse_offset
@@ -354,17 +354,17 @@ class Universe(Serializable):
         # do the movement, call this function from the main loop
         rotation, angle_up, radius = None, None, None
 
-        if self.view.left:
+        if self.uv_widget.left:
             rotation = -.5
-        if self.view.right:
+        if self.uv_widget.right:
             rotation = .5
-        if self.view.forward:
+        if self.uv_widget.forward:
             radius = -.05
-        if self.view.back:
+        if self.uv_widget.back:
             radius = .05
-        if self.view.up:
+        if self.uv_widget.up:
             angle_up = .5
-        if self.view.down:
+        if self.uv_widget.down:
             angle_up = -.5
 
         # only process if there is movement

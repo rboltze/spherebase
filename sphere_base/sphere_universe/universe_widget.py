@@ -8,7 +8,7 @@ Module UV_Widget. The layer on top of the universe.
 from PyQt5.QtOpenGL import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QCursor
+from PyQt5.QtGui import *
 
 import json
 
@@ -41,28 +41,40 @@ class UniverseWidget(QGLWidget):
 
         """
         super().__init__(parent)
-        self.setMinimumSize(640, 480)
-
-        self.view_width, self.view_height = self.width(), self.height()
-
-        self.setFocusPolicy(Qt.StrongFocus)
-
-        self._delayed_init_listeners = []
         super().setMouseTracking(True)
 
         self.left, self.right, self.forward, self.back, self._shift = False, False, False, False, False
         self.up, self.down, self.arrow_left, self.arrow_right = False, False, False, False
-        self._left_mouse_button_down, self._right_mouse_button_down = False, False
-        self._middle_mouse_button_down, self._mouse_button_down = False, False
-        self._is_initialized = False
-        self._first_mouse = False  # Is true ones after each mouse button press
-        self.pybullet_key = None
-        self._clicked_on_item = None
-        self.mouse_ray_collision_point = None
-        self.mouse_x, self.mouse_y = None, None
-        self.uv = None
-        self.is_dragging = None
+        self._left_mouse_button_down, self._right_mouse_button_down, self._mouse_button_down = False, False, False
+        self._middle_mouse_button_down, self._is_initialized, self._first_mouse  = False, False, False
+        self.pybullet_key, self._clicked_on_item, self.mouse_ray_collision_point = None, None, None
+        self.mouse_x, self.mouse_y, self.uv, self.is_dragging = None, None, None, None
         self.mouse_last_x, self.mouse_last_y = None, None
+        self._delayed_init_listeners = []
+
+        self.setMinimumSize(640, 480)
+        self.view_width, self.view_height = self.width(), self.height()
+
+        self.setFocusPolicy(Qt.StrongFocus)
+
+        # configuring QOpenGLWidget Opengl
+        self.format = QSurfaceFormat()
+        self.format.setDepthBufferSize(24)
+        self.format.setStencilBufferSize(8)
+        self.format.setVersion(3, 4)
+        self.format.setProfile(QSurfaceFormat.CoreProfile)
+        QSurfaceFormat.setDefaultFormat(self.format)
+
+        self.surface = QOffscreenSurface()
+        self.surface.create()
+        self.context = QOpenGLContext()
+        self.context.setFormat(self.format)
+        # QOpenGLContext.setShareContext(self.context, self.context)
+        self.context.create()
+
+    def set_current_opengl_context(self):
+        # logger.info("Make the initial context current")
+        self.context.makeCurrent(self.surface)
 
     def add_to_delayed_init(self, callback: 'function'):
         """
@@ -249,6 +261,10 @@ class UniverseWidget(QGLWidget):
         :type event: 'event'
 
         """
+
+        if not self.underMouse():
+            'Do not react on movement outside of the widget'
+            return
 
         self.mouse_x, self.mouse_y = event.x(), event.y()
         self.get_mouse_pos()

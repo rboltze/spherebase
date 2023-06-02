@@ -30,9 +30,8 @@ class UvConfig:
             - **uv** - Instance of :class:`~sphere_iot.uv_universe.Universe`
 
         """
-        # self.index = 0
         self.uv = universe
-        self.view = self.uv.view
+        self.uv_widget = self.uv.uv_widget
         self.view_loc = None
 
         # project wide opengl buffers
