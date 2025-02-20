@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtCore import Qt, QRect
-from PyQt5.QtWidgets import QAction
+from PyQt6.QtCore import Qt, QRect
+from PyQt6.QtGui import QAction
 
 from examples.example_sphere.uv_widget import UVWidget
 from examples.example_sphere.widget.widget_settings import Settings

@@ -6,9 +6,9 @@ A module containing the Main Window menu class
 
 import json
 import pyperclip
-from PyQt5.QtCore import Qt, QRect
-from PyQt5.QtGui import QKeySequence
-from PyQt5.QtWidgets import *
+from PyQt6.QtCore import Qt, QRect
+from PyQt6.QtGui import QKeySequence, QAction
+from PyQt6.QtWidgets import *
 
 from examples.example_sphere.widget.widget_settings import Settings
 
@@ -44,57 +44,57 @@ class SphereMenu(QMenu):
     # noinspection PyUnresolvedReferences
     def create_actions(self):
         self.action_new = QAction('&New', self)
-        self.action_new.setShortcuts(QKeySequence.New)
+        self.action_new.setShortcuts(QKeySequence.StandardKey.New)
         self.action_new.setStatusTip('Create new graph')
         self.action_new.triggered.connect(self.main_win.on_file_new)
 
         self.action_open = QAction('&Open', self)
-        self.action_open.setShortcuts(QKeySequence.Open)
+        self.action_open.setShortcuts(QKeySequence.StandardKey.Open)
         self.action_open.setStatusTip('Open file')
         self.action_open.triggered.connect(self.main_win.on_file_open)
 
         self.action_save = QAction('&Save', self)
-        self.action_save.setShortcuts(QKeySequence.Save)
+        self.action_save.setShortcuts(QKeySequence.StandardKey.Save)
         self.action_save.setStatusTip('Save file')
         self.action_save.triggered.connect(self.main_win.on_file_save)
 
         self.action_save_as = QAction('Save &As...', self)
-        self.action_save_as.setShortcuts(QKeySequence.SaveAs)
+        self.action_save_as.setShortcuts(QKeySequence.StandardKey.SaveAs)
         self.action_save_as.setStatusTip('Save file as...')
         self.action_save_as.triggered.connect(self.main_win.on_file_save_as)
 
         self.action_exit = QAction('E&xit', self)
-        self.action_exit.setShortcuts(QKeySequence.Close)
+        self.action_exit.setShortcuts(QKeySequence.StandardKey.Close)
         self.action_exit.setStatusTip('Exit application')
         self.action_exit.triggered.connect(self.main_win.close)
 
         self.action_undo = QAction('&Undo', self)
-        self.action_undo.setShortcuts(QKeySequence.Undo)
+        self.action_undo.setShortcuts(QKeySequence.StandardKey.Undo)
         self.action_undo.setStatusTip('Undo last operation')
         self.action_undo.triggered.connect(self.uv_widget.on_edit_undo)
 
         self.action_redo = QAction('&Redo', self)
-        self.action_redo.setShortcuts(QKeySequence.Redo)
+        self.action_redo.setShortcuts(QKeySequence.StandardKey.Redo)
         self.action_redo.setStatusTip('Redo last operation')
         self.action_redo.triggered.connect(self.uv_widget.on_edit_redo)
 
         self.action_cut = QAction('Cu&t', self)
-        self.action_cut.setShortcuts(QKeySequence.Cut)
+        self.action_cut.setShortcuts(QKeySequence.StandardKey.Cut)
         self.action_cut.setStatusTip('Cut to clipboard')
         self.action_cut.triggered.connect(self.uv_widget.on_edit_cut)
 
         self.action_copy = QAction('&Copy', self)
-        self.action_copy.setShortcuts(QKeySequence.Copy)
+        self.action_copy.setShortcuts(QKeySequence.StandardKey.Copy)
         self.action_copy.setStatusTip('Copy to clipboard')
         self.action_copy.triggered.connect(self.uv_widget.on_edit_copy)
 
         self.action_paste = QAction('&Paste', self)
-        self.action_paste.setShortcuts(QKeySequence.Paste)
+        self.action_paste.setShortcuts(QKeySequence.StandardKey.Paste)
         self.action_paste.setStatusTip('Paste from clipboard')
         self.action_paste.triggered.connect(self.uv_widget.on_edit_paste)
 
         self.action_delete = QAction('&Delete', self)
-        self.action_delete.setShortcuts(QKeySequence.Delete)
+        self.action_delete.setShortcuts(QKeySequence.StandardKey.Delete)
         self.action_delete.setStatusTip('Delete _selected items')
         self.action_delete.triggered.connect(self.uv_widget.on_edit_paste)
 

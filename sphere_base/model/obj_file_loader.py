@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtGui import *
+from PyQt6.QtGui import *
 from OpenGL.GL import *
 from PIL import Image
 from importlib_resources import files

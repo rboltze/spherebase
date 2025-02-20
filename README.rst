@@ -27,11 +27,11 @@ Features
 Requirements
 =============
 
-This package is created in python using a pyqt5 window.
+This package is created in python using a PyQt6 window.
 
 - Python 3.x
 - PyOpenGL
-- PyQt5
+- PyQt6
 - pyperclip
 - pybullet
 - Pillow

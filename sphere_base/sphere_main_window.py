@@ -2,9 +2,9 @@
 
 import os.path
 
-from PyQt5.QtGui import QSurfaceFormat
-from PyQt5.QtCore import QSettings, QPoint, QSize
-from PyQt5.QtWidgets import *
+from PyQt6.QtGui import QSurfaceFormat
+from PyQt6.QtCore import QSettings, QPoint, QSize
+from PyQt6.QtWidgets import *
 
 from sphere_base.sphere_main_menu import SphereMenu
 from sphere_base.sphere_universe.universe_widget import UniverseWidget
@@ -207,12 +207,12 @@ class SphereMainWindow(QMainWindow):
 
         result = QMessageBox.warning(self, "About to loose your work?",
                                      "The document has been modified.\n Do you want to save your changes?",
-                                     QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel
+                                     QMessageBox.StandardButton.Save | QMessageBox.StandardButton.Discard | QMessageBox.StandardButton.Cancel
                                      )
 
-        if result == QMessageBox.Save:
+        if result == QMessageBox.StandardButton.Save:
             return self.on_file_save()
-        elif result == QMessageBox.Cancel:
+        elif result == QMessageBox.StandardButton.Cancel:
             return False
 
         return True

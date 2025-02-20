@@ -5,10 +5,11 @@ Module UV_Widget. The layer on top of the universe.
 
 """
 
-from PyQt5.QtOpenGL import *
-from PyQt5.QtCore import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
+from PyQt6.QtOpenGL import *
+from PyQt6.QtCore import *
+from PyQt6.QtWidgets import *
+from PyQt6.QtGui import *
+from PyQt6.QtOpenGLWidgets import QOpenGLWidget
 
 import json
 
@@ -18,10 +19,10 @@ from sphere_base.constants import *
 from sphere_base.utils import dump_exception
 
 
-# class UniverseWidget(QOpenGLWidget):
-class UniverseWidget(QGLWidget):
+class UniverseWidget(QOpenGLWidget):
+    # class UniverseWidget(QGLWidget):
     """
-    This class represents the ``Universe Widget class`` it is a pyqt5 wrapper around the OpenGL widget.
+    This class represents the ``Universe Widget class`` it is a PyQt6 wrapper around the OpenGL widget.
 
     """
 
@@ -55,14 +56,14 @@ class UniverseWidget(QGLWidget):
         self.setMinimumSize(640, 480)
         self.view_width, self.view_height = self.width(), self.height()
 
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         # configuring QOpenGLWidget Opengl
         self.format = QSurfaceFormat()
         self.format.setDepthBufferSize(24)
         self.format.setStencilBufferSize(8)
         self.format.setVersion(3, 4)
-        self.format.setProfile(QSurfaceFormat.CoreProfile)
+        self.format.setProfile(QSurfaceFormat.OpenGLContextProfile.CoreProfile)
         QSurfaceFormat.setDefaultFormat(self.format)
 
         self.surface = QOffscreenSurface()
@@ -87,7 +88,7 @@ class UniverseWidget(QGLWidget):
 
     def initializeGL(self):
         """
-        Initialize PyQt5 OpenGl. After initializing continue with initializing any of the
+        Initialize PyQt6 OpenGl. After initializing continue with initializing any of the
         delayed initializations.
 
         """
@@ -157,10 +158,10 @@ class UniverseWidget(QGLWidget):
 
         """
 
-        self.mouse_x, self.mouse_y = event.x(), event.y()
+        self.mouse_x, self.mouse_y = event.pos().x(), event.pos().y()
         self.get_mouse_pos()
 
-        if event.button() == Qt.LeftButton:
+        if event.button() == Qt.MouseButton.LeftButton:
             self._first_mouse = True
             self._left_mouse_button_down = True
 
@@ -180,14 +181,14 @@ class UniverseWidget(QGLWidget):
                 # if it is not a sphere then get the _selected item, set selected sphere item
                 self.uv.target_sphere.get_selected_item(self._clicked_on_item, self._shift)
 
-        if event.button() == Qt.RightButton:
+        if event.button() == Qt.MouseButton.RightButton:
             self._first_mouse = True
             self._right_mouse_button_down = True
 
             if not self._clicked_on_item:
                 return
 
-        if event.button() == Qt.MiddleButton:
+        if event.button() == Qt.MouseButton.MiddleButton:
             self._first_mouse = True
             self._middle_mouse_button_down = True
             self.uv.target_sphere.last_collision_point = self.mouse_ray_collision_point
@@ -201,7 +202,7 @@ class UniverseWidget(QGLWidget):
         self._clicked_on_item = None
         self._left_mouse_button_down = False
         self._right_mouse_button_down = False
-        self.setCursor(QCursor(Qt.ArrowCursor))
+        self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
 
     def mouseReleaseEvent(self, event):
         """
@@ -266,22 +267,22 @@ class UniverseWidget(QGLWidget):
             'Do not react on movement outside of the widget'
             return
 
-        self.mouse_x, self.mouse_y = event.x(), event.y()
+        self.mouse_x, self.mouse_y = event.pos().x(), event.pos().y()
         self.get_mouse_pos()
 
         if self.uv.target_sphere and self.uv.cam.distance_to_target < HOVER_MIN_DISTANCE:
             hovered_item = self.uv.target_sphere.check_for_hover(self.mouse_x, self.mouse_y)
             if hovered_item:
-                self.setCursor(QCursor(Qt.PointingHandCursor))
+                self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
             else:
-                self.setCursor(QCursor(Qt.ArrowCursor))
+                self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
 
         if self._left_mouse_button_down:
 
             if self._clicked_on_item and self.uv.target_sphere.selected_item:
                 # dragging _selected items
                 self.is_dragging = True
-                self.setCursor(QCursor(Qt.ClosedHandCursor))
+                self.setCursor(QCursor(Qt.CursorShape.ClosedHandCursor))
                 # we are only looking at the first object in the selected objects.
                 # If it is node or edge then try to drag the whole selected group of items.
                 if self.uv.target_sphere.selected_item.type in ("sphere_node", "edge"):
@@ -307,7 +308,7 @@ class UniverseWidget(QGLWidget):
             x_offset, y_offset = self.get_mouse_position_offset(self.mouse_x, self.mouse_y)
 
             if self._clicked_on_item and self._clicked_on_item == self.uv.target_sphere.id:
-                self.setCursor(QCursor(Qt.ClosedHandCursor))
+                self.setCursor(QCursor(Qt.CursorShape.ClosedHandCursor))
 
                 # only rotate the sphere_base over the y-axis
                 self.uv.rotate_target_sphere_with_mouse(x_offset, self.mouse_ray_collision_point)
@@ -335,46 +336,46 @@ class UniverseWidget(QGLWidget):
         :param event: contains the key that is pressed
 
         """
-        if event.key() == Qt.Key_W:
+        if event.key() == Qt.Key.Key_W:
             self.forward = True
-        elif event.key() == Qt.Key_Z and event.modifiers() == Qt.ControlModifier:
+        elif event.key() == Qt.Key.Key_Z and event.modifiers() == Qt.KeyboardModifier.ControlModifier:
             # UNDO
             self.on_edit_undo()
-        elif event.key() == Qt.Key_Z and event.modifiers() == (Qt.ControlModifier | Qt.ShiftModifier):
+        elif event.key() == Qt.Key.Key_Z and event.modifiers() == (Qt.KeyboardModifier.ControlModifier | Qt.KeyboardModifier.ShiftModifier):
             # REDO
             self.on_edit_redo()
-        elif event.key() == Qt.Key_C and event.modifiers() == Qt.ControlModifier:
+        elif event.key() == Qt.Key.Key_C and event.modifiers() == Qt.KeyboardModifier.ControlModifier:
             # copy to clipboard
             self.on_edit_copy()
-        elif event.key() == Qt.Key_X and event.modifiers() == Qt.ControlModifier:
+        elif event.key() == Qt.Key.Key_X and event.modifiers() == Qt.KeyboardModifier.ControlModifier:
             # cut to clip board
             self.on_edit_cut()
-        elif event.key() == Qt.Key_V and event.modifiers() == Qt.ControlModifier:
+        elif event.key() == Qt.Key.Key_V and event.modifiers() == Qt.KeyboardModifier.ControlModifier:
             # paste from clipboard
             self.on_edit_paste()
-        elif event.key() == Qt.Key_S:
+        elif event.key() == Qt.Key.Key_S:
             self.back = True
-        elif event.key() == Qt.Key_A:
+        elif event.key() == Qt.Key.Key_A:
             self.right = True
-        elif event.key() == Qt.Key_Left:
+        elif event.key() == Qt.Key.Key_Left:
             self.arrow_left = True
-        elif event.key() == Qt.Key_D:
+        elif event.key() == Qt.Key.Key_D:
             self.left = True
-        elif event.key() == Qt.Key_Right:
+        elif event.key() == Qt.Key.Key_Right:
             self.arrow_right = True
-        elif event.key() == Qt.Key_Up:
+        elif event.key() == Qt.Key.Key_Up:
             self.up = True
-        elif event.key() == Qt.Key_Down:
+        elif event.key() == Qt.Key.Key_Down:
             self.down = True
-        elif event.key() == Qt.Key_T:
+        elif event.key() == Qt.Key.Key_T:
             self.uv.cam.get_cam_collision_point()
-        elif event.key() == Qt.Key_P:
+        elif event.key() == Qt.Key.Key_P:
             self.uv.skybox.get_next_set()
-        elif event.key() == Qt.Key_O:
+        elif event.key() == Qt.Key.Key_O:
             self.uv.skybox.get_former_set()
-        elif event.key() == Qt.Key_Delete:
+        elif event.key() == Qt.Key.Key_Delete:
             self.uv.target_sphere.delete_selected_items()
-        elif event.key() == Qt.Key_Shift:
+        elif event.key() == Qt.Key.Key_Shift:
             self._shift = True
 
     def keyReleaseEvent(self, event):
@@ -384,23 +385,23 @@ class UniverseWidget(QGLWidget):
         :param event: contains the key that is released
 
         """
-        if event.key() == Qt.Key_W:
+        if event.key() == Qt.Key.Key_W:
             self.forward = False
-        elif event.key() == Qt.Key_S:
+        elif event.key() == Qt.Key.Key_S:
             self.back = False
-        elif event.key() == Qt.Key_A:
+        elif event.key() == Qt.Key.Key_A:
             self.right = False
-        elif event.key() == Qt.Key_Left:
+        elif event.key() == Qt.Key.Key_Left:
             self.arrow_left = False
-        elif event.key() == Qt.Key_D:
+        elif event.key() == Qt.Key.Key_D:
             self.left = False
-        elif event.key() == Qt.Key_Right:
+        elif event.key() == Qt.Key.Key_Right:
             self.arrow_right = False
-        elif event.key() == Qt.Key_Up:
+        elif event.key() == Qt.Key.Key_Up:
             self.up = False
-        elif event.key() == Qt.Key_Down:
+        elif event.key() == Qt.Key.Key_Down:
             self.down = False
-        elif event.key() == Qt.Key_Shift:
+        elif event.key() == Qt.Key.Key_Shift:
             self._shift = False
 
     def get_mouse_position_offset(self, x_pos, y_pos):
@@ -458,7 +459,7 @@ class UniverseWidget(QGLWidget):
         create_item_node = context_menu.addAction("Item node")  # 2
 
         # create_entity_node = context_menu.addAction("Entity node")  # 3
-        action = context_menu.exec_(self.mapToGlobal(event.pos()))
+        action = context_menu.exec(self.mapToGlobal(event.pos()))
 
         if action == create_person_node:
             self.uv.target_sphere.create_new_node(1, self.mouse_ray_collision_point)

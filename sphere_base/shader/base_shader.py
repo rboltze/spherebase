@@ -5,7 +5,7 @@ Base shader. This module contains the base shader class. It needs to be inherite
 
 """
 
-from PyQt5.QtGui import *
+from PyQt6.QtGui import *
 from OpenGL.GL import *
 from pyrr import Vector3, matrix44
 import pyrr

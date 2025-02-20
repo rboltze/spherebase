@@ -6,7 +6,7 @@ Dynamic shader. This is the dynamic shader class. It allows for dynamic shading 
 
 """
 
-from PyQt5.QtGui import *
+from PyQt6.QtGui import *
 from OpenGL.GL import *
 from sphere_base.shader.base_shader import BaseShader
 
