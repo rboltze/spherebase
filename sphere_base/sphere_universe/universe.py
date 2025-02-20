@@ -401,6 +401,9 @@ class Universe(Serializable):
             dump_exception(e)
 
     def deserialize(self, data: dict, hashmap: dict = None, restore_id: bool = True) -> bool:
+        if not data:
+            return False
+
         self.clear()
         hashmap = hashmap if hashmap else {}
         self.id = data['id']

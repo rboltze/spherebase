@@ -489,8 +489,10 @@ class UniverseWidget(QGLWidget):
         """
 
         with open(file_name, "r") as file:
+            print(file_name)
             raw_data = file.read()
-            data = json.loads(raw_data, encoding='utf-8')
+            data = json.loads(raw_data)
+
             self.uv.deserialize(data)
             self.uv.target_sphere.history.store_initial_history_stamp()
 

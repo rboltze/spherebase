@@ -305,6 +305,7 @@ class BaseShader:
 
         glBindTexture(GL_TEXTURE_2D, self.config.get_texture(texture_id))
         obj_pos = matrix44.create_from_translation(Vector3(position))
+
         glUniformMatrix4fv(self.model_loc, 1, GL_FALSE, obj_pos)
 
         if color:
