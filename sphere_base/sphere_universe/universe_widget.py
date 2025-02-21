@@ -5,7 +5,6 @@ Module UV_Widget. The layer on top of the universe.
 
 """
 
-from PyQt6.QtOpenGL import *
 from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
@@ -30,17 +29,7 @@ class UniverseWidget(QOpenGLWidget):
     keyPressed = pyqtSignal(int)
 
     def __init__(self, parent):
-        """
-        Constructor of the ``UV_Widget`` class
 
-        :param parent: reference to the parent class.
-
-        :Instance Variables:
-
-            - **view_width** - width of the view screen.
-            - **view_height** - height of the view screen.
-
-        """
         super().__init__(parent)
         super().setMouseTracking(True)
 
@@ -78,20 +67,12 @@ class UniverseWidget(QOpenGLWidget):
         self.context.makeCurrent(self.surface)
 
     def add_to_delayed_init(self, callback: 'function'):
-        """
-        Register callback for 'delayed init' event.
-
-        :param callback: callback function
-
-        """
+        # Register callback for 'delayed init' event.
         self._delayed_init_listeners.append(callback)
 
     def initializeGL(self):
-        """
-        Initialize PyQt6 OpenGl. After initializing continue with initializing any of the
-        delayed initializations.
+        # Initialize PyQt6 OpenGl. After initializing continue with initializing any of the delayed initializations.
 
-        """
         self.uv = self.__class__.Universe_class(self, pybullet_key=self.pybullet_key)
 
         if not self._is_initialized:
@@ -104,16 +85,7 @@ class UniverseWidget(QOpenGLWidget):
         self._is_initialized = True
 
     def resizeGL(self, width, height):
-        """
-
-        Resize the screen
-
-        :param width: New width size
-        :type width: ``float``
-        :param height: New height size
-        :type height: ``float``
-
-        """
+        # Resize the screen
 
         self.view_width = width
         self.view_height = height
@@ -125,13 +97,6 @@ class UniverseWidget(QOpenGLWidget):
         self.uv.view_height = height
 
     def contextMenuEvent(self, event):
-        """
-
-        :param event: xy-mouse position
-        :type event: 'event'
-        :return:
-
-        """
         _x, _y = event.x(), event.y()
         self._clicked_on_item, self.mouse_ray_collision_point = self.uv.mouse_ray.check_mouse_ray(_x, _y)
 
@@ -140,24 +105,14 @@ class UniverseWidget(QOpenGLWidget):
         return super().contextMenuEvent(event)
 
     def get_mouse_pos(self):
-        """
-        Helper function to get the object that the mouse is pointing at and to return the mouse ray collision
-        point coordinates.
+        # Helper function to get the object and to return the mouse ray collision point coordinates.
 
-        """
         self._clicked_on_item, self.mouse_ray_collision_point = self.uv.mouse_ray.check_mouse_ray(self.mouse_x,
                                                                                                   self.mouse_y)
         return self._clicked_on_item, self.mouse_ray_collision_point, self.mouse_x, self.mouse_y
 
     def mousePressEvent(self, event):
-        """
-        Handles mouse press event
-
-        :param event: contains the x and y mouse position
-        :type event: 'event'
-
-        """
-
+        # overrides PyQt mousePressEvent
         self.mouse_x, self.mouse_y = event.pos().x(), event.pos().y()
         self.get_mouse_pos()
 
@@ -194,10 +149,7 @@ class UniverseWidget(QOpenGLWidget):
             self.uv.target_sphere.last_collision_point = self.mouse_ray_collision_point
 
     def _reset_mouse(self):
-        """
-        Reset the mouse flags
-
-        """
+        # reset the flags
         self._middle_mouse_button_down = False
         self._clicked_on_item = None
         self._left_mouse_button_down = False
@@ -205,13 +157,7 @@ class UniverseWidget(QOpenGLWidget):
         self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
 
     def mouseReleaseEvent(self, event):
-        """
-        Handles mouse release event
-
-        :param event: contains the x and y mouse position
-        :type event: 'event'
-
-        """
+        # overrides PyQt mouse release event
 
         selection = self.uv.rubber_band_box.get_selection()
 
@@ -255,16 +201,10 @@ class UniverseWidget(QOpenGLWidget):
         self._reset_mouse()
 
     def mouseMoveEvent(self, event):
-        """
-        Handles mouse release event
-
-        :param event: contains the x and y mouse position
-        :type event: 'event'
-
-        """
+        # overrides PyQt mouseMoveEvent
 
         if not self.underMouse():
-            'Do not react on movement outside of the widget'
+            # Do not react on movement outside the widget
             return
 
         self.mouse_x, self.mouse_y = event.pos().x(), event.pos().y()
@@ -317,12 +257,6 @@ class UniverseWidget(QOpenGLWidget):
                 self.uv.cam.process_mouse_movement(self.uv.target_sphere, 0, -y_offset)
 
     def wheelEvent(self, event):
-        """
-        Handles mouse wheel event.
-
-        :param event: contains mouse wheel rotation
-
-        """
         step = 1 if event.angleDelta().y() > 0 else -1
         radius = .05 * -step
 
@@ -330,12 +264,6 @@ class UniverseWidget(QOpenGLWidget):
         self.uv.target_sphere.has_been_modified = True
 
     def keyPressEvent(self, event):
-        """
-        Handles key press event
-
-        :param event: contains the key that is pressed
-
-        """
         if event.key() == Qt.Key.Key_W:
             self.forward = True
         elif event.key() == Qt.Key.Key_Z and event.modifiers() == Qt.KeyboardModifier.ControlModifier:
@@ -379,12 +307,6 @@ class UniverseWidget(QOpenGLWidget):
             self._shift = True
 
     def keyReleaseEvent(self, event):
-        """
-        Handles key release event
-
-        :param event: contains the key that is released
-
-        """
         if event.key() == Qt.Key.Key_W:
             self.forward = False
         elif event.key() == Qt.Key.Key_S:
@@ -405,15 +327,8 @@ class UniverseWidget(QOpenGLWidget):
             self._shift = False
 
     def get_mouse_position_offset(self, x_pos, y_pos):
-        """
-        Get difference between last stored location of the mouse on the screen
-        and the current mouse position.
-
-        :param x_pos: x position of the mouse pointer
-        :param y_pos: y position of the mouse pointer
-        :returns: (``float``, ``float``) x_offset, y_offset
-
-        """
+        # Get difference between last stored location of the mouse on the screen
+        # and the current mouse position.
 
         # Offset between the current mouse pointer position and the last
         if self._first_mouse:
@@ -433,14 +348,6 @@ class UniverseWidget(QOpenGLWidget):
         return x_offset, y_offset
 
     def handle_context_menu(self, event):
-        """
-        Handles context menu
-
-        :param event: Handles context menu
-        :type event: 'event
-
-        """
-
         menu_style = (
             "QMenu::item{"
             "background-color: lightGrey;"
@@ -469,38 +376,22 @@ class UniverseWidget(QOpenGLWidget):
         #     self.uv.target_sphere.create_new_node(1, self.mouse_ray_collision_point)
 
     def save_to_file(self, file_name: str):
-        """
-        Save json to file
-
-        :param file_name: path and name of the file to write to
-        :type file_name: str
-        :return:
-
-        """
+        # Save json to file
         with open(file_name, "w") as file:
             file.write(json.dumps(self.uv.serialize(), indent=4))
 
     def load_from_file(self, file_name):
-        """
-        Load json from file
-
-        :param file_name: path and name of the file to load from
-        :type file_name: str
-
-        """
+        # Load json from file
 
         with open(file_name, "r") as file:
-            print(file_name)
             raw_data = file.read()
             data = json.loads(raw_data)
 
             self.uv.deserialize(data)
-            self.uv.target_sphere.history.store_initial_history_stamp()
+            # self.uv.target_sphere.history.store_initial_history_stamp()
 
     def uv_new(self):
-        """
-        re-create the universe
-        """
+        # re-create the universe
         self.uv.uv_new()
 
     def on_edit_undo(self):

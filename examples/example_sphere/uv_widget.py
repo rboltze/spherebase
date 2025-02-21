@@ -27,7 +27,8 @@ class SphereUniverse(Universe):
 
     def draw(self):
         # In the detail sphere_base window only draw the selected sphere_base
-        self.target_sphere.draw()
+        if self.target_sphere:
+            self.target_sphere.draw()
 
 
 class UVWidget(UniverseWidget):

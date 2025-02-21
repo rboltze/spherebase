@@ -160,7 +160,10 @@ class SphereMenu(QMenu):
 
         if self.uv_widget.uv:
             active_sphere = True if self.get_sphere() else False
-            active = True if len(self.get_sphere().items_selected) > 0 else False
+            if active_sphere:
+                active = True if len(self.get_sphere().items_selected) > 0 else False
+            else:
+                active = False
             self.action_paste.setEnabled(active_sphere)
             self.action_cut.setEnabled(active)
             self.action_copy.setEnabled(active)

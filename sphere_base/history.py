@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 """
-A module containing all the code for working with history on a single sphere (Undo/Redo)
+
+    A module containing all the code for working with history on a single sphere (Undo/Redo)
+
 """
 
 from sphere_base.utils import dump_exception
@@ -11,16 +13,15 @@ DEBUG_RESTORE = False
 
 
 class History:
-    """ Class contains all the code for undo/redo operations on a single sphere_base """
 
-    def __init__(self, sphere: 'Sphere'):
+    def __init__(self, sphere):
         """
         Constructor of the ``History`` class.
 
         :param sphere: reference to  :class:`~sphere_iot.uv_sphere.Sphere`.
         :type sphere:  :class:`~sphere_iot.uv_sphere.Sphere`
 
-        :Instance Variables:
+        Instance Variables:
 
             - **sphere_base** - :class:`~sphere_iot.uv_sphere.Sphere`.
             - **current_img_id** - id of the current active image.
@@ -52,20 +53,17 @@ class History:
         self.history_current_step = -1
 
     def clear(self):
-        """
-        Reset the history stack
-        """
+        # Reset the history stack
         self.history_stack = []
         self.history_current_step = -1
 
     def store_initial_history_stamp(self):
-        """
-        Helper function usually used when new or open file requested
-        """
+        # Helper function usually used when new or open file requested
+
         self.clear()
         self.store_history("Initial history stamp")
 
-    def add_history_modified_listener(self, callback: 'function'):
+    def add_history_modified_listener(self, callback):
         """
         Register callback for 'history modified' event.
         :param callback: callback function
@@ -79,7 +77,7 @@ class History:
         """
         self._history_stored_listeners.append(callback)
 
-    def add_history_restored_listener(self, callback: 'function'):
+    def add_history_restored_listener(self, callback):
         """
         Register callback for 'history restored' event.
         :param callback: callback function

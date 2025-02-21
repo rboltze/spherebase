@@ -17,18 +17,15 @@ from sphere_base.clipboard import Clipboard
 from sphere_base.config import UvConfig
 from sphere_base.shader.default_shader import DefaultShader
 from sphere_base.calc import *
-import json
 import os.path
 
 DEBUG = False
-TEST_SPHERE_NUMBER = 1
+TEST_SPHERE_NUMBER = 10
 
 
 class Universe(Serializable):
-    """
-    This class represents the ``IOT universe``. It contains all the spheres
+    # This class represents the universe. It contains all the spheres
 
-    """
     Camera_class = Camera
     Models_class = Models
     Sphere_class = Sphere
@@ -41,35 +38,6 @@ class Universe(Serializable):
 
     def __init__(self, parent, skybox_img_dir=None, sphere_texture_dir=None, sphere_icon_dir=None,
                  pybullet_key=None):
-        """
-        Constructor of the ``Universe`` class
-
-        :param parent: Reference to the universe class universe widget.
-        :type parent: :class:`~sphere_iot.uv_widget.UV_Widget` or  :class:`~sphere_iot.uv_widget_glfw.UWidgetGLFW`.
-        :param pybullet_key: Used to run the universe in its own physics engine
-        :type pybullet_key: ``str``
-
-        :Instance Attributes:
-
-            - **target_sphere** - Instance of :class:`~sphere_iot.uv_sphere.Sphere`.
-            - **config** - Instance of :class:`~sphere_iot.uv_config.UvConfig`.
-            - **shader** - Instance of :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`.
-            - **cam** - Instance of :class:`~sphere_iot.uv_cam.camera`.
-            - **models** - Instance of :class:`~sphere_iot.uv_models.Models`.
-            - **mouse_ray** - Instance of :class:`~sphere_iot.uv_mouse_ray.MouseRay`.
-            - **skybox** - Instance of :class:`~sphere_iot.uv_skybox.Skybox`.
-            - **rubber_band_box** - Instance of :class:`~sphere_iot.uv_rubber_band.RubberBand`.
-            - **clipboard** - Instance of :class:`~sphere_iot.uv_clipboard.Clipboard`.
-
-        :Instance Variables:
-
-            - **mouse_last_x** - last stored x-position (``float``) of the mouse pointer.
-            - **mouse_last_y** - last stored y-position (``float``) of the mouse pointer.
-            - **mouse_x** - current x-position (``float``) of the mouse pointer.
-            - **mouse_y** - current y-position (``float``) of the mouse pointer.
-            - **mouse_offset** - ``float`` used when dragging the sphere_base over its axis.
-
-        """
 
         super().__init__("universe")
 
@@ -124,11 +92,8 @@ class Universe(Serializable):
         # sphere.on_lens_index_changed()
 
     def clear(self):
-        """
-        Removes all spheres. This will then cascade down first removing all sphere_base items on each sphere_base.
-        These items include nodes, sockets and edges.
-
-        """
+        # Removes all spheres. This will then cascade down first removing all sphere_base items on each sphere_base.
+        # These items include nodes, sockets and edges.
 
         for sphere in self._spheres:
             sphere.remove()
@@ -232,7 +197,7 @@ class Universe(Serializable):
         """
         self._has_been_modified_listeners.append(callback)
 
-    def on_selection_changed(self, sphere, sphere_items: list):
+    def on_selection_changed(self, sphere, sphere_items: [list, None] = None):
         """
         Handles 'selection changed' and triggers event 'selection changed'.
 
@@ -402,6 +367,8 @@ class Universe(Serializable):
 
     def deserialize(self, data: dict, hashmap: dict = None, restore_id: bool = True) -> bool:
         if not data:
+            self.target_sphere = self.Sphere(self, [0.0, 0.0, 0.0], 0)
+            self.target_sphere.history.store_initial_history_stamp()
             return False
 
         self.clear()
@@ -420,6 +387,7 @@ class Universe(Serializable):
         for sphere in self._spheres:
             if data['target_sphere_id'] == sphere.id:
                 self.target_sphere = sphere
+                self.target_sphere.history.store_initial_history_stamp()
 
         # deserialize camera
         for camera in data['camera']:
