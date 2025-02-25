@@ -73,10 +73,10 @@ class WidgetSphereSettings(QWidget):
 
     def _setup_red_slider(self):
         l_red = QLabel("red:")
-        self.sl_red = QSlider(Qt.Horizontal)
+        self.sl_red = QSlider(Qt.Orientation.Horizontal)
         self.sl_red.setMinimum(0)
         self.sl_red.setMaximum(100)
-        self.sl_red.setTickPosition(QSlider.TicksBelow)
+        self.sl_red.setTickPosition(QSlider.TickPosition.TicksBelow)
         self.sl_red.setTickInterval(45)
         self.sl_red.valueChanged.connect(self.on_red_slider_change)
         self.sl_red.setToolTip("Red value")
@@ -93,10 +93,10 @@ class WidgetSphereSettings(QWidget):
 
     def _setup_green_slider(self):
         l_green = QLabel("green:")
-        self.sl_green = QSlider(Qt.Horizontal)
+        self.sl_green = QSlider(Qt.Orientation.Horizontal)
         self.sl_green.setMinimum(0)
         self.sl_green.setMaximum(100)
-        self.sl_green.setTickPosition(QSlider.TicksBelow)
+        self.sl_green.setTickPosition(QSlider.TickPosition.TicksBelow)
         self.sl_green.setTickInterval(45)
         self.sl_green.valueChanged.connect(self.on_green_slider_change)
         self.sl_green.setToolTip("green value")
@@ -113,10 +113,10 @@ class WidgetSphereSettings(QWidget):
 
     def _setup_blue_slider(self):
         l_blue = QLabel("blue:")
-        self.sl_blue = QSlider(Qt.Horizontal)
+        self.sl_blue = QSlider(Qt.Orientation.Horizontal)
         self.sl_blue.setMinimum(0)
         self.sl_blue.setMaximum(100)
-        self.sl_blue.setTickPosition(QSlider.TicksBelow)
+        self.sl_blue.setTickPosition(QSlider.TickPosition.TicksBelow)
         self.sl_blue.setTickInterval(45)
         self.sl_blue.valueChanged.connect(self.on_blue_slider_change)
         self.sl_blue.setToolTip("blue value")
@@ -133,10 +133,10 @@ class WidgetSphereSettings(QWidget):
 
     def _setup_transparency_slider(self):
         l_transparency = QLabel("transparency:")
-        self.sl_transparency = QSlider(Qt.Horizontal)
+        self.sl_transparency = QSlider(Qt.Orientation.Horizontal)
         self.sl_transparency.setMinimum(0)
         self.sl_transparency.setMaximum(100)
-        self.sl_transparency.setTickPosition(QSlider.TicksBelow)
+        self.sl_transparency.setTickPosition(QSlider.TickPosition.TicksBelow)
         self.sl_transparency.setTickInterval(45)
         self.sl_transparency.valueChanged.connect(self.on_transparency_slider_change)
         self.sl_transparency.setToolTip("transparency")
@@ -153,10 +153,10 @@ class WidgetSphereSettings(QWidget):
 
     def _setup_animation_slider(self):
         l_animation = QLabel("Animation:")
-        self.sl_animation = QSlider(Qt.Horizontal)
+        self.sl_animation = QSlider(Qt.Orientation.Horizontal)
         self.sl_animation.setMinimum(-100)
         self.sl_animation.setMaximum(100)
-        self.sl_animation.setTickPosition(QSlider.TicksBelow)
+        self.sl_animation.setTickPosition(QSlider.TickPosition.TicksBelow)
         self.sl_animation.setTickInterval(45)
         self.sl_animation.valueChanged.connect(self.on_animation_slider_change)
         self.sl_animation.setToolTip("Animation speed")

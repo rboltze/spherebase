@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os.path
-from PyQt6.QtWidgets import QMainWindow, QMessageBox
+from PyQt6.QtWidgets import QMainWindow, QMessageBox, QFileDialog, QApplication
 from PyQt6.QtCore import QSettings, QPoint, QSize
 
 from sphere_base.sphere_main_menu import SphereMenu
@@ -11,19 +11,21 @@ from sphere_base.utils.file_handler import FileHandler
 
 
 class SphereMainWindow(QMainWindow):
-    Uv_Widget_class = UniverseWidget
     Menu_class = SphereMenu
+    Uv_Widget_class = UniverseWidget
 
     def __init__(self):
         super().__init__()
 
         self.name_company = 'rboltze'
         self.name_product = 'sphere_base'
-        self.version = '0.1.15 Beta 03/05/2023'
+        self.version = '0.2.0.121 Beta 03/05/2023'
 
+        self._file_name = None
+        self.file_handler = FileHandler()
         self.skybox_id, self.random_skybox = None, True
         self.selected_sphere, self.selected_sphere_item = None, None
-        self._filename = None
+
         self.title = "Sphere "
 
         self.selected_sphere_items = []
@@ -55,12 +57,12 @@ class SphereMainWindow(QMainWindow):
         self.menu = self.__class__.Menu_class(self)
 
     @property
-    def filename(self):
-        return self._filename
+    def file_name(self):
+        return self._file_name
 
-    @filename.setter
-    def filename(self, value):
-        self._filename = os.path.basename(value)
+    @file_name.setter
+    def file_name(self, value):
+        self._file_name = os.path.basename(value)
         self.set_title()
 
     def create_status_bar(self):
@@ -70,8 +72,8 @@ class SphereMainWindow(QMainWindow):
     def set_title(self, title=None, file_name=None):
         title = title if title else self.title
         if file_name:
-            self._filename = file_name
-        self.setWindowTitle(title + self.get_friendly_filename(self._filename))
+            self._file_name = file_name
+        self.setWindowTitle(title + self.get_friendly_filename(self._file_name))
 
     def set_skybox(self):
         self.uv_widget.uv.skybox.get_skybox_set(skybox_id=self.skybox_id, random=self.random_skybox)
@@ -84,7 +86,7 @@ class SphereMainWindow(QMainWindow):
         """
         Get user-friendly filename. Used in the window title
         """
-        name = os.path.basename(file_name) if self._filename else "New Graph"
+        name = os.path.basename(file_name) if self._file_name else "New Graph"
         return name + ("*" if self.has_been_modified() else "")
 
     def _delayed_init(self):
@@ -96,7 +98,7 @@ class SphereMainWindow(QMainWindow):
         try:
             if os.path.exists(file):
                 self.uv_widget.load_from_file(file)
-                self._filename = os.path.basename(file)
+                self._file_name = os.path.basename(file)
             else:
                 self.uv_widget.uv_new()
 
@@ -143,7 +145,7 @@ class SphereMainWindow(QMainWindow):
         msg.exec_()
 
     def on_file_new(self):
-        self._filename = ""
+        self._file_name = ""
         self.uv_widget.uv_new()
         self.reset_modified()
         self.set_title()
@@ -166,11 +168,11 @@ class SphereMainWindow(QMainWindow):
     def on_file_save(self):
         """Handle File Save operation"""
 
-        if not self.filename:
+        if not self.file_name:
             return self.on_file_save_as()
 
-        self.file_save(self.filename)
-        self.statusBar().showMessage("Successfully saved %s" % self._filename, 5000)
+        self.file_save(self.file_name)
+        self.statusBar().showMessage("Successfully saved %s" % self._file_name, 5000)
         return True
 
     def on_file_save_as(self):
@@ -182,14 +184,14 @@ class SphereMainWindow(QMainWindow):
             return False
 
         self.file_save(file_name)
-        self.statusBar().showMessage("Successfully saved as %s" % self.filename, 5000)
+        self.statusBar().showMessage("Successfully saved as %s" % self.file_name, 5000)
         return True
 
     def file_save(self, filename=None):
         if filename is not None:
-            self._filename = filename
+            self._file_name = filename
 
-        self.uv_widget.save_to_file(self._filename)
+        self.uv_widget.save_to_file(self._file_name)
         QApplication.restoreOverrideCursor()
 
         self.reset_modified()

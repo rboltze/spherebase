@@ -12,8 +12,8 @@ class Settings(QWidget):
         super().__init__()
         self.main_win = main_win
         self.setWindowTitle("Settings")
-        # TODO: settings windows does not stay on top
-        self.setWindowFlags(self.windowFlags() | Qt.Dialog)
+        # # TODO: settings windows does not stay on top
+        # self.setWindowFlags(self.windowFlags() | Qt.M)
         self.uv = self.main_win.uv_widget.uv
         self._init_ui()
         self._setup_ui()

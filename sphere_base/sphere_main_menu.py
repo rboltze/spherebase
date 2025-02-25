@@ -51,7 +51,7 @@ class SphereMenu(QMenu):
         self.action_open = QAction('&Open', self)
         self.action_open.setShortcuts(QKeySequence.StandardKey.Open)
         self.action_open.setStatusTip('Open file')
-        self.action_open.triggered.connect(self.main_win.on_file_open)
+        self.action_open.triggered.connect(self.main_win.file_handler.on_file_open)
 
         self.action_save = QAction('&Save', self)
         self.action_save.setShortcuts(QKeySequence.StandardKey.Save)
@@ -114,7 +114,7 @@ class SphereMenu(QMenu):
     def open_settings_window(self):
         self.window_settings = Settings(self.main_win)
         self.window_settings.setGeometry(QRect(400, 400, 500, 575))
-        self.window_settings.setWindowFlags(self.windowFlags() | Qt.Dialog)
+        # self.window_settings.setWindowFlags(self.windowFlags() | Qt.Dialog)
         self.window_settings.show()
 
     def create_file_menu(self):
