@@ -8,7 +8,7 @@ from sphere_base.sphere.sphere import Sphere
 from examples.example_sphere.sphere_overlay.sov_conf import *
 from examples.example_sphere.sphere_overlay.sphere_nodes.edge_sphere_item import SphereEdge
 import random
-from sphere_base.utils import dump_exception
+from sphere_base.utils.utils import dump_exception
 
 
 class OverlaySphere(Sphere):

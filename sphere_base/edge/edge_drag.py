@@ -10,7 +10,7 @@ from sphere_base.node.socket import *
 from sphere_base.edge.graphic_edge import GraphicEdge
 from sphere_base.shader.sphere_shader import SphereShader
 from sphere_base.model.model import Model
-from sphere_base.utils import dump_exception
+from sphere_base.utils.utils import dump_exception
 
 
 class EdgeDrag:
@@ -25,33 +25,7 @@ class EdgeDrag:
     """
 
     def __init__(self, sphere):
-        """
-        Constructor of the edge dragg class.
 
-        :param sphere: This class is instantiated from the :class:`~sphere_iot.uv_sphere.Sphere`
-        :type sphere: :class:`~sphere_iot.uv_sphere.Sphere`
-
-        :Instance Attributes:
-
-        - **gr_edge** - Instance of :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
-        - **calc** - Instance of :class:`~sphere_iot.uv_calc.UvCalc` from universe.
-
-        :Instance Variables:
-
-        - **uv** - reference to :class:`~sphere_iot.uv_universe.Universe`
-        - **sphere_base** - reference to :class:`~sphere_iot.uv_sphere.Sphere`
-        - **config** - reference to :class:`~sphere_iot.uv_config.UvConfig`
-        - **shader** - reference to :class:`~sphere_iot.shader.uv_base_shader.BaseShader`
-        - **radius** - radius of the sphere_base this node is on.
-        - **start_socket** - reference to :class:`~sphere_iot.uv_socket.Socket`
-        - **xyz** - ``Vector`` location of the loose edge end.
-        - **pos_orientation_offset** - quaternion position of the edge end relative to the
-          zero rotation of the sphere_base.
-
-        : Properties:
-            - **dragging** - property flag indicating whether the edge being dragged
-
-        """
         self.sphere = sphere
         self.config = sphere.config
 
@@ -83,13 +57,6 @@ class EdgeDrag:
 
     @property
     def dragging(self) -> bool:
-        """
-        Edge dragging flag
-
-        :getter: Returns current state
-        :setter: Sets _dragging value
-        :type: ``bool``
-        """
         return self._dragging
 
     @dragging.setter
@@ -98,18 +65,6 @@ class EdgeDrag:
             self._dragging = value
 
     def drag(self, start_socket, dragging: bool, mouse_ray_collision_point=None):
-        """
-        Dragging an edge
-
-        :param start_socket:
-        :type start_socket: :class:`~sphere_iot.uv_socket.Socket`
-        :param mouse_ray_collision_point: mouse x-offset
-        :type mouse_ray_collision_point: ``float``
-        :param dragging: ``True`` when dragging
-        :type dragging: ``bool``
-
-        """
-
         if not dragging:
             self._stop_dragging()
             return
@@ -150,15 +105,6 @@ class EdgeDrag:
             self.pos_orientation_offset = item.socket.pos_orientation_offset
 
     def update_edge(self, number_of_elements: int, step: float):
-        """
-        Update the position of the edge
-
-        :param number_of_elements:
-        :type number_of_elements: ``int``
-        :param step: size of each step
-        :type step: ``float``
-
-        """
         self.pos_array = [[self.xyz[0], self.xyz[1], self.xyz[2]]]  # first point
         for i in range(1, number_of_elements):
             pos_orientation_offset = quaternion.slerp(
@@ -169,12 +115,6 @@ class EdgeDrag:
             self.pos_array.append([pos[0], pos[1], pos[2]])
 
     def drag_to(self, mouse_abs_pos):
-        """
-        Used to Drag a line on the globe to the mouse_ray collision point.
-
-        :param mouse_abs_pos: mouse_ray collision point
-        :returns: xyz 'Vector3'
-        """
         self.pos_orientation_offset = self.calc.find_angle(mouse_abs_pos, self.sphere.orientation)
         return self.gr_edge.get_position(self.pos_orientation_offset, self.sphere.radius)
 

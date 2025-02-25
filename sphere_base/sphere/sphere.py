@@ -8,8 +8,8 @@ One sphere_base at the time can become the 'target sphere_base'.
 """
 
 from random import *
-from sphere_base.serializable import Serializable
-from sphere_base.utils import dump_exception
+from sphere_base.utils.serializable import Serializable
+from sphere_base.utils.utils import dump_exception
 from collections import OrderedDict
 from sphere_base.node.node import Node
 from sphere_base.edge.edge_drag import EdgeDrag

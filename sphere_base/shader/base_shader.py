@@ -10,7 +10,7 @@ from OpenGL.GL import *
 from pyrr import Vector3, matrix44
 import pyrr
 from sphere_base.constants import *
-from sphere_base.utils import dump_exception
+from sphere_base.utils.utils import dump_exception
 from importlib_resources import files
 import sphere_base.model.resources.shaders
 import glm

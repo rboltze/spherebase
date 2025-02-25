@@ -8,14 +8,14 @@ current implementation there is only need for a single camera object.
 
 from pyrr import Vector3, Vector4, vector, matrix44
 from sphere_base.sphere_universe.camera_movement import CameraMovement
-from sphere_base.utils import dump_exception
-from sphere_base.serializable import Serializable
+from sphere_base.utils.utils import dump_exception
+from sphere_base.utils.serializable import Serializable
 from collections import OrderedDict
 import json
 
 MOUSE_SENSITIVITY = .1
 DEFAULT_TARGET = Vector3([0.0, 0.0, 0.0])
-DEFAULT_POS = Vector3([0.0, 0.0, 3.0])
+DEFAULT_POS = Vector3([0.0, 0.0, 5.0])
 
 
 class Camera(Serializable):

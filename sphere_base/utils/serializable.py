@@ -2,7 +2,6 @@
 
 """
 A module containing Serializable "Interface". We pretend it is an abstract class
-And then Richard  made a mess by adding default method implementation.... :-(
 
 """
 
@@ -26,10 +25,9 @@ class Serializable:
         :return: data serialized in ``OrderedDict``
         :rtype: ``OrderedDict``
         """
-        raise NotImplemented()
+        raise NotImplementedError()
 
     def deserialize(self, data: dict, hashmap: dict = None, restore_id: bool = True) -> bool:
-
         """
         Deserialization method which take data in python ``dict`` format with helping `hashmap` containing
         references to existing entities.
@@ -44,4 +42,4 @@ class Serializable:
         :return: ``True`` if deserialization was successful, otherwise ``False``
         :rtype: ``bool``
         """
-        return NotImplemented
+        raise NotImplementedError()

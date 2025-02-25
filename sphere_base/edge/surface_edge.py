@@ -8,11 +8,11 @@ Edges are drawn between sockets over the surface of a sphere_base.
 
 from pyrr import quaternion, vector, Vector3
 from sphere_base.edge.graphic_edge import GraphicEdge
-from sphere_base.serializable import Serializable
+from sphere_base.utils.serializable import Serializable
 from sphere_base.model.model import Model
 from sphere_base.model.mesh import Mesh
 from collections import OrderedDict
-from sphere_base.utils import dump_exception
+from sphere_base.utils.utils import dump_exception
 import numpy as np
 from sphere_base.constants import *
 

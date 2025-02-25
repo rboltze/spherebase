@@ -15,7 +15,7 @@ import json
 from OpenGL.GL import *
 from sphere_base.sphere_universe.universe import Universe
 from sphere_base.constants import *
-from sphere_base.utils import dump_exception
+from sphere_base.utils.utils import dump_exception
 
 
 class UniverseWidget(QOpenGLWidget):

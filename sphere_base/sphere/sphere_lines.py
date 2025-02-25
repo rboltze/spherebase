@@ -2,8 +2,8 @@
 
 from sphere_base.constants import *
 from sphere_base.model.model import Model
-from sphere_base.utils import dump_exception
-from sphere_base.serializable import Serializable
+from sphere_base.utils.utils import dump_exception
+from sphere_base.utils.serializable import Serializable
 from pyrr import vector, Vector3
 import numpy as np
 import math

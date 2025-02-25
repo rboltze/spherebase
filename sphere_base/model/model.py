@@ -21,7 +21,7 @@ from sphere_base.shader.drag_edge_shader import DragEdgeShader
 from sphere_base.sphere_universe.graphic_item import GraphicItem
 from sphere_base.model.mesh import Mesh
 from sphere_base.model.obj_file_loader import ObjectFileLoader
-from sphere_base.utils import dump_exception
+from sphere_base.utils.utils import dump_exception
 import pathlib
 
 DEBUG = False

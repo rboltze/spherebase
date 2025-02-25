@@ -4,9 +4,10 @@ Module with some helper functions
 """
 
 import traceback
-from PyQt6.QtCore import *
-from PyQt6.QtWidgets import *
 from pprint import PrettyPrinter
+
+from PyQt6.QtCore import QFile, QIODevice
+from PyQt6.QtWidgets import QApplication
 
 pp = PrettyPrinter(indent=4).pprint
 
@@ -32,8 +33,9 @@ def load_style_sheet(filename: str):
     """
     # print('STYLE loading:', filename)
     file = QFile(filename)
-    file.open(QFile.ReadOnly | QFile.Text)
+    file.open(QIODevice.OpenModeFlag.ReadOnly | QIODevice.OpenModeFlag.Text)
     stylesheet = file.readAll()
+    # QApplication.instance().setStyleSheet(str(stylesheet, encoding='utf-8'))
     QApplication.instance().setStyleSheet(str(stylesheet, encoding='utf-8'))
 
 
@@ -51,4 +53,5 @@ def load_style_sheets(*args):
         file.open(QFile.ReadOnly | QFile.Text)
         stylesheet = file.readAll()
         res += "\n" + str(stylesheet, encoding='utf-8')
+    # QApplication.instance().setStyleSheet(res)
     QApplication.instance().setStyleSheet(res)

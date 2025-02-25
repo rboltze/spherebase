@@ -7,7 +7,7 @@ from importlib_resources import files
 
 import sphere_base.model.resources.meshes
 from sphere_base.model.mesh import Mesh
-from sphere_base.utils import dump_exception
+from sphere_base.utils.utils import dump_exception
 
 DEBUG = False
 

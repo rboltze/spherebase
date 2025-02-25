@@ -5,7 +5,7 @@ Calculation module. Contains calculations used in several modules.
 """
 
 from pyrr import Vector3, Vector4, vector, matrix44, quaternion, Quaternion
-from sphere_base.utils import dump_exception
+from sphere_base.utils.utils import dump_exception
 import math
 
 

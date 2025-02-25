@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import os.path
-
-from PyQt6.QtGui import QSurfaceFormat
+from PyQt6.QtWidgets import QMainWindow, QMessageBox
 from PyQt6.QtCore import QSettings, QPoint, QSize
-from PyQt6.QtWidgets import *
 
 from sphere_base.sphere_main_menu import SphereMenu
 from sphere_base.sphere_universe.universe_widget import UniverseWidget
-from sphere_base.utils import dump_exception
+from sphere_base.utils.utils import dump_exception
+from sphere_base.utils.file_handler import FileHandler
 
 
 class SphereMainWindow(QMainWindow):

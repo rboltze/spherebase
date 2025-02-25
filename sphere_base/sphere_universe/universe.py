@@ -6,7 +6,7 @@ Module universe. The universe contains all the spheres.
 """
 
 from collections import OrderedDict
-from sphere_base.serializable import Serializable
+from sphere_base.utils.serializable import Serializable
 from sphere_base.sphere.sphere import Sphere
 from sphere_base.model.models import Models
 from sphere_base.sphere_universe.mouse_ray import MouseRay
@@ -16,7 +16,6 @@ from sphere_base.sphere_universe.rubber_band_box import RubberBand
 from sphere_base.clipboard import Clipboard
 from sphere_base.config import UvConfig
 from sphere_base.shader.default_shader import DefaultShader
-from sphere_base.calc import *
 import os.path
 
 DEBUG = False

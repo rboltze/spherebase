@@ -6,7 +6,7 @@ The position of the socket is always in the center of the node disc it belongs t
 """
 
 
-from sphere_base.serializable import Serializable
+from sphere_base.utils.serializable import Serializable
 from sphere_base.node.graphic_socket import GraphicSocket
 from sphere_base.calc import Calc
 from sphere_base.constants import *

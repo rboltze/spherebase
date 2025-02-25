@@ -6,7 +6,7 @@
 
 """
 
-from sphere_base.utils import dump_exception
+from sphere_base.utils.utils import dump_exception
 
 DEBUG_STORE = False
 DEBUG_RESTORE = False

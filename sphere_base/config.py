@@ -5,7 +5,7 @@ A module containing the Configuration class.
 
 """
 
-from sphere_base.utils import dump_exception
+from sphere_base.utils.utils import dump_exception
 import os
 
 from importlib_resources import files

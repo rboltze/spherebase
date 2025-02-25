@@ -8,7 +8,7 @@ Clipboard module. Contains the clipboard class.
 from collections import OrderedDict
 from pyrr import quaternion, Quaternion
 from sphere_base.edge.surface_edge import SurfaceEdge
-from sphere_base.utils import dump_exception
+from sphere_base.utils.utils import dump_exception
 from sphere_base.calc import Calc
 
 DEBUG_COPY = False

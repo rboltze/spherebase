@@ -5,7 +5,7 @@
 """
 
 import numpy as np
-from sphere_base.utils import dump_exception
+from sphere_base.utils.utils import dump_exception
 
 DEBUG = False
 

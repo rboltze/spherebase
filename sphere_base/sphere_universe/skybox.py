@@ -18,7 +18,7 @@ from sphere_base.sphere_universe.graphic_item import GraphicItem
 from collections import namedtuple
 from PIL import Image
 from random import randint
-from sphere_base.utils import dump_exception
+from sphere_base.utils.utils import dump_exception
 import os
 
 
