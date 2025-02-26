@@ -15,12 +15,12 @@ class Models:
 
     Texture = namedtuple("texture", "id, name, type, path")
 
-    def __init__(self, universe):
+    def __init__(self, map):
         """
         Constructor of the ``Models`` class.
 
-        :param universe: reference to the :class:`~sphere_iot.uv_universe.Universe`
-        :type universe: :class:`~sphere_iot.uv_universe.Universe`
+        :param map: reference to the :class:`~sphere_iot.uv_universe.Map`
+        :type map: :class:`~sphere_iot.uv_universe.Map`
 
         :Instance Attributes:
 
@@ -29,13 +29,13 @@ class Models:
         :Instance Variables:
 
             - **config** - :class:`~sphere_iot.uv_config.UvConfig`
-            - **uv** - :class:`~sphere_iot.uv_universe.Universe`
+            - **map** - :class:`~sphere_iot.uv_universe.Map`
             - **mesh_id** - Holds the last ``Mesh id`` Created. Functions as a counter to create new id`s
 
         """
 
-        self.uv = universe
-        self.config = universe.config
+        self.map = map
+        self.config = map.config
 
         self._models = []
         self.loader = ObjectFileLoader(self)

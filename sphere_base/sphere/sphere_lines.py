@@ -16,7 +16,7 @@ class SphereLines(Serializable):
     def __init__(self, target_sphere, longitude=15, latitude=15, offset=0, color=None, width=1, max_distance=None):
         super().__init__('sphere_lines')
         self.sphere = target_sphere
-        self.uv = self.sphere.uv
+        self.uv = self.sphere.map
         self.orientation = self.sphere.orientation
         self.scale = [1.0, 1.0, 1.0]
         self.model = self.set_up_model('sphere_lines')

@@ -2,19 +2,19 @@
 
 """
 
-Using the universe for the detail sphere_base. This universe will only contain a single sphere_base at the time
+Using the map for the detail sphere_base. This map will only contain a single sphere_base at the time
 
 """
 
 from examples.example_sphere.sphere_overlay.sov_sphere import OverlaySphere
-from sphere_base.sphere_universe.universe import Universe
-from sphere_base.sphere_universe.universe_widget import UniverseWidget
+from sphere_base.sphere_universe.map import Map
+from sphere_base.sphere_universe.map_widget import MapWidget
 
 # PYBULLET_KEY_ID
 KEY = 2
 
 
-class SphereUniverse(Universe):
+class SphereMap(Map):
     Sphere_class = OverlaySphere
 
     def __init__(self, parent, pybullet_key):
@@ -31,8 +31,8 @@ class SphereUniverse(Universe):
             self.target_sphere.draw()
 
 
-class UVWidget(UniverseWidget):
-    Universe_class = SphereUniverse
+class UVWidget(MapWidget):
+    Map_class = SphereMap
 
     def __init__(self, parent):
         super().__init__(parent)

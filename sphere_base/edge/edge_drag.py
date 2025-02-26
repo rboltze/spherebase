@@ -29,7 +29,7 @@ class EdgeDrag:
         self.sphere = sphere
         self.config = sphere.config
 
-        self.uv = self.sphere.uv
+        self.map = self.sphere.map
 
         self.radius = self.sphere.radius
         self.start_socket = None
@@ -41,7 +41,7 @@ class EdgeDrag:
         self.pos_array = []
 
         self.gr_edge = self.__class__.GraphicsEdge_class(self)
-        self.model = self.uv.models.get_model('drag_edge')
+        self.model = self.map.models.get_model('drag_edge')
         self.calc = Calc()
 
     def _init_start_dragging(self, start_socket: 'Socket'):
@@ -94,7 +94,7 @@ class EdgeDrag:
         
         """
         # check what is under the mouse_pointer
-        item_id, item_pos = self.uv.mouse_ray.check_mouse_ray(self.uv.uv_widget.mouse_x, self.uv.uv_widget.mouse_y)
+        item_id, item_pos = self.map.mouse_ray.check_mouse_ray(self.map.map_widget.mouse_x, self.map.map_widget.mouse_y)
 
         # if under the mouse is a node_disc then 'snap' to its socket
         item = self.sphere.get_item_by_id(item_id)

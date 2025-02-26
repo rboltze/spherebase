@@ -30,7 +30,7 @@ NUMBER_OF_TEST_NODES = 0
 
 class Sphere(Serializable):
     """
-    Class representing a ``Sphere`` in the IOT ``Universe``. Each sphere_base represents a related group of people and
+    Class representing a ``Sphere`` in the IOT ``Map``. Each sphere_base represents a related group of people and
     or items. These `items` can include persons, entities or objects. They can have a relationship between each other.
     """
 
@@ -40,13 +40,13 @@ class Sphere(Serializable):
     Edge_drag_class = EdgeDrag
     History_class = History
 
-    def __init__(self, universe, position: list = None, texture_id: int = None, sphere_type='sphere_base'):
+    def __init__(self, map, position: list = None, texture_id: int = None, sphere_type='sphere_base'):
         """
         Constructor of the sphere_base class.
 
-        :param universe: reference to the :class:`~sphere_iot.uv_universe.Universe`
-        :type universe: :class:`~sphere_iot.uv_universe.Universe`
-        :param position: position of the sphere_base in universe
+        :param map: reference to the :class:`~sphere_iot.uv_universe.Map`
+        :type map: :class:`~sphere_iot.uv_universe.Map`
+        :param position: position of the sphere_base in map
         :type position: ``list`` with x, y, z values
         :param texture_id: number indicating which texture to use for the sphere_base
         :type texture_id: int.
@@ -77,9 +77,9 @@ class Sphere(Serializable):
         """
 
         super().__init__(sphere_type)
-        self.uv = universe
+        self.map = map
         self.texture_id = texture_id
-        self.config = universe.config
+        self.config = map.config
 
         self._has_been_modified = False
         self._dragging = False
@@ -121,8 +121,8 @@ class Sphere(Serializable):
         self.xyz = position if position else ([randint(-25, 25), randint(-25, 25), randint(-25, 25)])
         self.texture_id = texture_id if texture_id or texture_id == 0 else randint(1, 5)
 
-        self.collision_shape_id = self.uv.mouse_ray.get_collision_shape(self)
-        self.collision_object_id = self.uv.mouse_ray.create_collision_object(self)
+        self.collision_shape_id = self.map.mouse_ray.get_collision_shape(self)
+        self.collision_object_id = self.map.mouse_ray.create_collision_object(self)
 
         self.sphere_lines_mayor = SphereLines(self, 20, 20, 0, [0.5, 0, 0, 0.05], 4)  # red lines
         self.sphere_lines_minor = SphereLines(self, 40, 40, 0, [0.3, 0.3, 0.5, 0.1], 3)  # blue lines
@@ -132,13 +132,13 @@ class Sphere(Serializable):
         # for testing purposes a number of random nodes can be created
         # self.create_test_node(NUMBER_OF_TEST_NODES)
 
-        # add the sphere_base to the universe
-        self.uv.add_sphere(self)
+        # add the sphere_base to the map
+        self.map.add_sphere(self)
         self.history.store_initial_history_stamp()
 
     def get_model(self):
         # likely to be overridden
-        self.model = self.uv.models.get_model('sphere_base')
+        self.model = self.map.models.get_model('sphere_base')
 
     @property
     def dragging(self) -> bool:
@@ -538,7 +538,7 @@ class Sphere(Serializable):
         """
 
         # find the current item that is under the mouse pointer
-        hovered_item, hovered_item_pos = self.uv.mouse_ray.check_mouse_ray(mouse_x, mouse_y)
+        hovered_item, hovered_item_pos = self.map.mouse_ray.check_mouse_ray(mouse_x, mouse_y)
 
         # if there is no sphere item under the mouse pointer the id will be the id of the sphere
         if hovered_item and self._hovered_item and hovered_item == self.id:
@@ -573,7 +573,7 @@ class Sphere(Serializable):
         """
         Cut _selected sphere_base items to clipboard
         """
-        data = self.uv.clipboard.serialize_selected(delete=True)
+        data = self.map.clipboard.serialize_selected(delete=True)
         str_data = json.dumps(data, indent=4)
 
         pyperclip.copy(str_data)
@@ -582,7 +582,7 @@ class Sphere(Serializable):
         """
         Copy _selected sphere_base items to clipboard
         """
-        data = self.uv.clipboard.serialize_selected(delete=False)
+        data = self.map.clipboard.serialize_selected(delete=False)
         str_data = json.dumps(data, indent=4)
         pyperclip.copy(str_data)
 
@@ -605,7 +605,7 @@ class Sphere(Serializable):
             print("JSON does not contain any nodes!")
             return
 
-        self.uv.clipboard.deserialize_from_clipboard(data)
+        self.map.clipboard.deserialize_from_clipboard(data)
 
     def remove(self):
         """
@@ -614,8 +614,8 @@ class Sphere(Serializable):
         for item in self.items:
             item.remove()
 
-        self.uv.mouse_ray.delete_collision_object(self)
-        self.uv.remove_sphere(self)
+        self.map.mouse_ray.delete_collision_object(self)
+        self.map.remove_sphere(self)
 
     def set_radius(self, radius):
         """
@@ -627,7 +627,7 @@ class Sphere(Serializable):
         self.radius = radius
         self.scale = [radius, radius, radius]
         self.orientation = quaternion.create_from_eulers([0.0, radius, 0.0])
-        self.collision_shape_id = self.uv.mouse_ray.get_collision_shape(self)
+        self.collision_shape_id = self.map.mouse_ray.get_collision_shape(self)
 
     def set_node_class_selector(self, class_selecting_function):
         """
@@ -697,7 +697,7 @@ class Sphere(Serializable):
         self.texture_id = data['texture_id']
         self.color = data['color']
         self.set_radius(data['radius'])
-        self.uv.mouse_ray.reset_position_collision_object(self)
+        self.map.mouse_ray.reset_position_collision_object(self)
 
         # -- deserialize nodes on sphere_base
 

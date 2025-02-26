@@ -7,7 +7,7 @@ class WidgetSphereColorButtonSettings(QWidget):
 
     def __init__(self, main_win):
         super().__init__()
-        self.uv = main_win.uv_widget.uv
+        self.uv = main_win.map_widget.map
         self.sphere = self.uv.target_sphere
         self.color = []
         self.groupBox = QGroupBox("Default sphere colors")

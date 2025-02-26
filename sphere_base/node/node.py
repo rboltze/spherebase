@@ -71,9 +71,9 @@ class Node(Serializable):
         self.sphere = target_sphere
         self.config = self.sphere.config
         self.calc = self.sphere.calc
-        self.node_disc = self.sphere.uv.models.get_model('sphere_node')
-        self.circle = self.sphere.uv.models.get_model('circle')
-        self.ray = self.sphere.uv.mouse_ray
+        self.node_disc = self.sphere.map.models.get_model('sphere_node')
+        self.circle = self.sphere.map.models.get_model('circle')
+        self.ray = self.sphere.map.mouse_ray
 
         # (angle) of the node on the sphere_base relative to the zero rotation of the sphere_base
         self.pos_orientation_offset = np.array(
@@ -272,7 +272,7 @@ class Node(Serializable):
         self.socket.remove(with_edges)
 
         self.grNode = None
-        self.sphere.uv.mouse_ray.delete_collision_object(self)
+        self.sphere.map.mouse_ray.delete_collision_object(self)
         self.sphere.remove_item(self)
 
     def draw(self):

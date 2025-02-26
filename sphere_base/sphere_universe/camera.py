@@ -30,15 +30,15 @@ class Camera(Serializable):
         Constructor of the camera class.  Creates a single camera object for the program.
 
 
-        :param parent: This class is instantiated from the :class:`~sphere_iot.uv_universe.Universe`
-        :type parent: :class:`~sphere_iot.uv_universe.Universe`
+        :param parent: This class is instantiated from the :class:`~sphere_iot.uv_universe.Map`
+        :type parent: :class:`~sphere_iot.uv_universe.Map`
 
 
         :Instance Attributes:
 
         - **cm** - Instance of :class:`~sphere_iot.uv_cam_movement.CameraMovement`
-        - **shader** - Instance of :class:`~sphere_iot.shader.uv_default_shader.DefaultShader` from universe
-        - **config** - Instance of :class:`~sphere_iot.uv_config.UvConfig` from universe
+        - **shader** - Instance of :class:`~sphere_iot.shader.uv_default_shader.DefaultShader` from map
+        - **config** - Instance of :class:`~sphere_iot.uv_config.UvConfig` from map
 
 
         :Instance Variables:
@@ -66,7 +66,7 @@ class Camera(Serializable):
         self.movement_stack = []
         self.target_stack = []
 
-        self.uv = parent
+        self.map = parent
         self.target_sphere = None
         self.shader = parent.shader
         self.config = parent.config
@@ -205,7 +205,7 @@ class Camera(Serializable):
         #  the collision point on the surface of the sphere with the camera
         try:
             p1 = (self.xyz[0], self.xyz[1], self.xyz[2])
-            angle = self.uv.target_sphere.calc.find_angle(p1, self.uv.target_sphere.orientation)
+            angle = self.map.target_sphere.calc.find_angle(p1, self.map.target_sphere.orientation)
             # angle, print yaw degrees, pitch degrees
             print(angle)
         except Exception as e:

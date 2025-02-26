@@ -37,7 +37,7 @@ class History:
         """
 
         self.sphere = sphere
-        self.uv = sphere.uv
+        self.uv = sphere.map
 
         # history limit per Sphere
         self.history_limit = 32
@@ -201,7 +201,7 @@ class History:
         history_stamp = {
             'description': description,
             'snapshot': self.sphere.serialize(),
-            # 'snapshot': self.uv.serialize(),
+            # 'snapshot': self.map.serialize(),
             'selection': self.capture_current_selection(),
         }
 

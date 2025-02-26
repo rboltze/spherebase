@@ -18,7 +18,7 @@ class SphereMenu(QMenu):
         super().__init__()
 
         self.main_win = parent
-        self.uv_widget = self.main_win.uv_widget
+        self.uv_widget = self.main_win.map_widget
         self.action_new, self.action_open, self.action_save, self.action_copy = None, None, None, None
         self.action_save_as, self.action_exit, self.action_undo, self.action_paste = None, None, None, None
         self.action_redo, self.action_cut, self.action_copy, self.action_delete = None, None, None, None
@@ -158,7 +158,7 @@ class SphereMenu(QMenu):
         self.action_undo.setEnabled(False)
         self.action_redo.setEnabled(False)
 
-        if self.uv_widget.uv:
+        if self.uv_widget.map:
             active_sphere = True if self.get_sphere() else False
             if active_sphere:
                 active = True if len(self.get_sphere().items_selected) > 0 else False
@@ -182,4 +182,4 @@ class SphereMenu(QMenu):
 
     def get_sphere(self):
         # helper function to get the active target sphere_base from the sphere_iot
-        return self.uv_widget.uv.target_sphere
+        return self.uv_widget.map.target_sphere

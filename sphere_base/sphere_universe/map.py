@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Module universe. The universe contains all the spheres.
+Module map. The map contains all the spheres.
 
 """
 
@@ -16,14 +16,14 @@ from sphere_base.sphere_universe.rubber_band_box import RubberBand
 from sphere_base.clipboard import Clipboard
 from sphere_base.config import UvConfig
 from sphere_base.shader.default_shader import DefaultShader
+from sphere_base.utils.utils import dump_exception
 import os.path
 
-DEBUG = False
-TEST_SPHERE_NUMBER = 10
+TEST_SPHERE_NUMBER = 1
 
 
-class Universe(Serializable):
-    # This class represents the universe. It contains all the spheres
+class Map(Serializable):
+    # This class represents the map or map. It contains all the objects in the space
 
     Camera_class = Camera
     Models_class = Models
@@ -38,15 +38,15 @@ class Universe(Serializable):
     def __init__(self, parent, skybox_img_dir=None, sphere_texture_dir=None, sphere_icon_dir=None,
                  pybullet_key=None):
 
-        super().__init__("universe")
+        super().__init__("map")
 
-        self.uv_widget = parent
+        self.map_widget = parent
 
         self._spheres = []
         self._edges = []
         self._lens_index = 1  # variable to decide how to texture a sphere_base
 
-        self.mouse_last_x, self.mouse_last_y = self.uv_widget.view_width / 2, self.uv_widget.view_height / 2
+        self.mouse_last_x, self.mouse_last_y = self.map_widget.view_width / 2, self.map_widget.view_height / 2
         self.mouse_x, self.mouse_y = self.mouse_last_x, self.mouse_last_y
         self.mouse_offset = 0
         self.target_sphere = None
@@ -104,7 +104,7 @@ class Universe(Serializable):
 
     def uv_new(self):
         """
-        Re-create the sphere_iot universe
+        Re-create the sphere_iot map
         :return:
         """
 
@@ -134,7 +134,7 @@ class Universe(Serializable):
         """
         Add a new sphere_base to the internal list. Adds listeners.
 
-        :param sphere: The ``sphere_base`` that will be added to the ``Universe``
+        :param sphere: The ``sphere_base`` that will be added to the ``Map``
         :type sphere: :class:`~sphere_iot.uv_sphere.Sphere`
 
         """
@@ -159,7 +159,7 @@ class Universe(Serializable):
         """
         Add a new edge to the internal list.
 
-        :param edge: The ``edge`` that will be added to the ``Universe``
+        :param edge: The ``edge`` that will be added to the ``Map``
         :type edge: :class:`~sphere_iot.uv_sphere_edge.SphereEdge`
 
         """
@@ -298,9 +298,9 @@ class Universe(Serializable):
         offset = 0
 
         # rotating the target sphere with the left and right arrows
-        if self.uv_widget.arrow_right:
+        if self.map_widget.arrow_right:
             offset = 1.0  # degree
-        if self.uv_widget.arrow_left:
+        if self.map_widget.arrow_left:
             offset = -1.0  # degree
         if self.mouse_offset != 0:
             offset = self.mouse_offset
@@ -318,17 +318,17 @@ class Universe(Serializable):
         # do the movement, call this function from the main loop
         rotation, angle_up, radius = None, None, None
 
-        if self.uv_widget.left:
+        if self.map_widget.left:
             rotation = -.5
-        if self.uv_widget.right:
+        if self.map_widget.right:
             rotation = .5
-        if self.uv_widget.forward:
+        if self.map_widget.forward:
             radius = -.05
-        if self.uv_widget.back:
+        if self.map_widget.back:
             radius = .05
-        if self.uv_widget.up:
+        if self.map_widget.up:
             angle_up = .5
-        if self.uv_widget.down:
+        if self.map_widget.down:
             angle_up = -.5
 
         # only process if there is movement
@@ -337,6 +337,7 @@ class Universe(Serializable):
 
     def get_mouse_pos(self):
         # helper function to get the mouse variables
+        print("here")
         return self.view.get_mouse_pos()
 
     def draw(self):

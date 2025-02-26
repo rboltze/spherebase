@@ -11,7 +11,7 @@ class WidgetSphereSettings(QWidget):
 
     def __init__(self, main_win):
         super().__init__()
-        self.uv = main_win.uv_widget.uv
+        self.uv = main_win.map_widget.map
         self.sphere = self.uv.target_sphere
         self._color = self.uv.target_sphere.color * SPEED_CORRECTION
         self._red = int(self._color[0] * 100)

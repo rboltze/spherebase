@@ -18,5 +18,5 @@ class TestTemplate(unittest.TestCase):
         """Tear down test fixtures, if any."""
 
     def test_000_something(self):
-        """Test if universe has lens_index property"""
+        """Test if map has lens_index property"""
         assert(hasattr(Universe, 'lens_index'))

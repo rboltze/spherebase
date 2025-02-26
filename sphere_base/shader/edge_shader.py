@@ -24,7 +24,7 @@ class EdgeShader(BaseShader):
                      position=position, orientation=orientation, scale=scale, texture_id=texture_id, color=color,
                      switch=switch, line_width=line_width)
 
-        # self.context.makeCurrent(self.uv_widget.surface)
+        # self.context.makeCurrent(self.map_widget.surface)
         self.use()
         glBindVertexArray(self.config.VAO[mesh_index])
 

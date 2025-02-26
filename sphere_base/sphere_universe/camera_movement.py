@@ -58,8 +58,8 @@ class CameraMovement:
         :type offset: ``float``
 
         """
-        if self.cam.uv.target_sphere:
-            self.min_radius = self.cam.uv.target_sphere.radius + 0.1
+        if self.cam.map.target_sphere:
+            self.min_radius = self.cam.map.target_sphere.radius + 0.1
 
         new_xyzw = None
         if self.radius < self.min_radius:

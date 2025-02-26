@@ -52,7 +52,7 @@ class SkyboxShader(BaseShader):
 
         glBindVertexArray(self.config.VAO[mesh_index])
 
-        obj_pos = matrix44.create_from_translation(Vector3(self.config.uv.cam.xyz))
+        obj_pos = matrix44.create_from_translation(Vector3(self.config.map.cam.xyz))
         glUniformMatrix4fv(self.model_loc, 1, GL_FALSE, obj_pos)
 
         glDepthMask(GL_FALSE)

@@ -58,8 +58,8 @@ class Socket(Serializable):
         super().__init__('socket')
         self.node = node
 
-        self.socket_disc = self.node.sphere.uv.models.get_model('socket')
-        self.circle = self.node.sphere.uv.models.get_model('circle')
+        self.socket_disc = self.node.sphere.map.models.get_model('socket')
+        self.circle = self.node.sphere.map.models.get_model('circle')
 
         self.gr_socket = self.__class__.GraphicSocket_class(self.node)
         self.calc = Calc()
@@ -79,7 +79,7 @@ class Socket(Serializable):
         self.collision_object_radius = SOCKET_RADIUS
 
         # create a collision object (cylinder) pointing out from the center of the sphere_base
-        self.collision_shape_id = self.node.sphere.uv.mouse_ray.get_collision_shape(self)
+        self.collision_shape_id = self.node.sphere.map.mouse_ray.get_collision_shape(self)
         self.collision_object_id = self.create_collision_object()
 
         self.update_position()
@@ -89,17 +89,17 @@ class Socket(Serializable):
         Creating a``pybullet`` collision object in the form of a cylinder with the same size
         as the ``Socket``. The cylinder is pointing out from the center of the ``Sphere``.
         """
-        return self.node.sphere.uv.mouse_ray.create_collision_object(self)
+        return self.node.sphere.map.mouse_ray.create_collision_object(self)
 
     def delete_collision_object(self) -> None:
         """
         Deleting the ``pybullet`` collision object.
         """
-        self.node.sphere.uv.mouse_ray.delete_collision_object(self)
+        self.node.sphere.map.mouse_ray.delete_collision_object(self)
 
     def update_collision_object(self):
         # set the collision object for mouse pointer ray collision
-        self.node.sphere.uv.mouse_ray.reset_position_collision_object(self)
+        self.node.sphere.map.mouse_ray.reset_position_collision_object(self)
         # find connected edges
         edges = self.node.sphere.get_edges(self)
         for edge in edges:

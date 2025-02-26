@@ -3,7 +3,7 @@
 """
 This is the Skybox Module.
 
-It is responsible for creating a cube with a star packed universe background.
+It is responsible for creating a cube with a star packed map background.
 The cube is small and is moving with the camera. Whenever there is an object in the view, the skybox is not painted
 on those pixels.
 
@@ -18,7 +18,6 @@ from sphere_base.sphere_universe.graphic_item import GraphicItem
 from collections import namedtuple
 from PIL import Image
 from random import randint
-from sphere_base.utils.utils import dump_exception
 import os
 
 
@@ -34,10 +33,10 @@ class Skybox(GraphicItem):
         """
         Constructor of the Skybox class.
 
-        :param universe: reference to the :class:`~sphere_iot.uv_universe.Universe`
-        :type universe: :class:`~sphere_iot.uv_universe.Universe`
+        :param universe: reference to the :class:`~sphere_iot.uv_universe.Map`
+        :type universe: :class:`~sphere_iot.uv_universe.Map`
 
-        :Instance Attributes:
+        Instance Attributes:
 
 
             - **edge** - Instance of :class:`~sphere_iot.uv_edge.SphereSurfaceEdge`
@@ -47,10 +46,10 @@ class Skybox(GraphicItem):
             - **history** - Instance of :class:`~sphere_iot.uv_history.History`
             - **shader** - Instance of :class:`~sphere_iot.shader.uv_sphere_shader.SphereShader`
 
-        :Instance Variables:
+        Instance Variables:
 
             - **xyz** - position of the center of the cube which is the position of camera [x, y, z]
-            - **uv** - reference to :class:`~sphere_iot.uv_universe.Universe`
+            - **map** - reference to :class:`~sphere_iot.uv_universe.Map`
             - **model** - Instance of :class:`~sphere_iot.uv_model.Model`
             - **shader** - reference to the shader of the ``model``
             - **scale** - scaling used for this model

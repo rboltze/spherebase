@@ -58,7 +58,7 @@ class Model(GraphicItem):
         :Instance Variables:
 
             - **config** - :class:`~sphere_iot.uv_config.UvConfig`
-            - **uv** - :class:`~sphere_iot.uv_universe.Universe`
+            - **map** - :class:`~sphere_iot.uv_universe.Map`
             - **models** - :class:`~sphere_iot.uv_models.Models`
             - **model_id** - ``int`` id of this ``Model``
             - **shader** - specific class inherited from :class:`~sphere_iot.shader.uv_base_shader.Shader`
@@ -77,7 +77,7 @@ class Model(GraphicItem):
         super().__init__(self, model_name)
 
         self.config = models.config
-        self.uv = models.uv
+        self.uv = models.map
         self.models = models
         self.model_id = model_id if model_id else self.id
         self.name = model_name

@@ -63,7 +63,7 @@ class SurfaceEdge(Serializable):
 
         :Instance Attributes:
 
-            - **uv** - Instance of :class:`~sphere_iot.uv_universe.Universe`
+            - **map** - Instance of :class:`~sphere_iot.uv_universe.Map`
             - **sphere_base** - Instance of :class:`~sphere_iot.uv_sphere.Sphere`
             - **calc** - Instance of :class:`~sphere_iot.uv_calc.UvCalc`
             - **model** - Instance of :class:`~sphere_iot.uv_models.Model`
@@ -76,7 +76,7 @@ class SurfaceEdge(Serializable):
         self.sphere = target_sphere
         self.calc = self.sphere.calc
         self.config = self.sphere.config
-        self.uv = self.sphere.uv
+        self.uv = self.sphere.map
 
         self.gr_edge = self.__class__.GraphicsEdge_class(self)
 
@@ -184,7 +184,7 @@ class SurfaceEdge(Serializable):
 
     def update_collision_object(self):
         # set the collision object for mouse pointer ray collision
-        self.sphere.uv.mouse_ray.reset_position_collision_object(self, self.vert)
+        self.sphere.map.mouse_ray.reset_position_collision_object(self, self.vert)
 
     def update_position(self):
         """º
@@ -242,7 +242,7 @@ class SurfaceEdge(Serializable):
 
         if self._new_edge:
             # creating a collision object for mouse ray collisions
-            self.collision_object_id = self.sphere.uv.mouse_ray.create_collision_object(self, self.vert)
+            self.collision_object_id = self.sphere.map.mouse_ray.create_collision_object(self, self.vert)
             self._new_edge = False
 
         self.mesh.vertices = np.array(vertices, dtype=np.float32)
@@ -343,7 +343,7 @@ class SurfaceEdge(Serializable):
         self.sphere.remove_item(self)
 
         if self.collision_object_id:
-            self.sphere.uv.mouse_ray.delete_collision_object(self)
+            self.sphere.map.mouse_ray.delete_collision_object(self)
 
     def draw(self):
         """

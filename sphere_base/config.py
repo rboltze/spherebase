@@ -17,21 +17,21 @@ class UvConfig:
     The configuration class contains project wide variables which can be easily shared between modules and classes.
 
     """
-    def __init__(self, universe, skybox_img_dir="", sphere_texture_dir="", sphere_icon_dir=""):
+    def __init__(self, map, skybox_img_dir="", sphere_texture_dir="", sphere_icon_dir=""):
         """
         Constructor of the sphere_base class.
 
-        :param universe: reference to the :class:`~sphere_iot.uv_universe.Universe`
-        :type universe: :class:`~sphere_iot.uv_universe.Universe`
+        :param map: reference to the :class:`~sphere_iot.uv_universe.Map`
+        :type map: :class:`~sphere_iot.uv_universe.Map`
 
         :Instance Variables:
 
-            - **view** - reference to the universe class universe widget or view.
-            - **uv** - Instance of :class:`~sphere_iot.uv_universe.Universe`
+            - **view** - reference to the map class map widget or view.
+            - **map** - Instance of :class:`~sphere_iot.uv_universe.Map`
 
         """
-        self.uv = universe
-        self.uv_widget = self.uv.uv_widget
+        self.map = map
+        self.map_widget = self.map.map_widget
         self.view_loc = None
 
         # project wide opengl buffers
@@ -148,7 +148,7 @@ class UvConfig:
         """
         img_name = img_name if img_name else 'icon_question_mark'
         image_id = None
-        for index, _item in enumerate(self.uv.config.all_textures.values()):
+        for index, _item in enumerate(self.map.config.all_textures.values()):
             if _item['file_name'] == img_name or _item['file_name'][:-4] == img_name:
                 image_id = _item['img_id']
                 continue

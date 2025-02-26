@@ -5,21 +5,21 @@ from PyQt6.QtWidgets import QMainWindow, QMessageBox, QFileDialog, QApplication
 from PyQt6.QtCore import QSettings, QPoint, QSize
 
 from sphere_base.sphere_main_menu import SphereMenu
-from sphere_base.sphere_universe.universe_widget import UniverseWidget
+from sphere_base.sphere_universe.map_widget import MapWidget
 from sphere_base.utils.utils import dump_exception
 from sphere_base.utils.file_handler import FileHandler
 
 
 class SphereMainWindow(QMainWindow):
     Menu_class = SphereMenu
-    Uv_Widget_class = UniverseWidget
+    Uv_Widget_class = MapWidget
 
     def __init__(self):
         super().__init__()
 
         self.name_company = 'rboltze'
         self.name_product = 'sphere_base'
-        self.version = '0.2.0.121 Beta 03/05/2023'
+        self.version = '0.2.0.121 Beta 03/05/2025'
 
         self._file_name = None
         self.file_handler = FileHandler()
@@ -33,24 +33,17 @@ class SphereMainWindow(QMainWindow):
         self._set_win_properties()
         self._read_settings()
 
-        self.uv_widget = self.Uv_Widget_class(self)
+        self.map_widget = self.Uv_Widget_class(self)
 
-        # ---------------------------------------
-        # _format = QSurfaceFormat()
-        # _format.setVersion(3, 2)
-        # _format.setProfile(QSurfaceFormat.CoreProfile)
-        # self.uv_widget.setFormat(_format)
-        # ---------------------------------------
-
-        self.setCentralWidget(self.uv_widget)
+        self.setCentralWidget(self.map_widget)
         self.setWindowTitle("Sphere")
         self.create_status_bar()
 
         # delayed initialization waiting for OpenGL initialization
-        self.uv_widget.add_to_delayed_init(self._delayed_init)
+        self.map_widget.add_to_delayed_init(self._delayed_init)
 
         self.show()
-        self.uv_widget.uv.add_modified_listener(self.set_title)
+        self.map_widget.map.add_modified_listener(self.set_title)
         self.set_title()
         self.set_skybox()
 
@@ -76,35 +69,33 @@ class SphereMainWindow(QMainWindow):
         self.setWindowTitle(title + self.get_friendly_filename(self._file_name))
 
     def set_skybox(self):
-        self.uv_widget.uv.skybox.get_skybox_set(skybox_id=self.skybox_id, random=self.random_skybox)
+        self.map_widget.map.skybox.get_skybox_set(skybox_id=self.skybox_id, random=self.random_skybox)
 
     def _set_win_properties(self):
         # set default window properties
         self.setGeometry(200, 200, 800, 600)
 
     def get_friendly_filename(self, file_name):
-        """
-        Get user-friendly filename. Used in the window title
-        """
+        # Get user-friendly filename. Used in the window title
         name = os.path.basename(file_name) if self._file_name else "New Graph"
         return name + ("*" if self.has_been_modified() else "")
 
     def _delayed_init(self):
         # cannot be initialized in the constructor, needs to be delayed until after openGL is initialized !!!!
-        self.uv_widget.uv.add_selection_changed_listener(self.on_selection_changed)
+        self.map_widget.map.add_selection_changed_listener(self.on_selection_changed)
 
         file = "../examples/default.json"
 
         try:
             if os.path.exists(file):
-                self.uv_widget.load_from_file(file)
+                self.map_widget.load_from_file(file)
                 self._file_name = os.path.basename(file)
             else:
-                self.uv_widget.uv_new()
+                self.map_widget.uv_new()
 
         except Exception as e:
             dump_exception(e)
-            self.uv_widget.uv_new()
+            self.map_widget.uv_new()
 
     def on_selection_changed(self, sphere, items):
         """
@@ -113,8 +104,8 @@ class SphereMainWindow(QMainWindow):
         binding the detail node editor nodes to the sphere_base node.
         """
 
-        self.selected_sphere = self.uv_widget.uv.target_sphere
-        self.selected_sphere_items = self.uv_widget.uv.target_sphere.items_selected
+        self.selected_sphere = self.map_widget.map.target_sphere
+        self.selected_sphere_items = self.map_widget.map.target_sphere.items_selected
 
         if len(self.selected_sphere_items) == 0:
             # no items _selected
@@ -133,20 +124,20 @@ class SphereMainWindow(QMainWindow):
             self.selected_sphere_item = self.selected_sphere_items[0]
 
     def has_been_modified(self):
-        return self.uv_widget.uv.is_modified()
+        return self.map_widget.map.is_modified()
 
     def on_about(self):
         msg = QMessageBox()
         msg.setWindowTitle("About Sphere Base")
-        msg.setIcon(QMessageBox.Information)
+        msg.setIcon(QMessageBox.Icon.Information)
         msg.setText("<b>Sphere Base</b> is a Python program to visualize a sphere with a number of connected nodes "
                     "on its surface. Written by: Richard Boltze, email: <a>rboltze@protonmail.com")
         msg.setInformativeText("version: " + self.version)
-        msg.exec_()
+        msg.exec()
 
     def on_file_new(self):
         self._file_name = ""
-        self.uv_widget.uv_new()
+        self.map_widget.uv_new()
         self.reset_modified()
         self.set_title()
 
@@ -158,7 +149,7 @@ class SphereMainWindow(QMainWindow):
         try:
             for file_name in file_names:
                 if file_name:
-                    self.uv_widget.load_from_file(file_name)
+                    self.map_widget.load_from_file(file_name)
                     self.reset_modified()
                     self.set_title(file_name=file_name)
 
@@ -191,7 +182,7 @@ class SphereMainWindow(QMainWindow):
         if filename is not None:
             self._file_name = filename
 
-        self.uv_widget.save_to_file(self._file_name)
+        self.map_widget.save_to_file(self._file_name)
         QApplication.restoreOverrideCursor()
 
         self.reset_modified()
@@ -208,7 +199,8 @@ class SphereMainWindow(QMainWindow):
 
         result = QMessageBox.warning(self, "About to loose your work?",
                                      "The document has been modified.\n Do you want to save your changes?",
-                                     QMessageBox.StandardButton.Save | QMessageBox.StandardButton.Discard | QMessageBox.StandardButton.Cancel
+                                     QMessageBox.StandardButton.Save |
+                                     QMessageBox.StandardButton.Discard | QMessageBox.StandardButton.Cancel
                                      )
 
         if result == QMessageBox.StandardButton.Save:
@@ -220,7 +212,7 @@ class SphereMainWindow(QMainWindow):
 
     def reset_modified(self):
         # resetting the modified flag
-        self.uv_widget.uv.reset_has_been_modified()
+        self.map_widget.map.reset_has_been_modified()
         self.on_selection_changed(None, None)
 
     @staticmethod

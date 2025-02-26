@@ -24,7 +24,7 @@ class ObjectFileLoader:
 
     def __init__(self, parent):
         self.config = parent.config
-        self.uv_widget = parent.uv.uv_widget
+        self.map_widget = parent.map.map_widget
         self.index = 0
         self.context = QOpenGLContext.currentContext()
 
@@ -182,7 +182,7 @@ class ObjectFileLoader:
 
         """
 
-        self.context.makeCurrent(self.uv_widget.surface)
+        self.context.makeCurrent(self.map_widget.surface)
         glBindVertexArray(self.config.VAO[mesh_id])
 
         # vertex Buffer Object
@@ -244,7 +244,7 @@ class ObjectFileLoader:
 
         """
 
-        self.context.makeCurrent(self.uv_widget.surface)
+        self.context.makeCurrent(self.map_widget.surface)
         glBindTexture(GL_TEXTURE_2D, texture_id)
 
         # Set the texture wrapping parameters

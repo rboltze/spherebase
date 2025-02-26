@@ -23,8 +23,8 @@ class Clipboard:
         """
         Constructor of the clipboard class.
 
-        :param universe: The ``Universe``
-        :type universe: reference the :class:`~sphere_iot.uv_universe.Universe`
+        :param universe: The ``Map``
+        :type universe: reference the :class:`~sphere_iot.uv_universe.Map`
 
         """
 

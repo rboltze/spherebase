@@ -4,11 +4,11 @@
 This is the ``MouseRay`` module. This module is used for determining which object is on_current_row_changed
 by the mouse pointer.
 It uses the ``PyBullet`` library to shoot a ray into the ``PyBullet`` physics simulation
-which is a copy of the :class:`~sphere_iot.uv_universe.Universe` with all its ``Model`` objects.
+which is a copy of the :class:`~sphere_iot.uv_universe.Map` with all its ``Model`` objects.
 It returns the collision object the mouse ray hits.
 
 This module also creates all collision objects in the ``PyBullet`` simulation world for all the models used in the
-:class:`~sphere_iot.uv_universe.Universe` implementation.
+:class:`~sphere_iot.uv_universe.Map` implementation.
 
 """
 
@@ -37,7 +37,7 @@ COLLISION_SHAPES = {
 
 class MouseRay:
     """
-    This class maintains a parallel PyBullet physics reality of the :class:`~sphere_iot.uv_universe.Universe`.
+    This class maintains a parallel PyBullet physics reality of the :class:`~sphere_iot.uv_universe.Map`.
     For this it creates, places and maintains collision object shapes for all models which can be hit
     by a ray emitted from the mouse pointer.
 
@@ -48,13 +48,13 @@ class MouseRay:
         """
         Constructor of the ``MouseRay`` class.
 
-        :param universe: The 'PyBullet' physics simulation is a copy of the :class:`~sphere_iot.uv_universe.Universe`
-        :type universe:  :class:`~sphere_iot.uv_universe.Universe`
+        :param universe: The 'PyBullet' physics simulation is a copy of the :class:`~sphere_iot.uv_universe.Map`
+        :type universe:  :class:`~sphere_iot.uv_universe.Map`
 
         :Instance Attributes:
 
             - **camera** - Instance of :class:`~sphere_iot.uv_cam.camera`
-            - **uv** - Instance of :class:`~sphere_iot.uv_universe.Universe`
+            - **map** - Instance of :class:`~sphere_iot.uv_universe.Map`
 
         """
 
@@ -284,8 +284,8 @@ class MouseRay:
         :return: ``Vector4`` mouse position as a fraction of the screen
 
         """
-        x = (2.0 * mouse_x) / self.uv.uv_widget.view_width - 1.0
-        y = 1.0 - (2.0 * mouse_y) / self.uv.uv_widget.view_height
+        x = (2.0 * mouse_x) / self.uv.map_widget.view_width - 1.0
+        y = 1.0 - (2.0 * mouse_y) / self.uv.map_widget.view_height
         z = mouse_z
         return Vector4([x, y, z, 1.0])
 

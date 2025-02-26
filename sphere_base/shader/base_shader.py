@@ -37,9 +37,9 @@ class BaseShader:
         """
 
         self.config = parent.config
-        self.uv_widget = self.config.uv_widget
-        self.width = self.config.uv_widget.view_width
-        self.height = self.config.uv_widget.view_height
+        self.uv_widget = self.config.map_widget
+        self.width = self.config.map_widget.view_width
+        self.height = self.config.map_widget.view_height
 
         self.context = QOpenGLContext.currentContext()
         self.projection_matrix = None
@@ -212,8 +212,8 @@ class BaseShader:
         Prepare OpenGL projection Matrix
 
         """
-        self.width = self.config.uv_widget.view_width
-        self.height = self.config.uv_widget.view_height
+        self.width = self.config.map_widget.view_width
+        self.height = self.config.map_widget.view_height
         self.set_projection_matrix()
 
     def set_projection_matrix(self):
@@ -295,7 +295,7 @@ class BaseShader:
                 print("scale", scale)
                 print("texture_id", texture_id, "\n")
 
-        # self.context.makeCurrent(self.uv_widget.surface)
+        # self.context.makeCurrent(self.map_widget.surface)
         self.use()
         glBindVertexArray(self.config.VAO[mesh_index])
 

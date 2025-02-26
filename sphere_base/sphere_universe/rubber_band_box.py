@@ -17,10 +17,10 @@ class RubberBand(GraphicItem):
 
     def __init__(self, universe):
         """
-        Constructor of the ``Universe`` class
+        Constructor of the ``Map`` class
 
-        :param universe: reference to the :class:`~sphere_iot.uv_universe.Universe`.
-        :type universe: :class:`~sphere_iot.uv_universe.Universe`.
+        :param universe: reference to the :class:`~sphere_iot.uv_universe.Map`.
+        :type universe: :class:`~sphere_iot.uv_universe.Map`.
 
         :Instance Attributes:
 

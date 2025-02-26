@@ -14,14 +14,14 @@ from sphere_base.utils.utils import dump_exception
 class OverlaySphere(Sphere):
     Edge_class = SphereEdge
 
-    def __init__(self, universe, position=None, texture_id=None):
-        super().__init__(universe, position, texture_id)
+    def __init__(self, map, position=None, texture_id=None):
+        super().__init__(map, position, texture_id)
 
         self.set_node_class_selector(self.get_node_class_from_data)
         self._close_event_listeners = []
 
     def get_model(self):
-        self.model = self.uv.models.get_model('holo_sphere')
+        self.model = self.map.models.get_model('holo_sphere')
 
     def get_node_class_from_data(self, data):
         if 'op_code' not in data:
